@@ -2,17 +2,15 @@ package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
 import com.open3hr.adeies.services.EmployeeService;
-import com.open3hr.adeies.services.impl.EmployeeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
 @RequestMapping("/api")
-
 public class EmployeeController {
     @Autowired
-    private EmployeeServiceImpl employeeService;
+    private EmployeeService employeeService;
 
     @GetMapping("/employees")
     public List<EmployeeDTO> getAllEmployees(){
@@ -20,7 +18,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employee/{id}")
-    public EmployeeDTO getEmployeeById(@PathVariable int id){
+    public EmployeeDTO getEmployeeById(@PathVariable Long id){
         return employeeService.findEmployeeById(id);
     }
 
@@ -29,6 +27,10 @@ public class EmployeeController {
          return employeeService.addEmployee(employeeDTO);
     }
 
+    @DeleteMapping("/employee/{id}")
+    public void deleteById(@PathVariable Long id){
+        employeeService.deleteById(id);
+    }
 
 
 }

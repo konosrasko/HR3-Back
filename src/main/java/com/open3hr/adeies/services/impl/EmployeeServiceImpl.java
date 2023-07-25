@@ -2,7 +2,7 @@ package com.open3hr.adeies.services.impl;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
 import com.open3hr.adeies.entities.Employee;
-import com.open3hr.adeies.repositories.EmployeeRepo;
+import com.open3hr.adeies.repositories.EmployeeRepository;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,15 @@ import java.util.stream.Collectors;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private EmployeeRepo employeeRepo;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public List<EmployeeDTO> findAllEmployees() {
-        return employeeRepo.findAll().stream().map(EmployeeDTO::new).collect(Collectors.toList());
+        return employeeRepository.findAll().stream().map(EmployeeDTO::new).collect(Collectors.toList());
     }
     @Override
-    public EmployeeDTO findEmployeeById(int id){
-        Optional<Employee> result = employeeRepo.findById(id);
+    public EmployeeDTO findEmployeeById(Long id){
+        Optional<Employee> result = employeeRepository.findById(id);
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
         }
@@ -31,8 +31,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
-        Employee employee =new Employee();
-        return new EmployeeDTO(employeeRepo.save(employee));
+        Employee employee = new Employee();
+        return new EmployeeDTO(employeeRepository.save(employee));
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        this.employeeRepository.findById(id).orElseThrow(()-> new RuntimeException("Employee with id "+ id +" not found"));
     }
 
 
