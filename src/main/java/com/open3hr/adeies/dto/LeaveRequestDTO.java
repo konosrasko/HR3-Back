@@ -1,6 +1,5 @@
 package com.open3hr.adeies.dto;
 
-
 import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.entities.LeaveRequest;
 import lombok.Builder;

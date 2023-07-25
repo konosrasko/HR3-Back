@@ -1,7 +1,7 @@
 package com.open3hr.adeies.entities;
 
-
 import com.open3hr.adeies.dto.EmployeeDTO;
+import com.open3hr.adeies.dto.LeaveBalanceDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,9 +51,9 @@ public class Employee {
                     CascadeType.REFRESH
             })
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
-    private int supervisorId;
+    private Employee employee;
 
-    @OneToMany(mappedBy = "parking",
+    @OneToMany(mappedBy = "",
             fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.ALL
@@ -69,6 +69,9 @@ public class Employee {
         this.address = employeeDTO.getAddress();
         this.hireDate = employeeDTO.getHireDate();
         this.enabled = employeeDTO.isEnabled();
-        this.supervisorId = employeeDTO.getSupervisorId();
+        this.leaveBalanceList = employeeDTO.getLeaveBalanceDTOS()
+                .stream()
+                .map(leaveBalanceDTO -> new LeaveBalance(leaveBalanceDTO, this))
+                .toList();
     }
 }
