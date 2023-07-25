@@ -1,9 +1,7 @@
 package com.open3hr.adeies.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.open3hr.adeies.dto.UserDTO;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    @Column (name = "id")
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private Integer id;
 
     @Column (name = "username")
@@ -33,5 +32,12 @@ public class User {
 
     @Column (name = "role")
     Role role;
+
+    public User(UserDTO userDTO){
+        this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
+        this.isEnabled = userDTO.getIsEnabled();
+        this.role = userDTO.getRole();
+    }
 
 }
