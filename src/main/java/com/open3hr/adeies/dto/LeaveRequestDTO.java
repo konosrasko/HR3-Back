@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
+
 public class LeaveRequestDTO {
 
     private int categoryId;
@@ -24,4 +25,5 @@ public class LeaveRequestDTO {
         this.endDate= leaveRequest.getEndDate();
         this.categoryId = leaveRequest.getCategory().getId();
     }
+
 }

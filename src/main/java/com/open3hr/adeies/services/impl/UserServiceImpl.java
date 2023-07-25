@@ -14,25 +14,21 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
                 .map(UserDTO::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public UserDTO findById(Integer id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()) {
-            return new UserDTO(userOptional.get());
+        Optional<User> myUser = userRepository.findById(id);
+        if (myUser.isPresent()) {
+            return new UserDTO(myUser.get());
         } else {
             throw new RuntimeException("Couldn't find user with id: " + id);
         }
@@ -40,7 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(UserDTO userDTO) {
-        return new UserDTO(userRepository.save(userDTO.toUser()));
+        User myUser = new User(userDTO);
+        return new UserDTO(userRepository.save(myUser));
     }
 
     @Override

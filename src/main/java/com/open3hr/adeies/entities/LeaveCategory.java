@@ -32,6 +32,9 @@ public class LeaveCategory {
 //            })
 //    private List<LeaveBalance> balances = new ArrayList<>();
 
+    @Column(name="isActive")
+    private boolean isActive;
+
     public LeaveCategory(LeaveCategoryDTO leaveCategoryDTO){
         this.id = leaveCategoryDTO.getId();
         this.title = leaveCategoryDTO.getTitle();
