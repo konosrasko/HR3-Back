@@ -8,6 +8,8 @@ public class AdeiesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AdeiesApplication.class, args);
+
+		System.out.println("Pame. 💁‍♀️");
 	}
 
 }
