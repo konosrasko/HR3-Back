@@ -15,11 +15,6 @@ public class LeaveRequestController {
     @Autowired
     private LeaveRequestService leaveRequestService;
 
-    @PostMapping("/leaverequest/add")
-    public  LeaveRequest leaveRequest(@RequestBody LeaveRequestDTO leaveRequestDTO){
-        return new LeaveRequest(leaveRequestService.save(leaveRequestDTO));
-    }
-
     @GetMapping("/leaverequest/all")
     public List<LeaveRequestDTO> getAllLeaveRequest(){
         return leaveRequestService.findAll();

@@ -43,6 +43,12 @@ public class LeaveBalance {
         this.id = leaveBalanceDTO.getId();
         this.days = leaveBalanceDTO.getDays();
         this.daysTaken = leaveBalanceDTO.getDaysTaken();
-        this.leaveCategoryId = leaveBalanceDTO.getLeaveCategoryId();
+    }
+
+    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO, Employee employee){
+        this.id = leaveBalanceDTO.getId();
+        this.days = leaveBalanceDTO.getDays();
+        this.daysTaken = leaveBalanceDTO.getDaysTaken();
+        this.employee = employee;
     }
 }

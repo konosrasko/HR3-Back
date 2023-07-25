@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDTO {
 
-        Integer id;
-        String username;
-        String password;
-        Boolean isEnabled;
-        Integer employeeId;
-        Role role;
+        private Integer id;
+        private String username;
+        private String password;
+        private Boolean isEnabled;
+        private Integer employeeId;
+        private Role role;
 
         public UserDTO(User user) {
                 this.id = user.getId();

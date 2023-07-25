@@ -47,4 +47,4 @@ public class UserServiceImpl implements UserService {
     public void deleteById(Integer id) {
         userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
-    }
+}

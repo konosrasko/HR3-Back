@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface LeaveRequestService {
 
-    LeaveRequestDTO save(LeaveRequestDTO leaveRequestDTO);
 
     List<LeaveRequestDTO> findAll();
 
