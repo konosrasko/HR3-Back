@@ -14,13 +14,10 @@ public class LeaveBalanceDTO {
     private Integer id;
     private Integer days;
     private Integer daysTaken;
-    private Integer employeeId;
-    private Integer leaveCategoryId;
 
     public LeaveBalanceDTO(LeaveBalance leaveBalance){
         this.id = leaveBalance.getId();
         this.days = leaveBalance.getDays();
         this.daysTaken = leaveBalance.getDaysTaken();
-        this.leaveCategoryId = leaveBalance.getLeaveCategoryId();
     }
 }
