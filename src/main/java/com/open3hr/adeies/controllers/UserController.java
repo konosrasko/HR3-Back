@@ -28,7 +28,7 @@ public class UserController {
 
         @PostMapping("/add")
         public UserDTO save(@RequestBody UserDTO userDTO){
-                userDTO.setId(0L);
+                userDTO.setId(0);
                 return userService.save(userDTO);
         }
 

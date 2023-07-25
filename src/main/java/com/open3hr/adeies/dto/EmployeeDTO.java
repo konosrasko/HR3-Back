@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class EmployeeDTO {
-    private int employeeId;
+    private Integer employeeId;
     private String firstName;
     private String lastName;
     private String email;
@@ -21,7 +21,7 @@ public class EmployeeDTO {
     private String address;
     private Date hireDate;
     private boolean enabled;
-    private int supervisorId;
+    private Integer supervisorId;
 
     public EmployeeDTO(Employee employee) {
         this.employeeId = employee.getId();

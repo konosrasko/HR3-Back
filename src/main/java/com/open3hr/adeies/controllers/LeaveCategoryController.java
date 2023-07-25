@@ -24,7 +24,7 @@ public class LeaveCategoryController {
 
     @PostMapping("/leavecategory")
     public LeaveCategoryDTO save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
-        leaveCategoryDTO.setId(0L);
+        leaveCategoryDTO.setId(0);
         return leaveCategoryService.save(leaveCategoryDTO);
     }
 

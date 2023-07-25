@@ -26,7 +26,7 @@ public class LeaveBalanceController {
 
     @PostMapping("/leavebalance")
     public LeaveBalanceDTO save(@RequestBody LeaveBalanceDTO leaveBalanceDTO){
-        leaveBalanceDTO.setId(0L);
+        leaveBalanceDTO.setId(0);
         return leaveBalanceService.save(leaveBalanceDTO);
     }
 
