@@ -8,9 +8,9 @@ public interface LeaveBalanceService {
 
     List<LeaveBalanceDTO> findAll();
 
-    LeaveBalanceDTO findById(Long id);
+    LeaveBalanceDTO findById(Integer id);
 
     LeaveBalanceDTO save(LeaveBalanceDTO LeaveBalanceDTO);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 }
