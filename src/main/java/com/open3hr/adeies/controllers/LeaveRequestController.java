@@ -1,5 +1,6 @@
 package com.open3hr.adeies.controllers;
 
+import com.open3hr.adeies.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.dto.LeaveRequestDTO;
 import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.services.LeaveRequestService;
@@ -18,6 +19,13 @@ public class LeaveRequestController {
     @PostMapping("/leaverequest/add")
     public  LeaveRequest leaveRequest(@RequestBody LeaveRequestDTO leaveRequestDTO){
         return new LeaveRequest(leaveRequestService.save(leaveRequestDTO));
+    }
+
+
+    @GetMapping("/leaverequest/{employeeId}")
+    public List<LeaveRequestDTO> getAllLeaveRequestsOfAnEmployee(@PathVariable int id)
+    {
+        return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
     @GetMapping("/leaverequest/all")

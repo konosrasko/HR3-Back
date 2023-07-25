@@ -15,4 +15,6 @@ public interface LeaveRequestService {
 
     void deleteById(Integer id);
 
+    List<LeaveRequestDTO> findRequestsForAnEmployee(int id);
+
 }
