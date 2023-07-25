@@ -11,17 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LeaveBalanceDTO {
-    private Long id;
-    private Long days;
-    private Long daysTaken;
-    private Long employeeId;
-    private Long leaveCategoryId;
+    private Integer id;
+    private Integer days;
+    private Integer daysTaken;
+    private Integer employeeId;
+    private Integer leaveCategoryId;
 
     public LeaveBalanceDTO(LeaveBalance leaveBalance){
         this.id = leaveBalance.getId();
         this.days = leaveBalance.getDays();
         this.daysTaken = leaveBalance.getDaysTaken();
-        this.employeeId = leaveBalance.getEmployeeId();
         this.leaveCategoryId = leaveBalance.getLeaveCategoryId();
     }
 }

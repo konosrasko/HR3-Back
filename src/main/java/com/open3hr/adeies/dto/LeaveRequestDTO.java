@@ -13,11 +13,11 @@ import java.util.Date;
 public class LeaveRequestDTO {
 
     private LeaveCategory leaveCategory;
-    private Date start_date;
-    private Date end_date;
+    private Date startDate;
+    private Date endDate;
 
     public LeaveRequestDTO(LeaveRequest leaveRequest){
-        this.start_date=leaveRequest.getStart_date();
-        this.end_date= leaveRequest.getEnd_date();
+        this.startDate=leaveRequest.getStartDate();
+        this.endDate= leaveRequest.getEndDate();
     }
 }

@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserDTO findById(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             return new UserDTO(userOptional.get());
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
     }
