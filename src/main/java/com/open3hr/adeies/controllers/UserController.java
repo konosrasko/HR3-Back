@@ -16,7 +16,7 @@ public class UserController {
 
         @GetMapping("/{id}" )
         @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-        public UserDTO getUserById(@PathVariable int id){
+        public UserDTO getUserById(@PathVariable Long id){
             return userService.findById(id);
         }
 
@@ -28,7 +28,7 @@ public class UserController {
 
         @PostMapping("/add")
         public UserDTO save(@RequestBody UserDTO userDTO){
-                userDTO.setId(0);
+                userDTO.setId(0L);
                 return userService.save(userDTO);
         }
 
@@ -38,7 +38,7 @@ public class UserController {
         }
 
         @DeleteMapping("/{id}")
-        public void deleteById(@PathVariable int id){
+        public void deleteById(@PathVariable Long id){
                 userService.deleteById(id);
         }
 }

@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UserDTO {
 
-        int id;
+        Long id;
         String username;
         String password;
         Boolean isEnabled;
-        int employeeId;
+        Long employeeId;
         Role role;
 
         public UserDTO(User user) {

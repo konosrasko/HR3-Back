@@ -17,7 +17,7 @@ public class User {
 
     @Column (name = "id")
     @Id
-    int id;
+    Long id;
 
     @Column (name = "username")
     String username;
@@ -29,7 +29,7 @@ public class User {
     Boolean isEnabled;
 
     @Column (name = "employee_id")
-    int employeeId;
+    Long employeeId;
 
     @Column (name = "role")
     Role role;
