@@ -22,6 +22,6 @@ public class LeaveBalanceDTO {
         this.days = leaveBalance.getDays();
         this.days_taken = leaveBalance.getDays_taken();
         this.employee_id = leaveBalance.getEmployee_id();
-        this.leave_category_id = leaveBalance.getLeave_category_id();
+        this.leave_category_id = leaveBalance.getLeaveCategoryId();
     }
 }
