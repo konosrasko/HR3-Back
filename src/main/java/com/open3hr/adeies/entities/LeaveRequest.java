@@ -22,20 +22,20 @@ public class LeaveRequest {
 
     @Column(name = "employee_id")
     @JoinColumn(name = "employee_id")
-    private int employee_id;
+    private int employeeId;
 
     @Column(name = "leave_category_id")
     @JoinColumn(name = "leave_category_id")
-    private int leave_category_id;
+    private int leaveCategoryId;
 
     @Column(name = "submit_date")
-    private Date submit_date;
+    private Date submitDate;
 
     @Column(name = "start_date")
-    private Date start_date;
+    private Date startDate;
 
     @Column(name = "end_date")
-    private Date end_date;
+    private Date endDate;
 
     @Column(name = "duration")
     private int duration;
@@ -45,9 +45,9 @@ public class LeaveRequest {
 
     public LeaveRequest(LeaveRequestDTO leaveRequestDTO){
         // leave category id
-        this.start_date = leaveRequestDTO.getStart_date();
-        this.end_date = leaveRequestDTO.getEnd_date();
-        this.submit_date = new Date();
+        this.startDate = leaveRequestDTO.getStartDate();
+        this.endDate = leaveRequestDTO.getEndDate();
+        this.submitDate = new Date();
     }
 
 }
