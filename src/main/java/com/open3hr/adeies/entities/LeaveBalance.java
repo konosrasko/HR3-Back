@@ -23,12 +23,12 @@ public class LeaveBalance {
     private Long days;
 
     @Column(name = "days_taken")
-    private Long days_taken;
+    private Long daysTaken;
 
     @OneToMany(mappedBy = "",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    private Long employee_id;
+    private Long employeeId;
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
@@ -41,9 +41,9 @@ public class LeaveBalance {
 
     public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO){
         this.id = leaveBalanceDTO.getId();
-        this.days = leaveBalanceDTO.getDays_taken();
-        this.days_taken = leaveBalanceDTO.getDays_taken();
-        this.employee_id = leaveBalanceDTO.getEmployee_id();
-        this.leaveCategoryId = leaveBalanceDTO.getLeave_category_id();
+        this.days = leaveBalanceDTO.getDays();
+        this.daysTaken = leaveBalanceDTO.getDaysTaken();
+        this.employeeId = leaveBalanceDTO.getEmployeeId();
+        this.leaveCategoryId = leaveBalanceDTO.getLeaveCategoryId();
     }
 }

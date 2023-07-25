@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 public class LeaveBalanceDTO {
     private Long id;
     private Long days;
-    private Long days_taken;
-    private Long employee_id;
-    private Long leave_category_id;
+    private Long daysTaken;
+    private Long employeeId;
+    private Long leaveCategoryId;
 
     public LeaveBalanceDTO(LeaveBalance leaveBalance){
         this.id = leaveBalance.getId();
         this.days = leaveBalance.getDays();
-        this.days_taken = leaveBalance.getDays_taken();
-        this.employee_id = leaveBalance.getEmployee_id();
-        this.leave_category_id = leaveBalance.getLeaveCategoryId();
+        this.daysTaken = leaveBalance.getDaysTaken();
+        this.employeeId = leaveBalance.getEmployeeId();
+        this.leaveCategoryId = leaveBalance.getLeaveCategoryId();
     }
 }
