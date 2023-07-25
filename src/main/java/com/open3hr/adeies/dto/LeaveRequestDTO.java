@@ -2,13 +2,18 @@ package com.open3hr.adeies.dto;
 
 import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.entities.LeaveRequest;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
+
 public class LeaveRequestDTO {
 
     private LeaveCategory leaveCategory;
@@ -19,4 +24,5 @@ public class LeaveRequestDTO {
         this.startDate=leaveRequest.getStartDate();
         this.endDate= leaveRequest.getEndDate();
     }
+
 }
