@@ -25,12 +25,9 @@ public class LeaveBalance {
     @Column(name = "days_taken")
     private Integer daysTaken;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.DETACH,
-                    CascadeType.REFRESH,
-            })
+    @OneToMany(mappedBy = "",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY,
@@ -40,7 +37,13 @@ public class LeaveBalance {
                     CascadeType.REFRESH,
             })
     @JoinColumn(name = "leave_category_id", referencedColumnName = "id")
-    private LeaveCategory leaveCategory;
+    private Integer leaveCategoryId;
+
+    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO){
+        this.id = leaveBalanceDTO.getId();
+        this.days = leaveBalanceDTO.getDays();
+        this.daysTaken = leaveBalanceDTO.getDaysTaken();
+    }
 
     public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO, Employee employee){
         this.id = leaveBalanceDTO.getId();
