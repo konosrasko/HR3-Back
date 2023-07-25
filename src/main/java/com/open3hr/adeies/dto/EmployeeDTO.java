@@ -13,27 +13,25 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class EmployeeDTO {
-    private int employee_id;
-    private String first_name;
-    private String last_name;
+    private int employeeId;
+    private String firstName;
+    private String lastName;
     private String email;
-    private String mobile_number;
+    private String mobileNumber;
     private String address;
-    private Date hire_date;
-    private int is_enable;
-    private int supervisor_id;
+    private Date hireDate;
+    private boolean enabled;
+    private int supervisorId;
 
     public EmployeeDTO(Employee employee) {
-        this.employee_id = getEmployee_id();
-        this.first_name = getFirst_name();
-        this.last_name = getLast_name();
-        this.email = getEmail();
-        this.mobile_number = getMobile_number();
-        this.address = getAddress();
-        this.hire_date = getHire_date();
-        this.is_enable = getIs_enable();
-        this.supervisor_id = getSupervisor_id();
-
+        this.employeeId = employee.getId();
+        this.firstName = employee.getFirstName();
+        this.lastName = employee.getLastName();
+        this.email = employee.getEmail();
+        this.mobileNumber = employee.getMobileNumber();
+        this.address = employee.getAddress();
+        this.hireDate = employee.getHireDate();
+        this.enabled = employee.isEnabled();
+        this.supervisorId = employee.getSupervisorId();
     }
-
 }

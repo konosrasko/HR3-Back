@@ -5,7 +5,9 @@ import com.open3hr.adeies.dto.EmployeeDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -22,39 +24,51 @@ public class Employee {
     private int id;
 
     @Column(name = "first_name")
-    private String first_name;
+    private String firstName;
 
     @Column(name= "last_name")
-    private String last_name;
+    private String lastName;
 
     @Column(name="email")
     private String email;
 
     @Column(name = "mobile_number")
-    private String mobile_number;
+    private String mobileNumber;
 
     @Column(name = "address")
     private String address;
 
     @Column(name = "hire_date")
-    private Date hire_date;
+    private Date hireDate;
 
-    @Column(name = "is_enable")
-    private int is_enable;
+    @Column(name = "is_enabled")
+    private boolean enabled;
 
-    @Column(name = "supervisor_id")
-    private int supervisor_id;
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH
+            })
+    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
+    private int supervisorId;
+
+    @OneToMany(mappedBy = "parking",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
     public Employee(EmployeeDTO employeeDTO){
-        this.id = employeeDTO.getEmployee_id();
-        this.first_name = employeeDTO.getFirst_name();
-        this.last_name = employeeDTO.getLast_name();
+        this.id = employeeDTO.getEmployeeId();
+        this.firstName = employeeDTO.getFirstName();
+        this.lastName = employeeDTO.getLastName();
         this.email = employeeDTO.getEmail();
-        this.mobile_number = employeeDTO.getMobile_number();
+        this.mobileNumber = employeeDTO.getMobileNumber();
         this.address = employeeDTO.getAddress();
-        this.hire_date = employeeDTO.getHire_date();
-        this.is_enable = employeeDTO.getIs_enable();
-        this.supervisor_id = employeeDTO.getSupervisor_id();
+        this.hireDate = employeeDTO.getHireDate();
+        this.enabled = employeeDTO.isEnabled();
+        this.supervisorId = employeeDTO.getSupervisorId();
     }
-
 }
