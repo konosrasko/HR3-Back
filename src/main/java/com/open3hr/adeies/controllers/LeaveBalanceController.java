@@ -20,7 +20,7 @@ public class LeaveBalanceController {
     }
 
     @GetMapping("/leavebalance/{id}")
-    public LeaveBalanceDTO findById(@PathVariable Long id){
+    public LeaveBalanceDTO findById(@PathVariable Integer id){
         return leaveBalanceService.findById(id);
     }
 
@@ -36,7 +36,7 @@ public class LeaveBalanceController {
     }
 
     @DeleteMapping("/leavebalance/{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Integer id){
         leaveBalanceService.deleteById(id);
     }
 }

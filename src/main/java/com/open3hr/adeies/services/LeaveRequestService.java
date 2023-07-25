@@ -11,8 +11,8 @@ public interface LeaveRequestService {
 
     List<LeaveRequestDTO> findAll();
 
-    LeaveRequestDTO findById(int id);
+    LeaveRequestDTO findById(Integer id);
 
-    void deleteById(int id);
+    void deleteById(Integer id);
 
 }

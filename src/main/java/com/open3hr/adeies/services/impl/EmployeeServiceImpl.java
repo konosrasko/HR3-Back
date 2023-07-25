@@ -21,7 +21,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll().stream().map(EmployeeDTO::new).collect(Collectors.toList());
     }
     @Override
-    public EmployeeDTO findEmployeeById(Long id){
+    public EmployeeDTO findEmployeeById(Integer id){
         Optional<Employee> result = employeeRepository.findById(id);
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
@@ -36,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         this.employeeRepository.findById(id).orElseThrow(()-> new RuntimeException("Employee with id "+ id +" not found"));
     }
 

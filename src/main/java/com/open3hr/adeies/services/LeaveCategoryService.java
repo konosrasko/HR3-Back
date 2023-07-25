@@ -7,11 +7,11 @@ import java.util.List;
 public interface LeaveCategoryService {
     List<LeaveCategoryDTO> findAll();
 
-    LeaveCategoryDTO findById(Long Id);
+    LeaveCategoryDTO findById(Integer Id);
 
     LeaveCategoryDTO save(LeaveCategoryDTO leaveCategoryDTO);
 
-    void deleteById(Long Id);
+    void deleteById(Integer Id);
 
 
 }

@@ -17,18 +17,18 @@ public class LeaveBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "days")
-    private Long days;
+    private Integer days;
 
     @Column(name = "days_taken")
-    private Long daysTaken;
+    private Integer daysTaken;
 
     @OneToMany(mappedBy = "",
             fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
-    private Long employeeId;
+    private Integer employeeId;
 
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
@@ -37,7 +37,7 @@ public class LeaveBalance {
                     CascadeType.REFRESH,
             })
     @JoinColumn(name = "leave_category_id", referencedColumnName = "id")
-    private Long leaveCategoryId;
+    private Integer leaveCategoryId;
 
     public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO){
         this.id = leaveBalanceDTO.getId();

@@ -13,15 +13,15 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class EmployeeDTO {
-    private int employee_id;
+    private Integer employee_id;
     private String first_name;
     private String last_name;
     private String email;
     private String mobile_number;
     private String address;
     private Date hire_date;
-    private int is_enable;
-    private int supervisor_id;
+    private Integer is_enable;
+    private Integer supervisor_id;
 
     public EmployeeDTO(Employee employee) {
         this.employee_id = getEmployee_id();

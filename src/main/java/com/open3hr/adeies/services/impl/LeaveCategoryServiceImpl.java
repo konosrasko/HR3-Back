@@ -23,7 +23,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     }
 
     @Override
-    public LeaveCategoryDTO findById(Long Id){
+    public LeaveCategoryDTO findById(Integer Id){
         Optional<LeaveCategory> leaveCategory = leaveCategoryRepository.findById(Id);
         if(leaveCategory.isPresent()){
             return new LeaveCategoryDTO(leaveCategory.get());
@@ -38,7 +38,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
         return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
     }
     @Override
-    public void deleteById(Long Id) {
+    public void deleteById(Integer Id) {
         this.leaveCategoryRepository.findById(Id).orElseThrow(()-> new RuntimeException("Leave category with id "+ Id +" not found"));
     }
 

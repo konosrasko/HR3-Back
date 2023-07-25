@@ -19,7 +19,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name")
     private String first_name;
@@ -40,10 +40,10 @@ public class Employee {
     private Date hire_date;
 
     @Column(name = "is_enable")
-    private int is_enable;
+    private Boolean is_enable;
 
     @Column(name = "supervisor_id")
-    private int supervisor_id;
+    private Integer supervisor_id;
 
     public Employee(EmployeeDTO employeeDTO){
         this.id = employeeDTO.getEmployee_id();

@@ -26,12 +26,12 @@ public class LeaveRequestController {
     }
 
     @GetMapping("/leaverequest/{id}")
-    public LeaveRequestDTO leaveRequestDTO(@PathVariable int id){
+    public LeaveRequestDTO leaveRequestDTO(@PathVariable Integer id){
         return leaveRequestService.findById(id);
     }
 
     @DeleteMapping("/leaverequest/{id}")
-    public void deleteRequest(@PathVariable int id){
+    public void deleteRequest(@PathVariable Integer id){
         leaveRequestService.deleteById(id);
     }
 }
