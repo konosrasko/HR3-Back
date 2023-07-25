@@ -1,6 +1,8 @@
 package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
+import com.open3hr.adeies.dto.LeaveRequestDTO;
+import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
 
     @GetMapping("/employees")
     public List<EmployeeDTO> getAllEmployees(){
@@ -30,6 +33,11 @@ public class EmployeeController {
     @DeleteMapping("/employee/{id}")
     public void deleteById(@PathVariable Integer id){
         employeeService.deleteById(id);
+    }
+
+    @PostMapping("/employee/{id}/leaveRequest")
+    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable int id ){
+        return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
 

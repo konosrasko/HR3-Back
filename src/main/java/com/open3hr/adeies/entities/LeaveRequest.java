@@ -20,9 +20,13 @@ public class LeaveRequest {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "employee_id")
-    @JoinColumn(name = "employee_id")
-    private Integer employeeId;
+    @ManyToOne(fetch = FetchType.LAZY, cascade  = {
+            CascadeType.PERSIST,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    } )
+    @JoinColumn(name = "employee_id",referencedColumnName = "id")
+    private Employee employee;
 
     @Column(name = "leave_category_id")
     @JoinColumn(name = "leave_category_id")
@@ -43,11 +47,13 @@ public class LeaveRequest {
     @Column(name = "status")
     private String status;
 
-    public LeaveRequest(LeaveRequestDTO leaveRequestDTO){
-        // leave category id
+    public LeaveRequest(LeaveRequestDTO leaveRequestDTO, Employee employee){
+        this.employee = employee;
+        this.leaveCategoryId = leaveRequestDTO.getLeaveCategoryId();
         this.startDate = leaveRequestDTO.getStartDate();
         this.endDate = leaveRequestDTO.getEndDate();
         this.submitDate = new Date();
+        this.status = "Pending";
     }
 
 }
