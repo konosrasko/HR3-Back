@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `leave_request`;
-DROP TABLE IF EXISTS `leave_category`;
 DROP TABLE IF EXISTS `leave_balance`;
+DROP TABLE IF EXISTS `leave_category`;
 DROP TABLE IF EXISTS `employee`;
 
 CREATE TABLE `employee` (
