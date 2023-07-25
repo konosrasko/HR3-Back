@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +24,13 @@ public class LeaveCategory {
 
     @Column(name="title")
     private String title;
+
+//    @OneToMany(mappedBy = "leaveCategory",
+//            fetch = FetchType.EAGER,
+//            cascade = {
+//                    CascadeType.ALL
+//            })
+//    private List<LeaveBalance> balances = new ArrayList<>();
 
     public LeaveCategory(LeaveCategoryDTO leaveCategoryDTO){
         this.id = leaveCategoryDTO.getId();
