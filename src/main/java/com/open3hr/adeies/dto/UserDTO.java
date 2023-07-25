@@ -21,11 +21,9 @@ public class UserDTO {
         private Role role;
 
         public UserDTO(User user) {
-                this.id = user.getId();
                 this.username = user.getUsername();
                 this.password = user.getPassword();
                 this.isEnabled = user.getIsEnabled();
-                this.employeeId = user.getEmployeeId();
                 this.role = user.getRole();
         }
 
