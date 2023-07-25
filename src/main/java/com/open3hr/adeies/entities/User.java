@@ -17,19 +17,19 @@ public class User {
 
     @Column (name = "id")
     @Id
-    Integer id;
+    private Integer id;
 
     @Column (name = "username")
-    String username;
+    private String username;
 
     @Column (name = "password")
-    String password;
+    private String password;
 
     @Column (name = "is_enabled")
-    Boolean isEnabled;
+    private Boolean isEnabled;
 
     @Column (name = "employee_id")
-    Integer employeeId;
+    private Integer employeeId;
 
     @Column (name = "role")
     Role role;
