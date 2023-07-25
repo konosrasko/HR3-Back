@@ -11,12 +11,13 @@ import com.open3hr.adeies.services.LeaveRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class LeaveRequestServiceImpl implements LeaveRequestService{
+public class LeaveRequestServiceImpl implements LeaveRequestService {
 
     @Autowired
     private LeaveRequestRepository leaveRequestRepository;
@@ -24,43 +25,35 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     private EmployeeRepository employeeRepository;
 
 
-
     @Override
-    public List<LeaveRequestDTO> findAll(){
+    public List<LeaveRequestDTO> findAll() {
         return leaveRequestRepository.findAll().stream().map(LeaveRequestDTO::new).toList();
     }
 
     @Override
     public LeaveRequestDTO findById(Integer id) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
-        if (leaveRequest.isPresent()){
+        if (leaveRequest.isPresent()) {
             return new LeaveRequestDTO(leaveRequest.get());
-        }else {
-            throw new RuntimeException("Couldn't find request with id: "+id);
+        } else {
+            throw new RuntimeException("Couldn't find request with id: " + id);
         }
     }
 
     @Override
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         this.leaveRequestRepository.deleteById(id);
     }
 
     @Override
     public List<LeaveRequestDTO> findRequestsForAnEmployee(int id) {
 
-       Optional<Employee> employeeOptional= employeeRepository.findById(id);
-       if(employeeOptional.isPresent())
-       {
-           return filterTheListById(id,employeeOptional.get().getId());
-       }
-     else
-         return null;
-    }
-
-    public List<LeaveRequestDTO>filterTheListById(int id,int employeeId)
-    {
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findAll();
-        leaveRequests.stream().filter(leaveRequest -> employeeId == id).collect(Collectors.toList());
+
+        leaveRequests = leaveRequests.stream().filter(leaveRequest -> leaveRequest.getEmployee().getId() == id).collect(Collectors.toList());
+
         return leaveRequests.stream().map(LeaveRequestDTO::new).toList();
     }
 }
+
+
