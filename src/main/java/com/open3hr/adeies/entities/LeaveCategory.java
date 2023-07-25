@@ -22,6 +22,9 @@ public class LeaveCategory {
     @Column(name="title")
     private String title;
 
+    @Column(name="isActive")
+    private boolean isActive;
+
     public LeaveCategory(LeaveCategoryDTO leaveCategoryDTO){
         this.id = leaveCategoryDTO.getId();
         this.title = leaveCategoryDTO.getTitle();
