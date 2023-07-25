@@ -22,7 +22,7 @@ public class LeaveRequestController {
     }
 
 
-    @GetMapping("/leaverequest/{employeeId}")
+    @GetMapping("/searchemployeeleaverequest/{id}")
     public List<LeaveRequestDTO> getAllLeaveRequestsOfAnEmployee(@PathVariable int id)
     {
         return leaveRequestService.findRequestsForAnEmployee(id);

@@ -54,13 +54,18 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     public List<LeaveRequestDTO> findRequestsForAnEmployee(int id) {
 
        Optional<Employee> employeeOptional= employeeRepository.findById(id);
-      return filterTheListById(id);
+       if(employeeOptional.isPresent())
+       {
+           return filterTheListById(id,employeeOptional.get().getId());
+       }
+     else
+         return null;
     }
 
-    public List<LeaveRequestDTO>filterTheListById(int id)
+    public List<LeaveRequestDTO>filterTheListById(int id,int employeeId)
     {
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findAll();
-        leaveRequests.stream().filter(leaveRequest -> leaveRequest.getId() == id).collect(Collectors.toList());
+        leaveRequests.stream().filter(leaveRequest -> employeeId == id).collect(Collectors.toList());
         return leaveRequests.stream().map(LeaveRequestDTO::new).toList();
     }
 }
