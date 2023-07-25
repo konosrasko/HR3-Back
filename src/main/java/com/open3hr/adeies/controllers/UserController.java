@@ -1,46 +1,43 @@
 package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.UserDTO;
-import com.open3hr.adeies.services.impl.UserServiceImpl;
+import com.open3hr.adeies.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api")
 public class UserController {
-        @Autowired
-        private UserServiceImpl userService;
+    @Autowired
+    private UserService userService;
 
+    @GetMapping("/users/{id}" )
+    public UserDTO findById(@PathVariable Integer id){
+        return userService.findById(id);
+    }
 
-        @GetMapping("/{id}" )
-        @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-        public UserDTO getUserById(@PathVariable Integer id){
-            return userService.findById(id);
-        }
+    @GetMapping("/users")
+    public List<UserDTO> findAll(){
+        return userService.findAll();
+    }
 
-        @GetMapping("/all")
-        public List<UserDTO> findAll(){
-                return userService.findAll();
-        }
+    @PostMapping("/users")
+    public UserDTO save(@RequestBody UserDTO userDTO){
+        userDTO.setId(0);
+        return userService.save(userDTO);
+    }
 
+    @PutMapping("/users")
+    public UserDTO update(@RequestBody UserDTO userDTO){
+        return userService.save(userDTO);
+    }
 
-        @PostMapping("/add")
-        public UserDTO save(@RequestBody UserDTO userDTO){
-                userDTO.setId(0);
-                return userService.save(userDTO);
-        }
-
-        @PutMapping("/edit")
-        public UserDTO update(@RequestBody UserDTO userDTO){
-                return userService.save(userDTO);
-        }
-
-        @DeleteMapping("/{id}")
-        public void deleteById(@PathVariable Integer id){
-                userService.deleteById(id);
-        }
+    @DeleteMapping("/users/{id}")
+    public void deleteById(@PathVariable Integer id){
+        userService.deleteById(id);
+    }
 }
 
 
