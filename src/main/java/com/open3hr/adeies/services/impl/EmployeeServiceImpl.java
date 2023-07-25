@@ -1,8 +1,11 @@
 package com.open3hr.adeies.services.impl;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
+import com.open3hr.adeies.dto.LeaveRequestDTO;
 import com.open3hr.adeies.entities.Employee;
+import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.repositories.EmployeeRepository;
+import com.open3hr.adeies.repositories.LeaveRequestRepository;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,8 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+    @Autowired
+    private LeaveRequestRepository leaveRequestRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -31,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO addEmployee(EmployeeDTO employeeDTO) {
-        Employee employee = new Employee();
+        Employee employee = new Employee(employeeDTO);
         return new EmployeeDTO(employeeRepository.save(employee));
     }
 
@@ -40,5 +46,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeRepository.findById(id).orElseThrow(()-> new RuntimeException("Employee with id "+ id +" not found"));
     }
 
+    @Override
+    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO,int employeeId) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        if(optionalEmployee.isPresent()){
+
+            LeaveRequest leaveRequest= new LeaveRequest(leaveRequestDTO,optionalEmployee.get());
+
+            return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest));
+        }else
+            throw new RuntimeException("erwtisi");
+    }
 
 }

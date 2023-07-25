@@ -1,6 +1,7 @@
 package com.open3hr.adeies.services.impl;
 
 import com.open3hr.adeies.dto.LeaveRequestDTO;
+import com.open3hr.adeies.entities.Employee;
 import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.repositories.LeaveRequestRepository;
 import com.open3hr.adeies.services.LeaveRequestService;
@@ -16,12 +17,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     @Autowired
     private LeaveRequestRepository leaveRequestRepository;
 
-    @Override
-    public LeaveRequestDTO save(LeaveRequestDTO leaveRequestDTO) {
-        LeaveRequest leaveRequest = new LeaveRequest(leaveRequestDTO);
-        leaveRequestRepository.save(leaveRequest);
-        return leaveRequestDTO;
-    }
+
 
     @Override
     public List<LeaveRequestDTO> findAll(){
