@@ -1,4 +1,4 @@
-SELECT * FROM open2hr.employee;CREATE TABLE `employee` (
+CREATE TABLE `employee` (
   `id` int NOT NULL,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
