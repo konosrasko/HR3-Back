@@ -18,7 +18,7 @@ public class LeaveCategoryController {
     }
 
     @GetMapping("/leavecategory/{id}")
-    public LeaveCategoryDTO findById(@PathVariable Long id){
+    public LeaveCategoryDTO findById(@PathVariable Integer id){
         return leaveCategoryService.findById(id);
     }
 
@@ -34,7 +34,7 @@ public class LeaveCategoryController {
     }
 
     @DeleteMapping("/leavecategory/{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Integer id){
         leaveCategoryService.deleteById(id);
     }
 

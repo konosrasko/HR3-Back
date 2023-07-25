@@ -17,7 +17,7 @@ public class LeaveCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private Integer id;
 
     @Column(name="title")
     private String title;

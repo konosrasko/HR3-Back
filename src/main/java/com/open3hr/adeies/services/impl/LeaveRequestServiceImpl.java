@@ -29,7 +29,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     }
 
     @Override
-    public LeaveRequestDTO findById(int id) {
+    public LeaveRequestDTO findById(Integer id) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
         if (leaveRequest.isPresent()){
             return new LeaveRequestDTO(leaveRequest.get());
@@ -39,7 +39,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     }
 
     @Override
-    public void deleteById(int id){
+    public void deleteById(Integer id){
         this.leaveRequestRepository.deleteById(id);
     }
 

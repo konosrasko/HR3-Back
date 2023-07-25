@@ -23,7 +23,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     }
 
     @Override
-    public LeaveBalanceDTO findById(Long id) {
+    public LeaveBalanceDTO findById(Integer id) {
         Optional<LeaveBalance> myLeaveBalance = leaveBalanceRepository.findById(id);
         if(myLeaveBalance.isPresent()){
             return new LeaveBalanceDTO(myLeaveBalance.get());
@@ -39,7 +39,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Integer id) {
         this.leaveBalanceRepository.findById(id).orElseThrow(()-> new RuntimeException("Leave balance with id "+ id +" not found"));
     }
 }

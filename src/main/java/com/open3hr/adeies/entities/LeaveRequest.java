@@ -18,15 +18,15 @@ public class LeaveRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "employee_id")
     @JoinColumn(name = "employee_id")
-    private int employeeId;
+    private Integer employeeId;
 
     @Column(name = "leave_category_id")
     @JoinColumn(name = "leave_category_id")
-    private int leaveCategoryId;
+    private Integer leaveCategoryId;
 
     @Column(name = "submit_date")
     private Date submitDate;
@@ -38,7 +38,7 @@ public class LeaveRequest {
     private Date endDate;
 
     @Column(name = "duration")
-    private int duration;
+    private Integer duration;
 
     @Column(name = "status")
     private String status;
