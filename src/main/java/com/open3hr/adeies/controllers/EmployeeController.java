@@ -1,7 +1,9 @@
 package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
+import com.open3hr.adeies.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.services.EmployeeService;
+import com.open3hr.adeies.services.LeaveBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,9 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private LeaveBalanceService leaveBalanceService;
 
     @GetMapping("/employees")
     public List<EmployeeDTO> getAllEmployees(){
@@ -33,4 +38,8 @@ public class EmployeeController {
     }
 
 
+    @PostMapping("/employee/{id}/addbalance")
+    public void addBalanceToEmployee(@RequestBody LeaveBalanceDTO leaveBalanceDTO, @PathVariable Integer id){
+        leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO,id);
+    }
 }

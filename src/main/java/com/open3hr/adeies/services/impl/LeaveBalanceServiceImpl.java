@@ -1,7 +1,9 @@
 package com.open3hr.adeies.services.impl;
 
 import com.open3hr.adeies.dto.LeaveBalanceDTO;
+import com.open3hr.adeies.entities.Employee;
 import com.open3hr.adeies.entities.LeaveBalance;
+import com.open3hr.adeies.repositories.EmployeeRepository;
 import com.open3hr.adeies.repositories.LeaveBalanceRepository;
 import com.open3hr.adeies.services.LeaveBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import java.util.Optional;
 public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     @Autowired
     private LeaveBalanceRepository leaveBalanceRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Override
     public List<LeaveBalanceDTO> findAll() {
@@ -41,5 +46,16 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     @Override
     public void deleteById(Integer id) {
         this.leaveBalanceRepository.findById(id).orElseThrow(()-> new RuntimeException("Leave balance with id "+ id +" not found"));
+    }
+
+    @Override
+    public void addLeaveBalanceToEmployee(LeaveBalanceDTO leaveBalanceDTO, Integer employeeId) {
+        Optional<Employee> foundEmployee = employeeRepository.findById(employeeId);
+        if(foundEmployee.isPresent()){
+            LeaveBalance myLeaveBalance = new LeaveBalance(leaveBalanceDTO, foundEmployee.get());
+            leaveBalanceRepository.save(myLeaveBalance);
+        } else {
+            throw new RuntimeException("Couldn't find this employee to assign the leave balance");
+        }
     }
 }
