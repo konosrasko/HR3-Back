@@ -5,10 +5,12 @@ import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.repositories.LeaveCategoryRepository;
 import com.open3hr.adeies.services.LeaveCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     @Autowired
     private LeaveCategoryRepository leaveCategoryRepository;
