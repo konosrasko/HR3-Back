@@ -4,7 +4,6 @@ import com.open3hr.adeies.dto.LeaveBalanceDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Data
