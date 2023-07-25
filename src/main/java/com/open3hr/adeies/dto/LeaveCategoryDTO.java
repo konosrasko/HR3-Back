@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LeaveCategoryDTO {
-    private Long id;
+    private Integer id;
     private String title;
 
     public LeaveCategoryDTO(LeaveCategory leaveCategory){
