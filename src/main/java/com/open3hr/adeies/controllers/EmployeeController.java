@@ -40,5 +40,4 @@ public class EmployeeController {
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
-
 }

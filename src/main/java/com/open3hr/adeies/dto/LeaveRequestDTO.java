@@ -2,12 +2,16 @@ package com.open3hr.adeies.dto;
 
 import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.entities.LeaveRequest;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class LeaveRequestDTO {
 
