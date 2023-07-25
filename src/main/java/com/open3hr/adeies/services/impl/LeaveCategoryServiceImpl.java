@@ -16,16 +16,16 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     private LeaveCategoryRepository leaveCategoryRepository;
 
     @Override
-    public List<LeaveCategoryDTO> findAll(){
+    public List<LeaveCategoryDTO> findAll() {
         return leaveCategoryRepository.findAll().stream()
                 .map(LeaveCategoryDTO::new)
                 .toList();
     }
 
     @Override
-    public LeaveCategoryDTO findById(Integer Id){
+    public LeaveCategoryDTO findById(Integer Id) {
         Optional<LeaveCategory> leaveCategory = leaveCategoryRepository.findById(Id);
-        if(leaveCategory.isPresent()){
+        if (leaveCategory.isPresent()) {
             return new LeaveCategoryDTO(leaveCategory.get());
         } else {
             throw new RuntimeException("Couldn't find leave category with id" + Id);
@@ -33,13 +33,18 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     }
 
     @Override
-    public LeaveCategoryDTO save(LeaveCategoryDTO leaveCategoryDTO){
+    public LeaveCategoryDTO save(LeaveCategoryDTO leaveCategoryDTO) {
         LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
         return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
     }
-    @Override
-    public void deleteById(Integer Id) {
-        this.leaveCategoryRepository.findById(Id).orElseThrow(()-> new RuntimeException("Leave category with id "+ Id +" not found"));
-    }
 
+    @Override
+    public void deleteById(Integer id) {
+        Optional<LeaveCategory> result = leaveCategoryRepository.findById(Math.toIntExact(id));
+        if (result.isPresent()) {
+            leaveCategoryRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Did not find leave category id- " + id);
+        }
+    }
 }

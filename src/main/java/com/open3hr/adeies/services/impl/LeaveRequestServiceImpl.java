@@ -23,12 +23,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService{
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Override
-    public LeaveRequestDTO save(LeaveRequestDTO leaveRequestDTO) {
-        LeaveRequest leaveRequest = new LeaveRequest(leaveRequestDTO);
-        leaveRequestRepository.save(leaveRequest);
-        return leaveRequestDTO;
-    }
+
 
     @Override
     public List<LeaveRequestDTO> findAll(){

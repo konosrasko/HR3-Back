@@ -16,11 +16,12 @@ import java.util.Date;
 
 public class LeaveRequestDTO {
 
-    private LeaveCategory leaveCategory;
+    private int leaveCategoryId;
     private Date startDate;
     private Date endDate;
 
     public LeaveRequestDTO(LeaveRequest leaveRequest){
+        this.leaveCategoryId = leaveRequest.getLeaveCategoryId();
         this.startDate=leaveRequest.getStartDate();
         this.endDate= leaveRequest.getEndDate();
     }

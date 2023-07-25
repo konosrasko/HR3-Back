@@ -2,6 +2,7 @@ package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.services.LeaveCategoryService;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
