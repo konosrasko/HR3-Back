@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS `leave_category`;
 DROP TABLE IF EXISTS `employee`;
 
 CREATE TABLE `employee` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
@@ -20,13 +20,14 @@ CREATE TABLE `employee` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `leave_category` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(45) DEFAULT NULL,
+  `isActive` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `leave_balance` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `employee_id` int DEFAULT NULL,
   `leave_category_id` int DEFAULT NULL,
   `days` int DEFAULT NULL,
@@ -39,7 +40,7 @@ CREATE TABLE `leave_balance` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `leave_request` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `employee_id` int DEFAULT NULL,
   `leave_category_id` int DEFAULT NULL,
   `submit_date` datetime DEFAULT NULL,
@@ -55,7 +56,7 @@ CREATE TABLE `leave_request` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `user` (
-  `id` int NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) DEFAULT NULL,
   `password` varchar(45) DEFAULT NULL,
   `is_enabled` tinyint DEFAULT NULL,
@@ -65,8 +66,6 @@ CREATE TABLE `user` (
   KEY `employee_id_idx` (`employee_id`),
   CONSTRAINT `fk_4_employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- INSERT QUERIES
 
 INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (1, 'Stamatis', 'Chatzis', 'schatzis@ots.gr', 'Panadreoy 164 Neapoli', '2310632434', '2023-04-01', true);
 INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (2, 'Paylos', 'Tsigaros', 'ptsigar@ots.gr', 'Magnisias 23 Stayroypoli', '6983957541', '2023-03-01', true);

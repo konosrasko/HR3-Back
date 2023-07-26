@@ -53,7 +53,7 @@ public class Employee {
     @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
     private Employee employee;
 
-    @OneToMany(mappedBy = "",
+    @OneToMany(mappedBy = "employee",
             fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.ALL
