@@ -31,7 +31,8 @@ public class User {
     private Integer employeeId;
 
     @Column (name = "role")
-    Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User(UserDTO userDTO){
         this.id = userDTO.getId();
