@@ -1,7 +1,6 @@
 package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.UserDTO;
-import com.open3hr.adeies.repositories.UserRepository;
 import com.open3hr.adeies.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class UserController {
         userService.deleteById(id);
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/users")
     public UserDTO createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.createAccount(userDTO);
