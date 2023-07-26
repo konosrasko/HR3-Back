@@ -1,6 +1,7 @@
 package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.UserDTO;
+import com.open3hr.adeies.repositories.UserRepository;
 import com.open3hr.adeies.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,16 @@ public class UserController {
     public UserDTO createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.createAccount(userDTO);
+    }
+
+    @PutMapping("/users/{id}/changeStatus")
+    public UserDTO changeStatus(@PathVariable Integer id){
+        return userService.updateStatus(id);
+    }
+
+    @PutMapping("/users/{id}/supervisorRights")
+    public UserDTO supervisorRights(@PathVariable Integer id){
+        return userService.changeSupervisorRights(id);
     }
 }
 

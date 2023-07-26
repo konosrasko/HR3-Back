@@ -30,8 +30,12 @@ public class User {
     @Column (name = "employee_id")
     private Integer employeeId;
 
+    @Column(name = "is_supervisor")
+    private Boolean isSupervisor;
+
     @Column (name = "role")
-    Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     public User(UserDTO userDTO){
         this.id = userDTO.getId();
@@ -39,6 +43,7 @@ public class User {
         this.password = userDTO.getPassword();
         this.isEnabled = userDTO.getIsEnabled();
         this.employeeId = userDTO.getEmployeeId();
+        this.isSupervisor = userDTO.getIsSupervisor();
         this.role = userDTO.getRole();
     }
 
