@@ -47,14 +47,14 @@ public class Employee {
     @Column(name = "supervisor_id")
     private Integer supervisorId;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.DETACH,
-                    CascadeType.REFRESH
-            })
-    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
-    private Employee employee;
+//    @ManyToOne(fetch = FetchType.LAZY,
+//            cascade = {
+//                    CascadeType.PERSIST,
+//                    CascadeType.DETACH,
+//                    CascadeType.REFRESH
+//            })
+//    @JoinColumn(name = "supervisor_id", referencedColumnName = "id")
+//    private Employee employee;
 
     @OneToMany(mappedBy = "employee",
             fetch = FetchType.EAGER,
@@ -62,6 +62,9 @@ public class Employee {
                     CascadeType.ALL
             })
     private List<LeaveBalance> leaveBalanceList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "employee")
+    private User user;
 
     public Employee(EmployeeDTO employeeDTO){
         this.id = employeeDTO.getEmployeeId();

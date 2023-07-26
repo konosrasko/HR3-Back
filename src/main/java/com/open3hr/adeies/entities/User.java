@@ -27,9 +27,6 @@ public class User {
     @Column (name = "is_enabled")
     private Boolean isEnabled;
 
-    @Column (name = "employee_id")
-    private Integer employeeId;
-
     @Column(name = "is_supervisor")
     private Boolean isSupervisor;
 
@@ -37,14 +34,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(UserDTO userDTO){
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+    private Employee employee;
+
+    public User(UserDTO userDTO, Employee employee){
         this.id = userDTO.getId();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
         this.isEnabled = userDTO.getIsEnabled();
-        this.employeeId = userDTO.getEmployeeId();
-        this.isSupervisor = userDTO.getIsSupervisor();
         this.role = userDTO.getRole();
+        this.employee = employee;
+        this.isSupervisor = userDTO.getIsSupervisor();
     }
-
 }
