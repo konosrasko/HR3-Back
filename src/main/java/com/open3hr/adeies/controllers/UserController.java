@@ -23,7 +23,7 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/users/save")
     public UserDTO save(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.save(userDTO);
@@ -37,6 +37,12 @@ public class UserController {
     @DeleteMapping("/users/{id}")
     public void deleteById(@PathVariable Integer id){
         userService.deleteById(id);
+    }
+
+    @PostMapping("/users/create")
+    public UserDTO createAccount(@RequestBody UserDTO userDTO){
+        userDTO.setId(0);
+        return userService.createAccount(userDTO);
     }
 }
 

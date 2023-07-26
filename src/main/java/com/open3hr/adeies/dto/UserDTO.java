@@ -26,7 +26,6 @@ public class UserDTO {
                 this.isEnabled = user.getIsEnabled();
                 this.role = user.getRole();
         }
-
         public User toUser(){
                 return new User(
                         this.id,

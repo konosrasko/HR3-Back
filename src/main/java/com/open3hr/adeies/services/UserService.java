@@ -11,4 +11,6 @@ public interface UserService {
     UserDTO save(UserDTO userDTO);
 
     void deleteById(Integer id);
+
+    UserDTO createAccount(UserDTO userDTO);
 }
