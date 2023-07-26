@@ -25,14 +25,21 @@ public class LeaveCategory {
     @Column(name="title")
     private String title;
 
-//    @OneToMany(mappedBy = "leaveCategory",
-//            fetch = FetchType.EAGER,
-//            cascade = {
-//                    CascadeType.ALL
-//            })
-//    private List<LeaveBalance> balances = new ArrayList<>();
+    @OneToMany(mappedBy = "category",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveBalance> balances = new ArrayList<>();
 
-    @Column(name="isActive")
+    @OneToMany(mappedBy = "category",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveRequest> requests = new ArrayList<>();
+
+    @Column(name="is_active")
     private boolean isActive;
 
     public LeaveCategory(LeaveCategoryDTO leaveCategoryDTO){

@@ -2,7 +2,6 @@ package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.services.LeaveCategoryService;
-import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +12,7 @@ import java.util.List;
 public class LeaveCategoryController {
     @Autowired
     private LeaveCategoryService leaveCategoryService;
+
     @GetMapping("/leavecategory")
     public List<LeaveCategoryDTO> findAll(){
         return  leaveCategoryService.findAll();
@@ -26,12 +26,12 @@ public class LeaveCategoryController {
     @PostMapping("/leavecategory")
     public LeaveCategoryDTO save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         leaveCategoryDTO.setId(0);
-        return leaveCategoryService.save(leaveCategoryDTO);
+        return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
 
     @PutMapping("/leavecategory")
     public LeaveCategoryDTO update(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
-        return leaveCategoryService.save(leaveCategoryDTO);
+        return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
 
     @DeleteMapping("/leavecategory/{id}")

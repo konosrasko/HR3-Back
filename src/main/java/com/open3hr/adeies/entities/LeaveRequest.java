@@ -49,15 +49,15 @@ public class LeaveRequest {
     private Integer duration;
 
     @Column(name = "status")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public LeaveRequest(LeaveRequestDTO leaveRequestDTO, Employee employee, LeaveCategory category){
         this.employee = employee;
         this.startDate = leaveRequestDTO.getStartDate();
         this.endDate = leaveRequestDTO.getEndDate();
         this.submitDate = new Date();
-        this.status = "Pending";
+        this.status = leaveRequestDTO.getStatus();
         this.category = category;
     }
-
 }

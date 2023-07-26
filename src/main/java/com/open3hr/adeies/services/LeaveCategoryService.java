@@ -9,9 +9,8 @@ public interface LeaveCategoryService {
 
     LeaveCategoryDTO findById(Integer Id);
 
-    LeaveCategoryDTO save(LeaveCategoryDTO leaveCategoryDTO);
+    LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO);
 
     void deleteById(Integer Id);
-
 
 }
