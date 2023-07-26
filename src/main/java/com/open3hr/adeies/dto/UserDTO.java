@@ -27,14 +27,14 @@ public class UserDTO {
                 this.role = user.getRole();
         }
 
-        public User toUser(){
-                return new User(
-                        this.id,
-                        this.username,
-                        this.password,
-                        this.isEnabled,
-                        this.employeeId,
-                        this.role
-                );
-        }
+//        public User toUser(){
+//                return new User(
+//                        this.id,
+//                        this.username,
+//                        this.password,
+//                        this.isEnabled,
+//                        this.employeeId,
+//                        this.role
+//                );
+        //}
 }
