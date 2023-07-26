@@ -13,4 +13,7 @@ public interface UserService {
     void deleteById(Integer id);
 
     UserDTO createAccount(UserDTO userDTO);
+
+    UserDTO updateStatus(Integer id);
+    UserDTO changeSupervisorRights(Integer id);
 }

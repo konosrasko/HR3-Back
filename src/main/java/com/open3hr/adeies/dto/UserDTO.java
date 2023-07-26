@@ -18,6 +18,7 @@ public class UserDTO {
         private String password;
         private Boolean isEnabled;
         private Integer employeeId;
+        private Boolean isSupervisor;
         private Role role;
 
         public UserDTO(User user) {
@@ -33,6 +34,7 @@ public class UserDTO {
                         this.password,
                         this.isEnabled,
                         this.employeeId,
+                        this.isSupervisor,
                         this.role
                 );
         }
