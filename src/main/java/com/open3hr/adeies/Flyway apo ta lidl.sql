@@ -62,6 +62,7 @@ CREATE TABLE `user` (
   `is_enabled` tinyint DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
   `role` varchar(45) DEFAULT NULL,
+  `is_supervisor` tinyint NOT NULL,
   PRIMARY KEY (`id`),
   KEY `employee_id_idx` (`employee_id`),
   CONSTRAINT `fk_4_employee_id` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`)
@@ -87,6 +88,6 @@ INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_d
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (4, 4, 2, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-04-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
 
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (1, 'schatzis', 'katselis123', true, 1, 'ADMIN');
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (2, 'pablo', 'tsigaro_anameno', true, 2, 'HR');
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (3, 'areti', 'mex', true, 3, 'EMPLOYEE');
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (1, 'schatzis', 'katselis123', true, 1, 'ADMIN', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (2, 'pablo', 'tsigaro_anameno', true, 2, 'HR', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (3, 'areti', 'mex', true, 3, 'EMPLOYEE', false);
