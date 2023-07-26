@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,12 +43,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO save(UserDTO userDTO) {
-        User myUser = new User(userDTO);
-        return new UserDTO(userRepository.save(myUser));
-    }
-
-    @Override
     public void deleteById(Integer id) {
         userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
@@ -56,12 +51,14 @@ public class UserServiceImpl implements UserService {
     public UserDTO createAccount(UserDTO userDTO) {
         Optional<Employee> myEmployee = employeeRepository.findById(userDTO.getEmployeeId());
         if (myEmployee.isPresent()) {
-            userRepository.save(new User(userDTO));
+            List<User> userList = userRepository.findAll();
+            for (User user : userList){
+                if(Objects.equals(userDTO.getEmployeeId(), user.getEmployee().getId())){
+                    throw new RuntimeException("This Employee has already a User Account");
+                }
+            }
+            userRepository.save(new User(userDTO, myEmployee.get()));
             return userDTO;
-        } else {
-            throw new RuntimeException("Employee not found, couldn't create new account.");
-        }
-
-
+        } else throw new RuntimeException("Employee not found, couldn't create new account.");
     }
 }

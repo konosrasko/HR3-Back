@@ -60,6 +60,9 @@ public class Employee {
             })
     private List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "employee")
+    private User user;
+
     public Employee(EmployeeDTO employeeDTO){
         this.id = employeeDTO.getEmployeeId();
         this.firstName = employeeDTO.getFirstName();

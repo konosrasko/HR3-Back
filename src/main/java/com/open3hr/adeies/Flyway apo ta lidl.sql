@@ -82,12 +82,11 @@ INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `
 INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (4, 3, 1, 10, 0);
 
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (1, 1, 1, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (2, 2, 2, '2023-07-01 10:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (3, 3, 3, '2023-07-13 12:40:30', '2023-06-01', '2023-07-01', 30, 'PENDING');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (2, 2, 2, '2023-05-02 10:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (3, 3, 3, '2023-04-13 12:40:30', '2023-06-01', '2023-07-01', 30, 'PENDING');
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (4, 4, 2, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-04-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
 
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (1, 'schatzis', 'katselis123', true, 1, 'Admin');
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (1, 'schatzis', 'katselis123', true, 1, 'ADMIN');
 INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (2, 'pablo', 'tsigaro_anameno', true, 2, 'HR');
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (3, 'areti', 'mex', true, 3, 'Employee');
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (4, 'kleftis', 'kleftis', true, 1, 'Admin');
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (3, 'areti', 'mex', true, 3, 'EMPLOYEE');

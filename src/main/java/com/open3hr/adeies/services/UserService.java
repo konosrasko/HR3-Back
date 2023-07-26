@@ -8,8 +8,6 @@ public interface UserService {
 
     List<UserDTO> findAll();
 
-    UserDTO save(UserDTO userDTO);
-
     void deleteById(Integer id);
 
     UserDTO createAccount(UserDTO userDTO);
