@@ -27,11 +27,12 @@ public class User {
     @Column (name = "is_enabled")
     private Boolean isEnabled;
 
-//    @Column (name = "employee_id")
-//    private Integer employeeId;
+    @Column (name = "employee_id")
+    private Integer employeeId;
 
     @Column (name = "role")
-    Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToOne(fetch = FetchType.LAZY,
         cascade = CascadeType.ALL)
@@ -43,7 +44,7 @@ public class User {
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
         this.isEnabled = userDTO.getIsEnabled();
-       // this.employeeId = userDTO.getEmployeeId();
+        this.employeeId = userDTO.getEmployeeId();
         this.role = userDTO.getRole();
     }
 

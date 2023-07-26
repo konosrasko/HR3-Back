@@ -44,6 +44,9 @@ public class Employee {
     @Column(name = "is_enabled")
     private boolean enabled;
 
+    @Column(name = "supervisor_id")
+    private Integer supervisorId;
+
     @ManyToOne(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
@@ -72,6 +75,7 @@ public class Employee {
         this.address = employeeDTO.getAddress();
         this.hireDate = employeeDTO.getHireDate();
         this.enabled = employeeDTO.isEnabled();
+        this.supervisorId = employeeDTO.getSupervisor_id();
         this.leaveBalanceList = employeeDTO.getLeaveBalanceDTOS()
                 .stream()
                 .map(leaveBalanceDTO -> new LeaveBalance(leaveBalanceDTO, this))
