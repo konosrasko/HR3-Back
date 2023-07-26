@@ -27,6 +27,9 @@ public class User {
     @Column (name = "is_enabled")
     private Boolean isEnabled;
 
+    @Column(name = "is_supervisor")
+    private Boolean isSupervisor;
+
     @Column (name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -42,6 +45,6 @@ public class User {
         this.isEnabled = userDTO.getIsEnabled();
         this.role = userDTO.getRole();
         this.employee = employee;
+        this.isSupervisor = userDTO.getIsSupervisor();
     }
-
 }

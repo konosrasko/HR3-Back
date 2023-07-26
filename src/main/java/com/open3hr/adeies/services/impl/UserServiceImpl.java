@@ -61,4 +61,26 @@ public class UserServiceImpl implements UserService {
             return userDTO;
         } else throw new RuntimeException("Employee not found, couldn't create new account.");
     }
+
+    @Override
+    public UserDTO updateStatus(Integer id) {
+        Optional<User> myUser = userRepository.findById(id);
+        if(myUser.isPresent()){
+            myUser.get().setIsEnabled(!myUser.get().getIsEnabled());
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }
+        throw new RuntimeException("Couldn't find this user with id "+id);
+    }
+
+    @Override
+    public UserDTO changeSupervisorRights(Integer id) {
+        Optional<User> myUser = userRepository.findById(id);
+        if(myUser.isPresent()){
+                myUser.get().setIsSupervisor(!myUser.get().getIsSupervisor());
+                userRepository.save(myUser.get());
+                return new UserDTO(myUser.get());
+            }
+        throw new RuntimeException("Couldn't find this user with id "+id);
+    }
 }
