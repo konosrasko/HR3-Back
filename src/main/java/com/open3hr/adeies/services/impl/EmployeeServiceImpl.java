@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
         }
-        throw new RuntimeException("Dead enas");
+        throw new RuntimeException("Couldn't find an employee with the id "+ id);
     }
 
     @Override
