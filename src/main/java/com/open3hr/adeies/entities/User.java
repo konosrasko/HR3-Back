@@ -34,9 +34,11 @@ public class User {
     Role role;
 
     public User(UserDTO userDTO){
+        this.id = userDTO.getId();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
         this.isEnabled = userDTO.getIsEnabled();
+        this.employeeId = userDTO.getEmployeeId();
         this.role = userDTO.getRole();
     }
 

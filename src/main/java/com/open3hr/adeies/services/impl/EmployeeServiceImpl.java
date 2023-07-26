@@ -3,8 +3,10 @@ package com.open3hr.adeies.services.impl;
 import com.open3hr.adeies.dto.EmployeeDTO;
 import com.open3hr.adeies.dto.LeaveRequestDTO;
 import com.open3hr.adeies.entities.Employee;
+import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.repositories.EmployeeRepository;
+import com.open3hr.adeies.repositories.LeaveCategoryRepository;
 import com.open3hr.adeies.repositories.LeaveRequestRepository;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private LeaveCategoryRepository categoryRepository;
+
     @Override
     public List<EmployeeDTO> findAllEmployees() {
-        return employeeRepository.findAll().stream().map(EmployeeDTO::new).collect(Collectors.toList());
+        return employeeRepository.findAll()
+                .stream()
+                .map(EmployeeDTO::new)
+                .collect(Collectors.toList());
     }
     @Override
     public EmployeeDTO findEmployeeById(Integer id){
@@ -32,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
         }
-        throw new RuntimeException("Dead enas");
+        throw new RuntimeException("Couldn't find an employee with the id "+ id);
     }
 
     @Override
@@ -47,16 +55,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO,int employeeId) {
+    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if(optionalEmployee.isPresent()){
+            Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findById(leaveRequestDTO.getCategoryId());
+            if(optionalLeaveCategory.isPresent()){
 
-            LeaveRequest leaveRequest= new LeaveRequest(leaveRequestDTO,optionalEmployee.get());
+                LeaveRequest leaveRequest= new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
 
-            return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest));
+                return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest));
+            }else throw new RuntimeException("Skata");
         }else
             throw new RuntimeException("erwtisi");
     }
-
-
 }
