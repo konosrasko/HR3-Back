@@ -24,17 +24,6 @@ public class UserController {
         return userService.findAll();
     }
 
-    @PostMapping("/users/save")
-    public UserDTO save(@RequestBody UserDTO userDTO){
-        userDTO.setId(0);
-        return userService.save(userDTO);
-    }
-
-    @PutMapping("/users")
-    public UserDTO update(@RequestBody UserDTO userDTO){
-        return userService.save(userDTO);
-    }
-
     @DeleteMapping("/users/{id}")
     public void deleteById(@PathVariable Integer id){
         userService.deleteById(id);
@@ -56,5 +45,3 @@ public class UserController {
         return userService.changeSupervisorRights(id);
     }
 }
-
-
