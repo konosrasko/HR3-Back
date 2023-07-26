@@ -33,9 +33,14 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     }
 
     @Override
-    public LeaveCategoryDTO save(LeaveCategoryDTO leaveCategoryDTO) {
-        LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
-        return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
+    public LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO) {
+        Optional<LeaveCategory> foundCategory = leaveCategoryRepository.findCategoryByTitle(leaveCategoryDTO.getTitle());
+        if(foundCategory.isPresent()){
+            throw new RuntimeException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+        }else{
+            LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
+            return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
+        }
     }
 
     @Override

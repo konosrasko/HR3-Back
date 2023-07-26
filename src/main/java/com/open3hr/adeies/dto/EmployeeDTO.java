@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -24,8 +23,7 @@ public class EmployeeDTO {
     private String address;
     private Date hireDate;
     private boolean enabled;
-    private Integer supervisor_id;
-    private List<LeaveBalanceDTO> leaveBalanceDTOS = new ArrayList<>();
+    private Integer supervisorId;
 
     public EmployeeDTO(Employee employee) {
         this.employeeId = employee.getId();
@@ -36,10 +34,6 @@ public class EmployeeDTO {
         this.address = employee.getAddress();
         this.hireDate = employee.getHireDate();
         this.enabled = employee.isEnabled();
-        this.supervisor_id = employee.getSupervisorId();
-        this.leaveBalanceDTOS = employee.getLeaveBalanceList()
-                .stream()
-                .map(LeaveBalanceDTO::new)
-                .toList();
+        this.supervisorId = employee.getSupervisorId();
     }
 }

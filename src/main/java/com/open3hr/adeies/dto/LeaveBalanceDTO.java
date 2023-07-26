@@ -13,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LeaveBalanceDTO {
     private Integer id;
+    private String categoryTitle;
     private Integer days;
     private Integer daysTaken;
-//    private LeaveCategory category;
 
-    public LeaveBalanceDTO(LeaveBalance leaveBalance){
+    public LeaveBalanceDTO(LeaveBalance leaveBalance, LeaveCategory category){
         this.id = leaveBalance.getId();
+        this.categoryTitle = category.getTitle();
         this.days = leaveBalance.getDays();
         this.daysTaken = leaveBalance.getDaysTaken();
-//        this.category = leaveBalance.getLeaveCategory();
     }
 }

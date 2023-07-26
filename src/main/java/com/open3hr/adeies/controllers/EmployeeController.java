@@ -2,7 +2,6 @@ package com.open3hr.adeies.controllers;
 
 import com.open3hr.adeies.dto.EmployeeDTO;
 import com.open3hr.adeies.dto.LeaveRequestDTO;
-import com.open3hr.adeies.entities.LeaveRequest;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

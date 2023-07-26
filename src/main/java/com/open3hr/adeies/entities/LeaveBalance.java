@@ -31,27 +31,27 @@ public class LeaveBalance {
                     CascadeType.REFRESH,
             })
     private Employee employee;
-//
-//    @ManyToOne(fetch = FetchType.LAZY,
-//            cascade = {
-//                    CascadeType.PERSIST,
-//                    CascadeType.DETACH,
-//                    CascadeType.REFRESH,
-//            })
-//    @JoinColumn(name = "leave_category_id", referencedColumnName = "id")
-//    private LeaveCategory leaveCategory;
 
-    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO){
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH,
+            })
+    @JoinColumn(name = "leave_category_id", referencedColumnName = "id")
+    private LeaveCategory category;
+
+//    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO){
+//        this.id = leaveBalanceDTO.getId();
+//        this.days = leaveBalanceDTO.getDays();
+//        this.daysTaken = leaveBalanceDTO.getDaysTaken();
+//    }
+
+    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO, Employee employee, LeaveCategory category){
         this.id = leaveBalanceDTO.getId();
         this.days = leaveBalanceDTO.getDays();
         this.daysTaken = leaveBalanceDTO.getDaysTaken();
-    }
-
-    public LeaveBalance(LeaveBalanceDTO leaveBalanceDTO, Employee employee){
-        this.id = leaveBalanceDTO.getId();
-        this.days = leaveBalanceDTO.getDays();
-        this.daysTaken = leaveBalanceDTO.getDaysTaken();
-        //this.leaveCategory = leaveBalanceDTO.getCategory();
         this.employee = employee;
+        this.category = category;
     }
 }
