@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
@@ -34,13 +33,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(EmployeeDTO::new)
                 .collect(Collectors.toList());
     }
+
     @Override
     public EmployeeDTO findEmployeeById(Integer id){
         Optional<Employee> result = employeeRepository.findById(id);
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
-        }
-        throw new RuntimeException("Couldn't find an employee with the id "+ id);
+        }else throw new RuntimeException("Couldn't find an employee with the id "+ id);
     }
 
     @Override
@@ -62,10 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(optionalLeaveCategory.isPresent()){
 
                 LeaveRequest leaveRequest= new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
-
                 return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest));
-            }else throw new RuntimeException("Skata");
-        }else
-            throw new RuntimeException("erwtisi");
+
+            }else throw new RuntimeException("There is no such leave category");
+        }else throw new RuntimeException("There is no employee with this id");
     }
 }
