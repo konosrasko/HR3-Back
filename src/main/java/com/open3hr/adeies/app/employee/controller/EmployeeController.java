@@ -50,14 +50,20 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/employee/{id}/leavebalance")
+    @GetMapping("/{id}/leavebalance")
     public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(@PathVariable Integer id){
         return leaveBalanceService.showBalanceOfEmployee(id);
     }
 
-    @PostMapping("/employee/{id}/leavebalance")
+    @PostMapping("/{id}/leavebalance")
     public String addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
         leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO, id);
         return ("New balance added to employee with id " + id);
+    }
+
+    @PutMapping("/{id}/changeProfile")
+    public EmployeeDTO changeProfileOfEmployeeByAdmin(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id){
+        // make checks when security is added for admin
+        return employeeService.changeProfile(employeeDTO,id);
     }
 }

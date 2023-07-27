@@ -17,4 +17,6 @@ public interface EmployeeService {
     LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId);
 
     List<EmployeeDTO> employeesWithoutAccount();
+
+    EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id);
 }

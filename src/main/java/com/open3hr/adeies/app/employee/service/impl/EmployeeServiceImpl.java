@@ -77,4 +77,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .toList();
     }
 
+    @Override
+    public EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id) {
+        Optional<Employee> result = employeeRepository.findById(id);
+        if (result.isPresent()){
+            employeeRepository.save(new Employee(employeeDTO));
+            return employeeDTO;
+        }else {
+            throw new RuntimeException("Employee not found!");
+            // ### (id could be wrong) ###
+        }
+    }
+
 }
