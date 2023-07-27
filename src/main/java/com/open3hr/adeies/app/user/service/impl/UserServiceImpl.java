@@ -100,4 +100,17 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    @Override
+    public UserDTO unassignUserAccount(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            myUser.get().setEmployee(null);
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }else {
+            throw new RuntimeException("Couldn't find user account!");
+            // ### couldn't find user account with given id ###
+        }
+    }
 }

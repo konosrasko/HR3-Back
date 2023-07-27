@@ -16,4 +16,6 @@ public interface UserService {
     UserDTO changeSupervisorRights(Integer id);
 
     UserDTO assignUserToEmployee(Integer userId, Integer employeeId);
+
+    UserDTO unassignUserAccount(Integer userId);
 }
