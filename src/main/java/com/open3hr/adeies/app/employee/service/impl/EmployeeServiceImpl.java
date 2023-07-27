@@ -4,6 +4,7 @@ import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
+import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
@@ -59,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) {
+    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, Integer employeeId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if(optionalEmployee.isPresent()){
             Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());
@@ -69,7 +70,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }else throw new RuntimeException("There is no such leave category");
         }else throw new RuntimeException("There is no employee with this id");
     }
-
+    @Override
     public List<EmployeeDTO> employeesWithoutAccount() {
         List<Employee> employees = employeeRepository.findEmployeesWithoutUser();
         return employees.stream()
@@ -88,5 +89,44 @@ public class EmployeeServiceImpl implements EmployeeService {
             // ### (id could be wrong) ###
         }
     }
+
+    @Override
+    public LeaveRequestDTO acceptLeaveRequest(Integer employeeId, Integer leaveRequestId){
+        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
+        Optional<LeaveRequest> myLeaveRequest = leaveRequestRepository.findById(leaveRequestId);
+        Optional<LeaveCategory> myLeaveCategory  = categoryRepository.findById(myLeaveRequest.get().getCategory().getId());
+        if(myLeaveRequest.isPresent()){
+            if(myEmployee.isPresent()){
+                myLeaveRequest.get().setStatus(Status.APPROVED);
+                leaveRequestRepository.save(myLeaveRequest.get());
+                myLeaveRequest.get().setCategory(myLeaveCategory.get());
+                return new LeaveRequestDTO(myLeaveRequest.get(), myLeaveCategory.get());
+            }else {
+                throw new RuntimeException("Couldn't find employee!");
+            }
+        }else{
+            throw new RuntimeException("Couldn't find leave request!");
+        }
+    }
+
+    @Override
+    public LeaveRequestDTO denyLeaveRequest(Integer employeeId, Integer leaveRequestId){
+        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
+        Optional<LeaveRequest> myLeaveRequest = leaveRequestRepository.findById(leaveRequestId);
+        Optional<LeaveCategory> myLeaveCategory  = categoryRepository.findById(myLeaveRequest.get().getCategory().getId());
+        if(myLeaveRequest.isPresent()){
+            if(myEmployee.isPresent()){
+                myLeaveRequest.get().setStatus(Status.DENIED);
+                leaveRequestRepository.save(myLeaveRequest.get());
+                myLeaveRequest.get().setCategory(myLeaveCategory.get());
+                return new LeaveRequestDTO(myLeaveRequest.get(), myLeaveCategory.get());
+            }else {
+                throw new RuntimeException("Couldn't find employee!");
+            }
+        }else{
+            throw new RuntimeException("Couldn't find leave request!");
+        }
+    }
+
 
 }
