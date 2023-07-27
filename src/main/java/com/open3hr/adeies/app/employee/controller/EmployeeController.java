@@ -3,45 +3,61 @@ package com.open3hr.adeies.app.employee.controller;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
+import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
+import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @RestController
-@RequestMapping("/")
+@RequestMapping("/employees")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping("/employees")
+    @Autowired
+    private LeaveBalanceService leaveBalanceService;
+
+    @GetMapping("")
     public List<EmployeeDTO> getAllEmployees(){
         return employeeService.findAllEmployees();
     }
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("/{id}")
     public EmployeeDTO getEmployeeById(@PathVariable Integer id){
         return employeeService.findEmployeeById(id);
     }
 
-    @PostMapping("/employee")
+    @PostMapping("")
     public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employeeDTO){
         return employeeService.addEmployee(employeeDTO);
     }
 
-    @DeleteMapping("/employee/{id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id){
         employeeService.deleteById(id);
     }
 
-    @PostMapping("/employee/{id}/leaveRequest")
+    @PostMapping("/{id}/leaveRequest")
     public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable int id ){
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
-    @PostMapping("/employee/withoutAccount")
+    @PostMapping("/withoutAccount")
     public List<EmployeeDTO> employeesWithoutAccount(){
         return employeeService.employeesWithoutAccount();
     }
 
+
+    @GetMapping("/employee/{id}/leavebalance")
+    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(@PathVariable Integer id){
+        return leaveBalanceService.showBalanceOfEmployee(id);
+    }
+
+    @PostMapping("/employee/{id}/leavebalance")
+    public String addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
+        leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO, id);
+        return ("New balance added to employee with id " + id);
+    }
 }

@@ -8,38 +8,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public UserDTO findById(@PathVariable Integer id){
         return userService.findById(id);
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public List<UserDTO> findAll(){
         return userService.findAll();
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Integer id){
         userService.deleteById(id);
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/createAccount")
     public UserDTO createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.createAccount(userDTO);
     }
 
-    @PutMapping("/users/{id}/changeStatus")
+    @PutMapping("/{id}/changeStatus")
     public UserDTO changeStatus(@PathVariable Integer id){
         return userService.updateStatus(id);
     }
 
-    @PutMapping("/users/{id}/supervisorRights")
+    @PutMapping("/{id}/supervisorRights")
     public UserDTO supervisorRights(@PathVariable Integer id){
         return userService.changeSupervisorRights(id);
     }

@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/leaves")
+@RequestMapping("/leaverequests")
 public class LeaveRequestController {
 
     @Autowired
@@ -20,17 +20,17 @@ public class LeaveRequestController {
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
-    @GetMapping("/leaverequest/all")
+    @GetMapping("/")
     public List<LeaveRequestDTO> getAllLeaveRequest(){
         return leaveRequestService.findAll();
     }
 
-    @GetMapping("/leaverequest/{id}")
+    @GetMapping("/leaverequests/{id}")
     public LeaveRequestDTO leaveRequestDTO(@PathVariable Integer id){
         return leaveRequestService.findById(id);
     }
 
-    @DeleteMapping("/leaverequest/{id}")
+    @DeleteMapping("/leaverequests/{id}")
     public void deleteRequest(@PathVariable Integer id){
         leaveRequestService.deleteById(id);
     }

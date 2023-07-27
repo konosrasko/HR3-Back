@@ -13,7 +13,7 @@ public class LeaveCategoryController {
     @Autowired
     private LeaveCategoryService leaveCategoryService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public List<LeaveCategoryDTO> findAll(){
         return  leaveCategoryService.findAll();
     }
@@ -23,13 +23,13 @@ public class LeaveCategoryController {
         return leaveCategoryService.findById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public LeaveCategoryDTO save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         leaveCategoryDTO.setId(0);
         return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
 
-    @PutMapping("/")
+    @PutMapping("")
     public LeaveCategoryDTO update(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
