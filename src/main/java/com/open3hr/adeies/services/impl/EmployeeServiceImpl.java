@@ -5,13 +5,16 @@ import com.open3hr.adeies.dto.LeaveRequestDTO;
 import com.open3hr.adeies.entities.Employee;
 import com.open3hr.adeies.entities.LeaveCategory;
 import com.open3hr.adeies.entities.LeaveRequest;
+import com.open3hr.adeies.entities.User;
 import com.open3hr.adeies.repositories.EmployeeRepository;
 import com.open3hr.adeies.repositories.LeaveCategoryRepository;
 import com.open3hr.adeies.repositories.LeaveRequestRepository;
+import com.open3hr.adeies.repositories.UserRepository;
 import com.open3hr.adeies.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private LeaveCategoryRepository categoryRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<EmployeeDTO> findAllEmployees() {
@@ -66,4 +72,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             }else throw new RuntimeException("There is no such leave category");
         }else throw new RuntimeException("There is no employee with this id");
     }
+
+    public List<EmployeeDTO> employeesWithoutAccount() {
+        List<Employee> employees = employeeRepository.findEmployeesWithoutUser();
+        return employees.stream()
+                .map(EmployeeDTO::new)
+                .toList();
+    }
+
 }

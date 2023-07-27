@@ -38,4 +38,9 @@ public class EmployeeController {
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
+    @PostMapping("/employee/withoutAccount")
+    public List<EmployeeDTO> employeesWithoutAccount(){
+        return employeeService.employeesWithoutAccount();
+    }
+
 }
