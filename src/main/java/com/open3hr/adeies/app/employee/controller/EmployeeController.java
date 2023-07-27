@@ -66,4 +66,14 @@ public class EmployeeController {
         // make checks when security is added for admin
         return employeeService.changeProfile(employeeDTO,id);
     }
+
+    @PutMapping("/{employeeId}/approve/{leaveRequestId}")
+    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
+        return employeeService.acceptLeaveRequest(employeeId,leaveRequestId);
+    }
+
+    @PutMapping("/{employeeId}/reject/{leaveRequestId}")
+    public LeaveRequestDTO denyLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
+        return employeeService.denyLeaveRequest(employeeId,leaveRequestId);
+    }
 }

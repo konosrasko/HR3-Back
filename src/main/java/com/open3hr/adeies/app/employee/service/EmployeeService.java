@@ -14,9 +14,13 @@ public interface EmployeeService {
 
     void deleteById(Integer id);
 
-    LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId);
+    LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, Integer employeeId);
 
     List<EmployeeDTO> employeesWithoutAccount();
+
+    LeaveRequestDTO acceptLeaveRequest(Integer employeeId, Integer leaveRequestId);
+
+    LeaveRequestDTO denyLeaveRequest(Integer employeeId, Integer leaveRequestId);
 
     EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id);
 }

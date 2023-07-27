@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.employee.entity;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
+import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -57,6 +58,13 @@ public class Employee {
 
     @OneToOne(mappedBy = "employee")
     private User user;
+
+    @OneToMany(mappedBy = "employee",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveRequest> leaveRequest = new ArrayList<>();
 
     public Employee(EmployeeDTO employeeDTO){
         this.id = employeeDTO.getEmployeeId();
