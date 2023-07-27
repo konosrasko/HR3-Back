@@ -43,4 +43,9 @@ public class UserController {
     public UserDTO supervisorRights(@PathVariable Integer id){
         return userService.changeSupervisorRights(id);
     }
+
+    @PutMapping("/{userId}/assignToEmployee/{employeeId}")
+    public UserDTO assignUserToEmployee(@PathVariable Integer userId, @PathVariable Integer employeeId){
+        return userService.assignUserToEmployee(userId,employeeId);
+    }
 }

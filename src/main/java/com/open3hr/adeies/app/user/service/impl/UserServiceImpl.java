@@ -80,4 +80,24 @@ public class UserServiceImpl implements UserService {
             }
         throw new RuntimeException("Couldn't find this user with id "+id);
     }
+
+    @Override
+    public UserDTO assignUserToEmployee(Integer userId, Integer employeeId) {
+        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            if(myEmployee.isPresent()){
+                myUser.get().setEmployee(myEmployee.get());
+                userRepository.save(myUser.get());
+                return new UserDTO(myUser.get());
+            }else {
+                throw new RuntimeException("Couldn't find employee!");
+                // ### probably the employee ID is wrong ###
+            }
+        }else{
+            throw new RuntimeException("Couldn't find the user account");
+            // ### probably the user ID is wrong ###
+        }
+
+    }
 }
