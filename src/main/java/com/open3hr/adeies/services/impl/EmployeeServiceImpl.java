@@ -57,11 +57,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
         if(optionalEmployee.isPresent()){
-            Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findById(leaveRequestDTO.getCategoryId());
+            Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());
             if(optionalLeaveCategory.isPresent()){
 
                 LeaveRequest leaveRequest= new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
-                return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest));
+                return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest), optionalLeaveCategory.get());
 
             }else throw new RuntimeException("There is no such leave category");
         }else throw new RuntimeException("There is no employee with this id");
