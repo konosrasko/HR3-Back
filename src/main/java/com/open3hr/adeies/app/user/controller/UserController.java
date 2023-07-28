@@ -48,4 +48,9 @@ public class UserController {
     public UserDTO assignUserToEmployee(@PathVariable Integer userId, @PathVariable Integer employeeId){
         return userService.assignUserToEmployee(userId,employeeId);
     }
+
+    @PutMapping("/{userId}/unassign")
+    public UserDTO unassignUserAccount(@PathVariable Integer userId){
+        return userService.unassignUserAccount(userId);
+    }
 }
