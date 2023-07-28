@@ -6,6 +6,7 @@ import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,5 +76,15 @@ public class EmployeeController {
     @PutMapping("/{employeeId}/reject/{leaveRequestId}")
     public LeaveRequestDTO denyLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
         return employeeService.denyLeaveRequest(employeeId,leaveRequestId);
+    }
+
+    @PutMapping("/{employeeId}/assign/{supervisorId}")
+    public EmployeeDTO assignToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
+        return employeeService.assignToSupervisor(employeeId, supervisorId);
+    }
+
+    @PutMapping("/{employeeId}/unassigned/{supervisorId}")
+    public EmployeeDTO unassignedToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
+        return employeeService.unassignedToSupervisor(employeeId, supervisorId);
     }
 }
