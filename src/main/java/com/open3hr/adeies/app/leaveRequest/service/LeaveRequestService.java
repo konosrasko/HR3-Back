@@ -15,4 +15,6 @@ public interface LeaveRequestService {
 
     List<LeaveRequestDTO> findRequestsForAnEmployee(int id);
 
+    List<LeaveRequestDTO> getPendingRequests();
+
 }
