@@ -143,21 +143,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         } else
             throw new RuntimeException("Couldn't find supervisor!");
     }
+
     @Override
     public EmployeeDTO unassignedToSupervisor(Integer employeeId, Integer supervisorId) {
         Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
-        if (myEmployee.isPresent()){
+        if (myEmployee.isPresent()) {
             myEmployee.get().setSupervisorId(null);
             employeeRepository.save(myEmployee.get());
             return new EmployeeDTO(myEmployee.get());
         } else {
             throw new RuntimeException("Couldn't find employee!");
         }
+    }
 
+    @Override
+    public List<LeaveRequestDTO> requestHistoryOfEmployee(Integer employeeId) {
+        List<LeaveRequest> myLeaveRequestHistory = leaveRequestRepository.leaveRequestHistoryOfEmployee(employeeId);
+        return myLeaveRequestHistory.stream()
+                .map(leaveRequest -> new LeaveRequestDTO(leaveRequest, leaveRequest.getCategory()))
+                .toList();
     }
 }
-
-
-
-
-
