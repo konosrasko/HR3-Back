@@ -70,6 +70,13 @@ public class Employee {
             })
     private User user;
 
+    @OneToMany(mappedBy = "employee",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveRequest> leaveRequest = new ArrayList<>();
+
     public Employee(EmployeeDTO employeeDTO){
         this.id = employeeDTO.getEmployeeId();
         this.firstName = employeeDTO.getFirstName();

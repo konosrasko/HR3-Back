@@ -74,10 +74,51 @@ public class UserServiceImpl implements UserService {
     public UserDTO changeSupervisorRights(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
         if(myUser.isPresent()){
-                myUser.get().setIsSupervisor(!myUser.get().getIsSupervisor());
                 userRepository.save(myUser.get());
                 return new UserDTO(myUser.get());
             }
         throw new RuntimeException("Couldn't find this user with id "+id);
+    }
+
+    @Override
+    public UserDTO assignUserToEmployee(Integer userId, Integer employeeId) {
+        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            if(myEmployee.isPresent()){
+                myUser.get().setEmployee(myEmployee.get());
+                userRepository.save(myUser.get());
+                return new UserDTO(myUser.get());
+            }else {
+                throw new RuntimeException("Couldn't find employee!");
+                // ### probably the employee ID is wrong ###
+            }
+        }else{
+            throw new RuntimeException("Couldn't find the user account");
+            // ### probably the user ID is wrong ###
+        }
+
+    }
+
+    @Override
+    public UserDTO unassignUserAccount(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            myUser.get().setEmployee(null);
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }else {
+            throw new RuntimeException("Couldn't find user account!");
+            // ### couldn't find user account with given id ###
+        }
+    }
+
+    @Override
+    public UserDTO getUserInfo(String username) {
+        for (User user : userRepository.findAll()){
+            if (user.getUsername().equals(username))
+                return new UserDTO(user);
+        }
+        return null;
     }
 }

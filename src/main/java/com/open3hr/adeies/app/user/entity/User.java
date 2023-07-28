@@ -26,11 +26,8 @@ public class User {
     @Column (name = "password")
     private String password;
 
-    @Column (name = "is_enabled")
+    @Column (name = "enabled")
     private Boolean isEnabled;
-
-    @Column(name = "is_supervisor")
-    private Boolean isSupervisor;
 
     @Column (name = "role")
     @Enumerated(EnumType.STRING)
@@ -47,6 +44,5 @@ public class User {
         this.isEnabled = userDTO.getIsEnabled();
         this.role = userDTO.getRole();
         this.employee = employee;
-        this.isSupervisor = userDTO.getIsSupervisor();
     }
 }

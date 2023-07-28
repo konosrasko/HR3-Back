@@ -14,4 +14,10 @@ public interface UserService {
 
     UserDTO updateStatus(Integer id);
     UserDTO changeSupervisorRights(Integer id);
+
+    UserDTO assignUserToEmployee(Integer userId, Integer employeeId);
+
+    UserDTO unassignUserAccount(Integer userId);
+
+    UserDTO getUserInfo(String username);
 }

@@ -18,13 +18,14 @@ public class UserDTO {
         private String password;
         private Boolean isEnabled;
         private Integer employeeId;
-        private Boolean isSupervisor;
         private Role role;
 
         public UserDTO(User user) {
+                this.id = user.getId();
                 this.username = user.getUsername();
                 this.password = user.getPassword();
                 this.isEnabled = user.getIsEnabled();
                 this.role = user.getRole();
+                this.employeeId = user.getEmployee().getId();
         }
 }
