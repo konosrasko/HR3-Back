@@ -3,6 +3,7 @@ package com.open3hr.adeies.app.user.controller;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,12 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @GetMapping("/info")
+    public UserDTO getInfo(){
+        String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getUserInfo(username);
+    }
 
     @GetMapping("/{id}")
     public UserDTO findById(@PathVariable Integer id){
