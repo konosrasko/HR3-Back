@@ -23,4 +23,9 @@ public interface EmployeeService {
     LeaveRequestDTO denyLeaveRequest(Integer employeeId, Integer leaveRequestId);
 
     EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id);
+
+    EmployeeDTO assignToSupervisor(Integer employeeId, Integer supervisorId);
+
+    EmployeeDTO unassignedToSupervisor(Integer employeeId, Integer supervisorId);
+
 }
