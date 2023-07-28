@@ -14,7 +14,7 @@ public interface EmployeeService {
 
     void deleteById(Integer id);
 
-    LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, Integer employeeId);
+    LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId);
 
     List<EmployeeDTO> employeesWithoutAccount();
 
@@ -28,4 +28,5 @@ public interface EmployeeService {
 
     EmployeeDTO unassignedToSupervisor(Integer employeeId, Integer supervisorId);
 
+    List<LeaveRequestDTO> requestHistoryOfEmployee(Integer employeeId);
 }

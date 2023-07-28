@@ -87,4 +87,9 @@ public class EmployeeController {
     public EmployeeDTO unassignedToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
         return employeeService.unassignedToSupervisor(employeeId, supervisorId);
     }
+
+    @GetMapping("/{employeeId}/leaveRequestHistory")
+    public List<LeaveRequestDTO> leaveRequestHistoryOfEmployee(@PathVariable Integer employeeId){
+        return employeeService.requestHistoryOfEmployee(employeeId);
+    }
 }

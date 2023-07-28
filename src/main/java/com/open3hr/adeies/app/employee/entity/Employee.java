@@ -56,7 +56,18 @@ public class Employee {
             })
     private List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "employee")
+    @OneToMany(mappedBy = "employee",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
+    private List<LeaveRequest> requestList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "employee",
+            fetch = FetchType.EAGER,
+            cascade = {
+                    CascadeType.ALL
+            })
     private User user;
 
     @OneToMany(mappedBy = "employee",
