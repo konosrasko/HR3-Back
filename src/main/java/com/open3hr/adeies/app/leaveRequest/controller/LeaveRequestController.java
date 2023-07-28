@@ -34,4 +34,9 @@ public class LeaveRequestController {
     public void deleteRequest(@PathVariable Integer id){
         leaveRequestService.deleteById(id);
     }
+
+    @GetMapping("/pending")
+    public List<LeaveRequestDTO> getPendingRequest(){
+        return leaveRequestService.getPendingRequests();
+    }
 }

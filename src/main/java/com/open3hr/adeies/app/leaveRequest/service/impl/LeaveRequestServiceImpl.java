@@ -1,6 +1,9 @@
 package com.open3hr.adeies.app.leaveRequest.service.impl;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
+import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
@@ -10,8 +13,7 @@ import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +34,9 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                 .stream()
                 .map(leaveRequest -> {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
-                    if(category.isPresent()){
+                    if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    }else throw new RuntimeException("Error with leave request");
+                    } else throw new RuntimeException("Error with leave request");
                 })
                 .toList();
     }
@@ -44,9 +46,9 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
         if (leaveRequest.isPresent()) {
             Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.get().getCategory().getTitle());
-            if(category.isPresent()){
+            if (category.isPresent()) {
                 return new LeaveRequestDTO(leaveRequest.get(), category.get());
-            }else throw new RuntimeException("Error Finding Leave Category");
+            } else throw new RuntimeException("Error Finding Leave Category");
         } else throw new RuntimeException("Couldn't find request with id: " + id);
     }
 
@@ -62,10 +64,36 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                 .filter(leaveRequest -> leaveRequest.getEmployee().getId() == id)
                 .map(leaveRequest -> {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
-                    if (category.isPresent()){
+                    if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    }else throw new RuntimeException("Error with leave category");
+                    } else throw new RuntimeException("Error with leave category");
                 })
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<LeaveRequestDTO> getPendingRequests() {
+        List<LeaveRequest> leaveRequests = leaveRequestRepository.findAll();
+
+        List<LeaveRequest> pendingRequests = new ArrayList<>();
+        for (LeaveRequest leaveRequest : leaveRequests) {
+            if (leaveRequest.getStatus() == Status.PENDING){
+                pendingRequests.add(leaveRequest);
+            }
+        }
+        return pendingRequests
+                .stream()
+                .map(leaveRequest -> {
+                    Optional<LeaveCategory> categoryOfRequest = categoryRepository.findById(leaveRequest.getCategory().getId());
+                    if(categoryOfRequest.isPresent()){
+                        return new LeaveRequestDTO(leaveRequest, categoryOfRequest.get());
+                    }else throw new RuntimeException("This category does not exists");
+                })
+                .toList();
+
+    }
 }
+
+
+
+
+
