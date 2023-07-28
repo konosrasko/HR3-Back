@@ -18,6 +18,7 @@ INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_d
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (4, 4, 2, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
 INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-04-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'PENDING');
 
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (1, 'schatzis', 'katselis123', true, 1, 'ADMIN', false);
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (2, 'pablo', 'tsigaro_anameno', true, 2, 'HR', false);
-INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`, `is_supervisor`) VALUES (3, 'areti', 'mex', true, 3, 'EMPLOYEE', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (1, 'schatzis', '{noop}katselis123', true, 1, 'ADMIN', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (2, 'pablo', '{noop}tsigaro_anameno', true, 2, 'HR', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (3, 'areti', '{noop}mex', true, 3, 'EMPLOYEE', false);
+INSERT INTO `user` (`id`, `username`, `password`, `is_enabled`, `employee_id`, `role`) VALUES (4, 'kleftis', '{noop}123', true, 4, 'EMPLOYEE', false);
