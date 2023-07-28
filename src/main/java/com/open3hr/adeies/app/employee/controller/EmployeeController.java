@@ -35,7 +35,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee/{id}/leaveRequest")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable int id ){
+    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id ){
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 

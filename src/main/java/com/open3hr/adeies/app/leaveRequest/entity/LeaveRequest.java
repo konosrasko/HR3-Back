@@ -22,7 +22,7 @@ public class LeaveRequest {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade  = {
+    @ManyToOne(fetch = FetchType.EAGER, cascade  = {
             CascadeType.PERSIST,
             CascadeType.DETACH,
             CascadeType.REFRESH
@@ -30,7 +30,7 @@ public class LeaveRequest {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade  = {
+    @ManyToOne(fetch = FetchType.EAGER, cascade  = {
             CascadeType.PERSIST,
             CascadeType.DETACH,
             CascadeType.REFRESH
@@ -58,7 +58,8 @@ public class LeaveRequest {
         this.employee = employee;
         this.startDate = leaveRequestDTO.getStartDate();
         this.endDate = leaveRequestDTO.getEndDate();
-        this.submitDate = new Date();
+        this.submitDate = leaveRequestDTO.getSubmitDate();
+        this.duration = leaveRequestDTO.getDuration();
         this.status = leaveRequestDTO.getStatus();
         this.category = category;
     }

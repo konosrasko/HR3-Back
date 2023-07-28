@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LeaveCategoryRepository extends JpaRepository<LeaveCategory, Integer> {
-    @Query("SELECT lc FROM LeaveCategory lc WHERE lc.title = ?1")
+    @Query(value = "SELECT * FROM leave_category WHERE title = :title",nativeQuery = true)
     Optional<LeaveCategory> findCategoryByTitle(String title);
 
 }

@@ -17,17 +17,21 @@ import java.util.Date;
 
 public class LeaveRequestDTO {
 
-    //    private int categoryId;
+    private Integer id;
     private String leaveTitle;
+    private Date submitDate;
     private Date startDate;
     private Date endDate;
+    private Integer duration;
     private Status status;
 
     public LeaveRequestDTO(LeaveRequest leaveRequest, LeaveCategory category){
+        this.id = leaveRequest.getId();
         this.leaveTitle = category.getTitle();
+        this.submitDate = leaveRequest.getSubmitDate();
         this.startDate = leaveRequest.getStartDate();
         this.endDate = leaveRequest.getEndDate();
-        //this.categoryId = leaveRequest.getCategory().getId();
+        this.duration = leaveRequest.getDuration();
         this.status = leaveRequest.getStatus();
     }
 }

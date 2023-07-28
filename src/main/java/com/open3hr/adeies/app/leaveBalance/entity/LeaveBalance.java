@@ -26,7 +26,7 @@ public class LeaveBalance {
     @Column(name = "days_taken")
     private Integer daysTaken;
 
-    @ManyToOne(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.DETACH,
@@ -34,7 +34,7 @@ public class LeaveBalance {
             })
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.LAZY,
+    @ManyToOne(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.DETACH,

@@ -1,7 +1,7 @@
-INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (1, 'Stamatis', 'Chatzis', 'schatzis@ots.gr', 'Panadreoy 164 Neapoli', '2310632434', '2023-04-01', true);
-INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (2, 'Paylos', 'Tsigaros', 'ptsigar@ots.gr', 'Magnisias 23 Stayroypoli', '6983957541', '2023-03-01', true);
-INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (3, 'Aretoympa', 'Aretoulidou', 'adimatati@ots.gr', 'Melenikoy 20', '6987142133', '2023-05-01', true);
-INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `mobile_number`, `address`, `hire_date`, `is_enabled`) VALUES (4, 'Mixail', 'Thief', 'klevwotivrw@ots.gr', 'Sikelianoy 51 Dendropotamos', '6969696969', '2023-04-01', true);
+INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `address`, `mobile_number`, `hire_date`, `is_enabled`) VALUES (1, 'Stamatis', 'Chatzis', 'schatzis@ots.gr', 'Panadreoy 164 Neapoli', '2310632434', '2023-04-01', true);
+INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `address`, `mobile_number`, `hire_date`, `is_enabled`) VALUES (2, 'Paylos', 'Tsigaros', 'ptsigar@ots.gr', 'Magnisias 23 Stayroypoli', '6983957541', '2023-03-01', true);
+INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `address`, `mobile_number`, `hire_date`, `is_enabled`) VALUES (3, 'Aretoympa', 'Aretoulidou', 'adimatati@ots.gr', 'Melenikoy 20', '6987142133', '2023-05-01', true);
+INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `address`, `mobile_number`, `hire_date`, `is_enabled`) VALUES (4, 'Mixail', 'Thief', 'klevwotivrw@ots.gr', 'Sikelianoy 51 Dendropotamos', '6969696969', '2023-04-01', true);
 
 INSERT INTO `leave_category` (`id`, `title`) VALUES (1, 'Kanoniki');
 INSERT INTO `leave_category` (`id`, `title`) VALUES (2, 'Egkymonsinis');
