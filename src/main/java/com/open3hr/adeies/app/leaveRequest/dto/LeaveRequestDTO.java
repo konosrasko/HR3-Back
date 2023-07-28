@@ -27,7 +27,6 @@ public class LeaveRequestDTO {
         this.leaveTitle = category.getTitle();
         this.startDate = leaveRequest.getStartDate();
         this.endDate = leaveRequest.getEndDate();
-        //this.categoryId = leaveRequest.getCategory().getId();
         this.status = leaveRequest.getStatus();
     }
 }
