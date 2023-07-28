@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService {
     public UserDTO changeSupervisorRights(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
         if(myUser.isPresent()){
-                myUser.get().setIsSupervisor(!myUser.get().getIsSupervisor());
                 userRepository.save(myUser.get());
                 return new UserDTO(myUser.get());
             }
@@ -112,5 +111,14 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Couldn't find user account!");
             // ### couldn't find user account with given id ###
         }
+    }
+
+    @Override
+    public UserDTO getUserInfo(String username) {
+        for (User user : userRepository.findAll()){
+            if (user.getUsername().equals(username))
+                return new UserDTO(user);
+        }
+        return null;
     }
 }
