@@ -212,9 +212,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(leaveRequest -> new LeaveRequestDTO(leaveRequest, leaveRequest.getCategory()))
                 .toList();
     }
+
+    public boolean isSupervisor(int employeeId){
+        boolean isSuper = false;
+        Optional<Employee> foundEmployee = employeeRepository.findById(employeeId);
+        if(foundEmployee.isPresent()){
+            Optional<Employee> foundSuperV = employeeRepository.findIfSupervisor(employeeId);
+            if(foundSuperV.isPresent()){
+                isSuper = true;
+            }
+        }else throw new RuntimeException("No employee with this id found");
+        return isSuper;
+    }
 }
-
-
-
-
-
