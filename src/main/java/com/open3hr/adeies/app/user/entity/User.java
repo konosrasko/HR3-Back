@@ -7,13 +7,17 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
 
 @Entity
 @Table(name = "user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User implements GrantedAuthority, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +41,11 @@ public class User {
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public User(UserDTO userDTO, Employee employee){
         this.id = userDTO.getId();
         this.username = userDTO.getUsername();
@@ -44,5 +53,35 @@ public class User {
         this.isEnabled = userDTO.getIsEnabled();
         this.role = userDTO.getRole();
         this.employee = employee;
+    }
+
+    @Override
+    public String getAuthority() {
+       return this.getRole().toString();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -7,6 +7,10 @@ import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.user.repository.UserRepository;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
@@ -22,12 +26,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
                 .map(UserDTO::new)
                 .toList();
     }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        System.out.println("we are in user detail service");
+
+       return userRepository.findUserByUsername(username).orElseThrow(()-> new UsernameNotFoundException("username Doesnt exist"));
+    }
+
 
     @Override
     public UserDTO findById(Integer id) {
@@ -121,4 +139,6 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+
 }
