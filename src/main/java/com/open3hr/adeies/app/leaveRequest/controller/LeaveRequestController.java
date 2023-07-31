@@ -20,17 +20,17 @@ public class LeaveRequestController {
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public List<LeaveRequestDTO> getAllLeaveRequest(){
         return leaveRequestService.findAll();
     }
 
-    @GetMapping("/leaverequests/{id}")
+    @GetMapping("/{id}")
     public LeaveRequestDTO leaveRequestDTO(@PathVariable Integer id){
         return leaveRequestService.findById(id);
     }
 
-    @DeleteMapping("/leaverequests/{id}")
+    @DeleteMapping("/{id}")
     public void deleteRequest(@PathVariable Integer id){
         leaveRequestService.deleteById(id);
     }
