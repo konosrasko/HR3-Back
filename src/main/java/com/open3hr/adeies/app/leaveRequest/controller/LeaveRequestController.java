@@ -16,7 +16,7 @@ public class LeaveRequestController {
     private LeaveRequestService leaveRequestService;
 
     @GetMapping("/searchemployeeleaverequest/{id}")
-    public List<LeaveRequestDTO> getAllLeaveRequestsOfAnEmployee(@PathVariable int id) {
+    public List<LeaveRequestDTO> getAllLeaveRequestsOfAnEmployee(@PathVariable Integer id) {
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
