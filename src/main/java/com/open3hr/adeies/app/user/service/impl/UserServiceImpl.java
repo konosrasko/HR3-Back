@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service.impl;
 
+import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.user.entity.User;
@@ -9,6 +10,7 @@ import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -120,5 +122,13 @@ public class UserServiceImpl implements UserService {
                 return new UserDTO(user);
         }
         return null;
+    }
+
+    @Override
+    public List<EmployeeUserDTO> getEmployeeUserAdmin() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new EmployeeUserDTO(user.getEmployee(), user))
+                .toList();
     }
 }
