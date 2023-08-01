@@ -46,6 +46,7 @@ public class UserController {
         return userService.updateStatus(id);
     }
 
+    //TI EINAI AYTO
     @PutMapping("/{id}/supervisorRights")
     public UserDTO supervisorRights(@PathVariable Integer id){
         return userService.changeSupervisorRights(id);

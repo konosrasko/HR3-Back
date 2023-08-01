@@ -16,11 +16,17 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     private LeaveCategoryRepository leaveCategoryRepository;
 
     @Override
+
     public List<LeaveCategoryDTO> findAll() {
         return leaveCategoryRepository.findAll().stream()
                 .map(LeaveCategoryDTO::new)
                 .toList();
     }
+
+    //ΕΔΩ ΝΑ ΣΟΥ ΔΙΝΕΙ ΜΟΝΟ ΤΑ ΑΚΤΙΒ
+    //ΔΙΚΟ ΣΑΣ
+    /*
+    */
 
     @Override
     public LeaveCategoryDTO findById(Integer Id) {
