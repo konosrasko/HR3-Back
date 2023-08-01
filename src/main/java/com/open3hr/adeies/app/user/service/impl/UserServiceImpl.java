@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private EmployeeRepository employeeRepository;
 
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> findAll() {
