@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.leaveRequest.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
@@ -19,8 +20,11 @@ public class LeaveRequestDTO {
 
     private Integer id;
     private String leaveTitle;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date submitDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
     private Integer duration;
     private Status status;

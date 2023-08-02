@@ -5,7 +5,6 @@ import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.enums.Status;
-import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -17,6 +16,7 @@ import com.open3hr.adeies.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -70,36 +70,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) {
-        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);
+        Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);//Search for the employee
         if(optionalEmployee.isPresent()){
-            Employee selectedEmployee = optionalEmployee.get();
-            Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());
+            Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());//Search for leave category that has been requested
             if(optionalLeaveCategory.isPresent()){
-                Optional<LeaveBalance> foundBalanceOfEmployee = selectedEmployee.getLeaveBalanceList()
+                Optional<LeaveBalance> foundBalanceOfEmployee = optionalEmployee.get().getLeaveBalanceList()
                         .stream()
                         .filter(balance -> Objects.equals(balance.getCategory().getTitle(), leaveRequestDTO.getLeaveTitle()))
-                        .findAny();
+                        .findAny();//Search for the balance of the leave category for this employee
                 if(foundBalanceOfEmployee.isPresent()){
                     LeaveBalance employeesBalance = foundBalanceOfEmployee.get();
-                    Date submitDate = new Date();
-                    long todayStartDiff;
-                    long startDate = leaveRequestDTO.getStartDate().getTime();
-                    long endDate = leaveRequestDTO.getEndDate().getTime();
-                    long toDate = submitDate.getTime();
+                    Date submitDate = leaveRequestDTO.getSubmitDate();
+                    long todayStartDiff, startDate, endDate, toDate;
 
-                    if(toDate > startDate){
-                        todayStartDiff = startDate - toDate;
-                    } else {
-                        todayStartDiff = Math.abs(toDate - startDate);
-                    }
+                    startDate = leaveRequestDTO.getStartDate().getTime();
+                    endDate = leaveRequestDTO.getEndDate().getTime();
+                    toDate = submitDate.getTime();
+
+                    if(toDate > startDate){todayStartDiff = startDate - toDate;}
+                    else {todayStartDiff = Math.abs(toDate - startDate);}
 
                     long todayStartDiffToDays = TimeUnit.DAYS.convert(todayStartDiff, TimeUnit.MILLISECONDS);
 
                     if(endDate >= startDate){
                         if(todayStartDiffToDays >= 0){
-
-                            long startEndDiff = Math.abs(endDate - startDate);
-                            long startEndDiffToDays = TimeUnit.DAYS.convert(startEndDiff, TimeUnit.MILLISECONDS) + 1;
+                            long startEndDiffToDays = TimeUnit.DAYS.convert(Math.abs(endDate - startDate), TimeUnit.MILLISECONDS) + 1;
 
                             if(startEndDiffToDays <= employeesBalance.getDays()){
                                 leaveRequestDTO.setId(0);
