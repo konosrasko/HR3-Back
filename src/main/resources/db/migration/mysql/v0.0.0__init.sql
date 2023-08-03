@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
+  `password` varchar(200) DEFAULT NULL,
   `is_enabled` tinyint DEFAULT NULL,
   `employee_id` int DEFAULT NULL,
   `role` varchar(45) DEFAULT NULL,
