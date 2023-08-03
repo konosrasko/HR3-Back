@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         System.out.println("we are in user detail service");
      User user = userRepository.findUserByUsername(username).orElseThrow();
-       return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),new ArrayList<>());
+       return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
     }
 
 
