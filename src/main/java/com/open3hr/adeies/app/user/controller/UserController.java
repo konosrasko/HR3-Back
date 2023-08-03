@@ -15,10 +15,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/info")
-    public UserDTO getInfo(){
+    public String  getInfo(){
 //        String username= SecurityContextHolder.getContext().getAuthentication().getName();
 //        return userService.getUserInfo(username);
-        return null;
+        return "TA KATAFERAMEEEEEEEEE";
     }
 
     @GetMapping("/{id}")
