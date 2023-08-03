@@ -64,9 +64,7 @@ public class User implements  UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-
             authorities.add(new SimpleGrantedAuthority("ROLE_" + this.role));
-
         return authorities;
     }
 

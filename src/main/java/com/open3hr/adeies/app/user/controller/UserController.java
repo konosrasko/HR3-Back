@@ -17,7 +17,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/info")
-    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee')")
     public String  getInfo(){
 //        String username= SecurityContextHolder.getContext().getAuthentication().getName();
 //        return userService.getUserInfo(username);
