@@ -5,6 +5,7 @@ import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/info")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee')")
     public String  getInfo(){
 //        String username= SecurityContextHolder.getContext().getAuthentication().getName();
 //        return userService.getUserInfo(username);
