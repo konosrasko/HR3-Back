@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service.impl;
 
+import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.user.entity.User;
@@ -138,5 +139,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return null;
     }
 
-
+    @Override
+    public List<EmployeeUserDTO> getEmployeeUserAdmin() {
+        return userRepository.findAll()
+                .stream()
+                .map(user -> new EmployeeUserDTO(user.getEmployee(), user))
+                .toList();
+    }
 }

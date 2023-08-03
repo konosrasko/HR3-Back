@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.controller;
 
+import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class UserController {
     @GetMapping("")
     public List<UserDTO> findAll(){
         return userService.findAll();
+    }
+
+    @GetMapping("/admin")
+    public List<EmployeeUserDTO> findUsersEmployeesForAdmin(){
+        return userService.getEmployeeUserAdmin();
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,7 @@
 package com.open3hr.adeies.app.leaveRequest.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -39,12 +40,15 @@ public class LeaveRequest {
     private LeaveCategory category;
 
     @Column(name = "submit_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date submitDate;
 
     @Column(name = "start_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
 
     @Column(name = "end_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
     @Column(name = "duration")
