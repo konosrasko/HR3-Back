@@ -6,6 +6,7 @@ import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,40 +18,46 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/info")
-    @PreAuthorize("hasRole('HR') OR hasRole('Employee')")
-    public String  getInfo(){
-//        String username= SecurityContextHolder.getContext().getAuthentication().getName();
-//        return userService.getUserInfo(username);
-        return "TA KATAFERAMEEEEEEEEE";
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public UserDTO  getInfo(){
+        String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getUserInfo(username);
+
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
     public UserDTO findById(@PathVariable Integer id){
         return userService.findById(id);
     }
 
     @GetMapping("")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin')")
     public List<UserDTO> findAll(){
         return userService.findAll();
     }
 
     @GetMapping("/admin")
+    @PreAuthorize("hasRole('Admin')")
     public List<EmployeeUserDTO> findUsersEmployeesForAdmin(){
         return userService.getEmployeeUserAdmin();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin')")
     public void deleteById(@PathVariable Integer id){
         userService.deleteById(id);
     }
 
     @PostMapping("/createAccount")
+    @PreAuthorize("hasRole('Admin')")
     public UserDTO createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.createAccount(userDTO);
     }
 
     @PutMapping("/{id}/changeStatus")
+    @PreAuthorize("hasRole('Admin')")
     public UserDTO changeStatus(@PathVariable Integer id){
         return userService.updateStatus(id);
     }
@@ -62,11 +69,13 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/assignToEmployee/{employeeId}")
+    @PreAuthorize("hasRole('Admin')")
     public UserDTO assignUserToEmployee(@PathVariable Integer userId, @PathVariable Integer employeeId){
         return userService.assignUserToEmployee(userId,employeeId);
     }
 
     @PutMapping("/{userId}/unassign")
+    @PreAuthorize("hasRole('Admin')")
     public UserDTO unassignUserAccount(@PathVariable Integer userId){
         return userService.unassignUserAccount(userId);
     }
