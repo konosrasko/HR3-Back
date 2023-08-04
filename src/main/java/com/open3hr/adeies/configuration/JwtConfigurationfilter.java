@@ -34,7 +34,7 @@ public class JwtConfigurationfilter extends OncePerRequestFilter {
         final String authenticationHeader = request.getHeader("Authorization");
         final String jwtToken ;
         final String username;
-        System.out.println("geia");
+
         if(authenticationHeader == null || !authenticationHeader.startsWith("Bearer "))
         {
             filterChain.doFilter(request,response);
@@ -43,7 +43,6 @@ public class JwtConfigurationfilter extends OncePerRequestFilter {
 
         jwtToken = authenticationHeader.substring(7);
         username = jwtService.extractUsername(jwtToken);
-        System.out.println(username);
 
         if(username!=null && SecurityContextHolder.getContext().getAuthentication() == null)
         {
