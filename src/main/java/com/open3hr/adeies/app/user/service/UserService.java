@@ -9,8 +9,6 @@ public interface UserService {
 
     List<UserDTO> findAll();
 
-    void deleteById(Integer id);
-
     UserDTO createAccount(UserDTO userDTO);
 
     UserDTO updateStatus(Integer id);
@@ -23,4 +21,8 @@ public interface UserService {
     UserDTO getUserInfo(String username);
 
     List<EmployeeUserDTO> getEmployeeUserAdmin();
+
+    EmployeeUserDTO getEmployeeUserById(int userId);
+
+    UserDTO editUser(UserDTO userDTO, Integer userId);
 }

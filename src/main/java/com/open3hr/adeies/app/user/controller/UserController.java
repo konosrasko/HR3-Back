@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -39,15 +40,20 @@ public class UserController {
         return userService.getEmployeeUserAdmin();
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Integer id){
-        userService.deleteById(id);
+    @GetMapping("/admin/{userId}")
+    public EmployeeUserDTO findUsersEmployeesForAdminById(@PathVariable Integer userId){
+        return userService.getEmployeeUserById(userId);
     }
 
     @PostMapping("/createAccount")
     public UserDTO createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
         return userService.createAccount(userDTO);
+    }
+
+    @PutMapping("/user/{userId}")
+    public UserDTO editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId){
+        return userService.editUser(userDTO, userId);
     }
 
     @PutMapping("/{id}/changeStatus")

@@ -40,6 +40,9 @@ public class User implements  UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column (name = "is_supervisor")
+    private boolean isSupervisor;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
@@ -56,10 +59,8 @@ public class User implements  UserDetails {
         this.isEnabled = userDTO.getIsEnabled();
         this.role = userDTO.getRole();
         this.employee = employee;
+        this.isSupervisor = userDTO.isSupervisor();
     }
-
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
