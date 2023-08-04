@@ -50,9 +50,8 @@ public class AuthenticationService {
             throw  new DisabledException("User not Registered");
         }
 
-        System.out.println(authentication);
 
-        User user = new User(authenticationRequest.getUsername(), authenticationRequest.getPassword(),new ArrayList<>());
+        User user = new User(authenticationRequest.getUsername(), authenticationRequest.getPassword(),authentication.getAuthorities());
         var token = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder().token(token).build();
