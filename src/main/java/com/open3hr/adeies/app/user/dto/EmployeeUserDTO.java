@@ -25,7 +25,6 @@ public class EmployeeUserDTO {
     public EmployeeUserDTO (Employee employee, User user){
         this.userId = user.getId();
         this.username = user.getUsername();
-        this.password = user.getPassword();
         this.role = user.getRole();
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();
