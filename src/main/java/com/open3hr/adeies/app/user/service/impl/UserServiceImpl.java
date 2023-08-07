@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service.impl;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-     User user = userRepository.findUserByUsername(username).orElseThrow();
+        User user = userRepository.findUserByUsername(username).orElseThrow();
        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
     }
 
@@ -121,14 +121,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDTO getUserInfo(String username) {
+    public EmployeeDTO getEmployeeInfo(String username) {
         for (User user : userRepository.findAll()){
-            if (user.getUsername().equals(username))
-                return new UserDTO(user);
+            if (user.getUsername().equals(username)) {
+                Optional<Employee> myEmployee = employeeRepository.findById(user.getEmployee().getId());
+                if (myEmployee.isPresent()) {
+                    return new EmployeeDTO(myEmployee.get());
+                }
+            }
         }
         return null;
     }
-
+    @Override
+    public UserDTO getUserInfo(String username) {
+        for (User user : userRepository.findAll()){
+            if (user.getUsername().equals(username)) {
+                return new UserDTO(user);
+            }
+        }
+        return null;
+    }
     @Override
     public List<EmployeeUserDTO> getEmployeeUserAdmin() {
         return userRepository.findAll()

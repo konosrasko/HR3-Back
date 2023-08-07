@@ -29,4 +29,6 @@ public interface EmployeeService {
     EmployeeDTO unassignedToSupervisor(Integer employeeId, Integer supervisorId);
 
     List<LeaveRequestDTO> requestHistoryOfEmployee(Integer employeeId);
+
+    EmployeeDTO findEmployeeByUserName(String username);
 }

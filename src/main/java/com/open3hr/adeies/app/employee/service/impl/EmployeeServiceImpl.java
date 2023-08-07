@@ -13,6 +13,7 @@ import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.user.repository.UserRepository;
+import com.open3hr.adeies.app.user.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -206,6 +207,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         return myLeaveRequestHistory.stream()
                 .map(leaveRequest -> new LeaveRequestDTO(leaveRequest, leaveRequest.getCategory()))
                 .toList();
+    }
+
+    @Override
+    public EmployeeDTO findEmployeeByUserName(String username) {
+        Optional<User> myUser = userRepository.findUserByUsername(username);
+        if(myUser.isPresent()){
+            Optional<Employee> myEmployee = employeeRepository.findById(myUser.get().getEmployee().getId());
+            if(myEmployee.isPresent()){
+                return new EmployeeDTO(myEmployee.get());
+            }else {
+                throw new RuntimeException("Couldn't find employee");
+            }
+        }else {
+            throw new RuntimeException("Couldn't find user");
+        }
     }
 
     public boolean isSupervisor(int employeeId){
