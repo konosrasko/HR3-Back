@@ -6,8 +6,10 @@ import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,9 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private LeaveBalanceService leaveBalanceService;
@@ -50,6 +55,14 @@ public class EmployeeController {
         return employeeService.employeesWithoutAccount();
     }
 
+
+    @GetMapping("/balance")
+    @PreAuthorize("/")
+    public List<LeaveBalanceDTO> getMyLeaveBalances(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return leaveBalanceService.showBalanceOfEmployee(id);
+    }
 
     @GetMapping("/{id}/leavebalance")
     public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(@PathVariable Integer id){
