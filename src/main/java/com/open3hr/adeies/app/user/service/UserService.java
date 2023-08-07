@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import java.util.List;
@@ -21,6 +22,7 @@ public interface UserService {
     UserDTO unassignUserAccount(Integer userId);
 
     UserDTO getUserInfo(String username);
+    EmployeeDTO getEmployeeInfo(String username);
 
     List<EmployeeUserDTO> getEmployeeUserAdmin();
 }

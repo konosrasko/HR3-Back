@@ -1,10 +1,11 @@
 package com.open3hr.adeies.app.user.controller;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
+import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/info")
+    @GetMapping("/user_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public UserDTO  getInfo(){
+    public UserDTO getUserInfo(){
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.getUserInfo(username);
+    }
 
+    @GetMapping("/employee_info")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public EmployeeDTO getEmployeeInfo(){
+        String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getEmployeeInfo(username);
     }
 
     @GetMapping("/{id}")

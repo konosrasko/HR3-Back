@@ -6,7 +6,6 @@ import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +55,6 @@ public class EmployeeController {
     public List<EmployeeDTO> employeesWithoutAccount(){
         return employeeService.employeesWithoutAccount();
     }
-
 
     @GetMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
