@@ -45,14 +45,16 @@ public class UserController {
         return userService.findAll();
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin/all-users")
     @PreAuthorize("hasRole('Admin')")
     public List<EmployeeUserDTO> findUsersEmployeesForAdmin(){
         return userService.getEmployeeUserAdmin();
     }
 
-    @GetMapping("/admin/{userId}")
-    public EmployeeUserDTO findUsersEmployeesForAdminById(@PathVariable Integer userId){
+    @GetMapping("/admin/{user}")
+    @PreAuthorize("hasRole('Admin')")
+    public EmployeeUserDTO findUsersEmployeesForAdminById(@PathVariable String user){
+        Integer userId = userService.getUserInfo(user).getEmployeeId();
         return userService.getEmployeeUserById(userId);
     }
 
