@@ -31,7 +31,7 @@ public class EmployeeUserDTO {
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();
         this.employeeId = employee.getId();
-        this.isEnabled = user.getIsEnabled();
+        this.isEnabled = user.isEnable();
         this.isSupervisor = user.isSupervisor();
     }
 }

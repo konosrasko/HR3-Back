@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDTO updateStatus(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
         if(myUser.isPresent()){
-            myUser.get().setIsEnabled(!myUser.get().getIsEnabled());
+            myUser.get().setEnable(!myUser.get().isEnable());
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
         }
@@ -134,15 +134,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
     @Override
     public UserDTO getUserInfo(String username) {
-        for (User user : userRepository.findAll()){
-            if (user.getUsername().equals(username)) {
-                return new UserDTO(user);
-            }
-        }
-        return null;
+        Optional<User> foundUser = userRepository.findAll()
+                .stream()
+                .filter(user -> Objects.equals(user.getUsername(), username))
+                .findFirst();
+        if(foundUser.isPresent()){
+            return new UserDTO(foundUser.get());
+        }else throw new RuntimeException("Couldn't find this user");
     }
+
     @Override
     public List<EmployeeUserDTO> getEmployeeUserAdmin() {
+        List<User> users = userRepository.findAll();
+        System.out.println(users);
         return userRepository.findAll()
                 .stream()
                 .map(user -> new EmployeeUserDTO(user.getEmployee(), user))
@@ -170,7 +174,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDTO activateDeactivateUser(Integer userId) {
         Optional<User> myUser = userRepository.findById(userId);
         if(myUser.isPresent()){
-            myUser.get().setIsEnabled(!myUser.get().getIsEnabled());
+            myUser.get().setEnable(!myUser.get().isEnable());
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
         }else {

@@ -34,7 +34,7 @@ public class User implements  UserDetails {
     private String password;
 
     @Column (name = "enabled")
-    private Boolean isEnabled;
+    private boolean isEnable;
 
     @Column (name = "role")
     @Enumerated(EnumType.STRING)
@@ -43,7 +43,12 @@ public class User implements  UserDetails {
     @Column (name = "is_supervisor")
     private boolean isSupervisor;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+    })
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
@@ -56,7 +61,7 @@ public class User implements  UserDetails {
         this.id = userDTO.getId();
         this.username = userDTO.getUsername();
         this.password = userDTO.getPassword();
-        this.isEnabled = userDTO.getIsEnabled();
+        this.isEnable = userDTO.isEnable();
         this.role = userDTO.getRole();
         this.employee = employee;
         this.isSupervisor = userDTO.isSupervisor();
@@ -84,7 +89,6 @@ public class User implements  UserDetails {
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return true;
     }

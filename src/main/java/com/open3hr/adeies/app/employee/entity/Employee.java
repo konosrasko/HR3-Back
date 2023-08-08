@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+
 @Builder
 public class Employee {
 
@@ -66,15 +66,15 @@ public class Employee {
     @OneToOne(mappedBy = "employee",
             fetch = FetchType.EAGER,
             cascade = {
-                    CascadeType.ALL
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH
             })
     private User user;
 
     @OneToMany(mappedBy = "employee",
             fetch = FetchType.EAGER,
-            cascade = {
-                    CascadeType.ALL
-            })
+            cascade = {CascadeType.ALL})
     private List<LeaveRequest> leaveRequest = new ArrayList<>();
 
     public Employee(EmployeeDTO employeeDTO){
