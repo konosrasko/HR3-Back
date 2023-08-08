@@ -49,7 +49,7 @@ public class AuthenticationService {
         Authentication authentication;
         String encryptedUsername = authenticationRequest.getUsername();
         String encryptedPassword = authenticationRequest.getPassword();
-        System.out.println("encrypted username: " +  encryptedUsername + " and pass: " +  encryptedPassword);
+        System.out.println("encrypted username: " +  encryptedUsername + " and encypted pass: " +  encryptedPassword);
 
         //DECRYPTION
         MessageDigest sha = MessageDigest.getInstance("SHA-1");
