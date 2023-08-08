@@ -56,14 +56,6 @@ public class EmployeeController {
         employeeService.deleteById(id);
     }
 
-    @PostMapping("/leaveRequest")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
-        return employeeService.addLeaveRequest(leaveRequestDTO, loggedUserEmployeeId);
-    }
-
     @GetMapping("/withoutAccount")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin')")
     public List<EmployeeDTO> employeesWithoutAccount(){
