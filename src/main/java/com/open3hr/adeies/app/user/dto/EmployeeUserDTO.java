@@ -19,6 +19,7 @@ public class EmployeeUserDTO {
     private Role role;
     private String firstName;
     private String lastName;
+    private Integer employeeId;
     private boolean isEnabled;
     private boolean isSupervisor;
 
@@ -29,6 +30,7 @@ public class EmployeeUserDTO {
         this.role = user.getRole();
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();
+        this.employeeId = employee.getId();
         this.isEnabled = user.getIsEnabled();
         this.isSupervisor = user.isSupervisor();
     }

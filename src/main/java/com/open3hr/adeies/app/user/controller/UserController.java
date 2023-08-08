@@ -65,7 +65,7 @@ public class UserController {
         return userService.createAccount(userDTO);
     }
 
-    @PutMapping("/user/{userId}")
+    @PutMapping("/admin/{userId}")
     @PreAuthorize("hasRole('Admin')")
     public UserDTO editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId){
         return userService.editUser(userDTO, userId);
