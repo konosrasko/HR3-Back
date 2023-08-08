@@ -165,4 +165,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
         }else throw new RuntimeException("This user does not exist");
     }
+
+    @Override
+    public UserDTO activateDeactivateUser(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            myUser.get().setIsEnabled(!myUser.get().getIsEnabled());
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }else {
+            throw new RuntimeException("User with id "+ userId +" could not be found!");
+        }
+    }
 }

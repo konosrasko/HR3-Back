@@ -18,10 +18,8 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private LeaveBalanceService leaveBalanceService;
 
@@ -58,10 +56,12 @@ public class EmployeeController {
         employeeService.deleteById(id);
     }
 
-    @PostMapping("/{id}/leaveRequest")
+    @PostMapping("/leaveRequest")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable int id ){
-        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
+        return employeeService.addLeaveRequest(leaveRequestDTO, loggedUserEmployeeId);
     }
 
     @GetMapping("/withoutAccount")
@@ -81,8 +81,10 @@ public class EmployeeController {
 
     @GetMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(@PathVariable Integer id){
-        return leaveBalanceService.showBalanceOfEmployee(id);
+    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
+        return leaveBalanceService.showBalanceOfEmployee(loggedUserEmployeeId);
     }
 
 

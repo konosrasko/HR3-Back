@@ -27,4 +27,6 @@ public interface UserService {
     EmployeeUserDTO getEmployeeUserById(int userId);
 
     UserDTO editUser(UserDTO userDTO, Integer userId);
+
+    UserDTO activateDeactivateUser(Integer userId);
 }

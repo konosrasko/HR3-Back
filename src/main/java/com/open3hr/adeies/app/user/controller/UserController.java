@@ -94,4 +94,10 @@ public class UserController {
     public UserDTO unassignUserAccount(@PathVariable Integer userId){
         return userService.unassignUserAccount(userId);
     }
+
+    @PutMapping("/{userid}/changeEnabled")
+    @PreAuthorize("hasRole('Admin')")
+    public UserDTO activateDeactivateUser(@PathVariable Integer userid){
+        return userService.activateDeactivateUser(userid);
+    }
 }
