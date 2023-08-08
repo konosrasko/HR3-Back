@@ -64,7 +64,7 @@ public class Employee {
     private List<LeaveRequest> requestList = new ArrayList<>();
 
     @OneToOne(mappedBy = "employee",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.DETACH,

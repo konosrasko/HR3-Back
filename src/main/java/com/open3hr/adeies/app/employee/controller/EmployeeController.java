@@ -23,6 +23,15 @@ public class EmployeeController {
     @Autowired
     private LeaveBalanceService leaveBalanceService;
 
+    //used in: http://localhost:4200/home/leaves/add
+    @PostMapping("/leaverequests/add")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    }
+
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
     public List<EmployeeDTO> getAllEmployees(){
@@ -63,7 +72,7 @@ public class EmployeeController {
 
 
     @GetMapping("/balance")
-    @PreAuthorize("/")
+    //@PreAuthorize('Admin', 'Employee', 'HR')
     public List<LeaveBalanceDTO> getMyLeaveBalances(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
@@ -77,6 +86,7 @@ public class EmployeeController {
         int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
         return leaveBalanceService.showBalanceOfEmployee(loggedUserEmployeeId);
     }
+
 
     @PostMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('HR')")
