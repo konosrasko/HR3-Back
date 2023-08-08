@@ -54,7 +54,10 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
     @Override
     public void deleteById(Integer id) {
+        Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
+        if (leaveRequest.isPresent() && leaveRequest.get().getStatus()==Status.PENDING)
         this.leaveRequestRepository.deleteById(id);
+        else throw new RuntimeException("oxi denn eee ");
     }
 
     @Override

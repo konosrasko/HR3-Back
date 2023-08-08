@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service.impl;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
@@ -26,8 +27,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
-
     @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream()
@@ -35,16 +34,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .toList();
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        System.out.println("UserServiceImpl - username: " + username);
 
         User user = userRepository.findUserByUsername(username).orElseThrow();
        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
     }
-
 
     @Override
     public UserDTO findById(Integer id) {
@@ -54,11 +49,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         } else {
             throw new RuntimeException("Couldn't find user with id: " + id);
         }
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        userRepository.findById(id).orElseThrow(() -> new RuntimeException("User with id " + id + " not found"));
     }
 
     @Override
@@ -131,19 +121,48 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDTO getUserInfo(String username) {
+    public EmployeeDTO getEmployeeInfo(String username) {
         for (User user : userRepository.findAll()){
-            if (user.getUsername().equals(username))
-                return new UserDTO(user);
+            if (user.getUsername().equals(username)) {
+                Optional<Employee> myEmployee = employeeRepository.findById(user.getEmployee().getId());
+                if (myEmployee.isPresent()) {
+                    return new EmployeeDTO(myEmployee.get());
+                }
+            }
         }
         return null;
     }
-
+    @Override
+    public UserDTO getUserInfo(String username) {
+        for (User user : userRepository.findAll()){
+            if (user.getUsername().equals(username)) {
+                return new UserDTO(user);
+            }
+        }
+        return null;
+    }
     @Override
     public List<EmployeeUserDTO> getEmployeeUserAdmin() {
         return userRepository.findAll()
                 .stream()
                 .map(user -> new EmployeeUserDTO(user.getEmployee(), user))
                 .toList();
+    }
+
+    @Override
+    public EmployeeUserDTO getEmployeeUserById(int userId){
+        Optional<User> foundUser = userRepository.findById(userId);
+        if(foundUser.isPresent()){
+            return new EmployeeUserDTO(foundUser.get().getEmployee(), foundUser.get());
+        }else throw new RuntimeException("This user does not exist");
+    }
+
+    @Override
+    public UserDTO editUser(UserDTO userDTO, Integer userId){
+        Optional<User> foundUser = userRepository.findById(userId);
+        if(foundUser.isPresent()){
+            userDTO.setId(userId);
+            return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
+        }else throw new RuntimeException("This user does not exist");
     }
 }

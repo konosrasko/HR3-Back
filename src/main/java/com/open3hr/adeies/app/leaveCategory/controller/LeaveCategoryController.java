@@ -3,6 +3,7 @@ package com.open3hr.adeies.app.leaveCategory.controller;
 import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveCategory.service.LeaveCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,27 +15,32 @@ public class LeaveCategoryController {
     private LeaveCategoryService leaveCategoryService;
 
     @GetMapping("")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public List<LeaveCategoryDTO> findAll(){
         return  leaveCategoryService.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public LeaveCategoryDTO findById(@PathVariable Integer id){
         return leaveCategoryService.findById(id);
     }
 
     @PostMapping("")
+    @PreAuthorize("hasRole('HR')")
     public LeaveCategoryDTO save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         leaveCategoryDTO.setId(0);
         return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
 
     @PutMapping("")
+    @PreAuthorize("hasRole('HR')")
     public LeaveCategoryDTO update(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         return leaveCategoryService.createNewCategory(leaveCategoryDTO);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('HR')")
     public void deleteById(@PathVariable Integer id){
         leaveCategoryService.deleteById(id);
     }
