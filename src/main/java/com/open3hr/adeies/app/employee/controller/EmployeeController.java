@@ -34,7 +34,7 @@ public class EmployeeController {
 
     //used in: http://localhost:4200/home/leaves/add
     @GetMapping("/balance")
-    //@PreAuthorize('Admin', 'Employee', 'HR')
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
     public List<LeaveBalanceDTO> getMyLeaveBalances(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
