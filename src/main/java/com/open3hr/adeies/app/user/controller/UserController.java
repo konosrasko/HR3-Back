@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.user.controller;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
+import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.service.UserService;
@@ -18,6 +19,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    //used in: http://localhost:4200/home/landing
+    @GetMapping("/roles")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public RolesDTO getMyRoles(){
+        String username= SecurityContextHolder.getContext().getAuthentication().getName();
+        int logged_id = userService.getUserInfo(username).getId();
+        return userService.getUserRoles(logged_id);
+    }
 
     @GetMapping("/user_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")

@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.user.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
+import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.user.entity.User;
@@ -117,6 +118,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }else {
             throw new RuntimeException("Couldn't find user account!");
             // ### couldn't find user account with given id ###
+        }
+    }
+
+    @Override
+    public RolesDTO getUserRoles(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            return new RolesDTO(myUser.get());
+        }else {
+            throw new RuntimeException("Couldn't find user account!");
         }
     }
 
