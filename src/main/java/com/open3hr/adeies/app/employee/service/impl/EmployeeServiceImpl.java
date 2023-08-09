@@ -85,7 +85,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
                     if(leaveRequestDTO.getEndDate().getTime() >= leaveRequestDTO.getStartDate().getTime() ){
-                        if(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime()){
+                        System.out.println("start date:" + leaveRequestDTO.getStartDate());
+                        System.out.println("submit date:" + leaveRequestDTO.getSubmitDate());
+                        System.out.println("start date >= end date:");
+                        System.out.println(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() );
+                        if(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() ){
 
                             if(leaveRequestDTO.getDuration() <= employeesBalance.getDays() - employeesBalance.getDaysTaken()){
                                 leaveRequestDTO.setId(0);
