@@ -1,4 +1,4 @@
-package com.open3hr.adeies.app.user.dto;
+package com.open3hr.adeies.app.leaveRequest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.open3hr.adeies.app.employee.entity.Employee;
@@ -16,6 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class SubordinatesReqDTO {
+    private Integer leaveId;
     private Integer employeeId;
     private String firstName;
     private String lastName;
@@ -30,6 +31,7 @@ public class SubordinatesReqDTO {
     private Status status;
 
     public SubordinatesReqDTO(LeaveRequest leaveRequest, Employee employee){
+        this.leaveId = leaveRequest.getId();
         this.employeeId = employee.getId();
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();

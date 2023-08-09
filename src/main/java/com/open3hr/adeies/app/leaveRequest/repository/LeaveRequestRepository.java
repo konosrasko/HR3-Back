@@ -13,7 +13,7 @@ public interface LeaveRequestRepository extends JpaRepository<LeaveRequest, Inte
 
 
 
-    @Query(value = "SELECT lr.* FROM leave_request lr JOIN employee ON employee_id = lr.employee.id WHERE employee.supervisor_id=:supervisorId", nativeQuery = true)
+    @Query(value = "SELECT lr.*,e.first_name FROM leave_request lr JOIN employee e ON e.id = lr.employee_id WHERE e.supervisor_id=:supervisorId", nativeQuery = true)
     List<LeaveRequest> findLeaveRequestsForSupervisedEmployees(@Param("supervisorId") Integer supervisor_Id);
 
 }

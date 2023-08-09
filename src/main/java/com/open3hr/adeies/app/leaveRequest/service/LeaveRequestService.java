@@ -1,7 +1,7 @@
 package com.open3hr.adeies.app.leaveRequest.service;
 
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
-import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
+import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 
 import java.util.List;
 
@@ -18,6 +18,6 @@ public interface LeaveRequestService {
 
     List<LeaveRequestDTO> getPendingRequests();
 
-    List<LeaveRequestDTO> getSubordinatesReq(Integer supervisorId);
+    List<SubordinatesReqDTO> getSubordinatesReq(Integer supervisorId);
 
 }

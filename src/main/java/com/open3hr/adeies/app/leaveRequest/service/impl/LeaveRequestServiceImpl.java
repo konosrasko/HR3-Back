@@ -1,7 +1,5 @@
 package com.open3hr.adeies.app.leaveRequest.service.impl;
 
-import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
-import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -10,6 +8,7 @@ import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
+import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,11 +96,11 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
 
 
     @Override
-    public List<LeaveRequestDTO> getSubordinatesReq(Integer supervisorId) {
+    public List<SubordinatesReqDTO> getSubordinatesReq(Integer supervisorId) {
 
         List<LeaveRequest> myLeaveRequestHistory = leaveRequestRepository.findLeaveRequestsForSupervisedEmployees(supervisorId);
         return myLeaveRequestHistory.stream()
-                .map(leaveRequest -> new LeaveRequestDTO(leaveRequest, leaveRequest.getCategory()))
+                .map(leaveRequest -> new SubordinatesReqDTO(leaveRequest, leaveRequest.getEmployee()))
                 .toList();
     }
 }
