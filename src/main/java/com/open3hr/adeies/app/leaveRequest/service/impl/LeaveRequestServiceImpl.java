@@ -94,6 +94,16 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                 .toList();
 
     }
+
+
+    @Override
+    public List<LeaveRequestDTO> getSubordinatesReq(Integer supervisorId) {
+
+        List<LeaveRequest> myLeaveRequestHistory = leaveRequestRepository.findLeaveRequestsForSupervisedEmployees(supervisorId);
+        return myLeaveRequestHistory.stream()
+                .map(leaveRequest -> new LeaveRequestDTO(leaveRequest, leaveRequest.getCategory()))
+                .toList();
+    }
 }
 
 
