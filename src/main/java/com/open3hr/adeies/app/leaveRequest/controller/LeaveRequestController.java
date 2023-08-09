@@ -4,6 +4,7 @@ import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.user.service.UserService;
+import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,17 @@ public class LeaveRequestController {
 
     @Autowired
     private LeaveRequestService leaveRequestService;
+    @Autowired
+    private UserService userService;
+
+    //used in: http://localhost:4200/home/leaves/requests
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
+    public List<LeaveRequestDTO> getAllMyLeaveRequests() {
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return leaveRequestService.findRequestsForAnEmployee(id);
+    }
 
     @Autowired
     private UserService userService;

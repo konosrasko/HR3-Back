@@ -18,12 +18,28 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
     @Autowired
     private UserService userService;
-
     @Autowired
     private LeaveBalanceService leaveBalanceService;
+
+    //used in: http://localhost:4200/home/leaves/add
+    @PostMapping("/leaverequests/add")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    }
+
+    //used in: http://localhost:4200/home/leaves/add
+    @GetMapping("/balance")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
+    public List<LeaveBalanceDTO> getMyLeaveBalances(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return leaveBalanceService.showBalanceOfEmployee(id);
+    }
 
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
@@ -49,12 +65,6 @@ public class EmployeeController {
         employeeService.deleteById(id);
     }
 
-    @PostMapping("/{id}/leaveRequest")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable int id ){
-        return employeeService.addLeaveRequest(leaveRequestDTO,id);
-    }
-
     @GetMapping("/withoutAccount")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin')")
     public List<EmployeeDTO> employeesWithoutAccount(){
@@ -62,19 +72,16 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/balance")
-    @PreAuthorize("/")
-    public List<LeaveBalanceDTO> getMyLeaveBalances(){
-        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveBalanceService.showBalanceOfEmployee(id);
-    }
+
 
     @GetMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(@PathVariable Integer id){
-        return leaveBalanceService.showBalanceOfEmployee(id);
+    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
+        return leaveBalanceService.showBalanceOfEmployee(loggedUserEmployeeId);
     }
+
 
     @PostMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('HR')")

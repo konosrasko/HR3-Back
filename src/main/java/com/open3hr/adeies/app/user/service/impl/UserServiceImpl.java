@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.user.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
+import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.user.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,6 +63,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     throw new RuntimeException("This Employee has already a User Account");
                 }
             }
+            //STAMTAH KSPINA
+            //userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userRepository.save(new User(userDTO, myEmployee.get()));
             return userDTO;
         } else throw new RuntimeException("Employee not found, couldn't create new account.");
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDTO updateStatus(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
         if(myUser.isPresent()){
-            myUser.get().setIsEnabled(!myUser.get().getIsEnabled());
+            myUser.get().setEnable(!myUser.get().isEnable());
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
         }
@@ -121,6 +125,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public RolesDTO getUserRoles(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            return new RolesDTO(myUser.get());
+        }else {
+            throw new RuntimeException("Couldn't find user account!");
+        }
+    }
+
+    @Override
     public EmployeeDTO getEmployeeInfo(String username) {
         for (User user : userRepository.findAll()){
             if (user.getUsername().equals(username)) {
@@ -134,15 +148,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
     @Override
     public UserDTO getUserInfo(String username) {
-        for (User user : userRepository.findAll()){
-            if (user.getUsername().equals(username)) {
-                return new UserDTO(user);
-            }
-        }
-        return null;
+        Optional<User> foundUser = userRepository.findAll()
+                .stream()
+                .filter(user -> Objects.equals(user.getUsername(), username))
+                .findFirst();
+        if(foundUser.isPresent()){
+            return new UserDTO(foundUser.get());
+        }else throw new RuntimeException("Couldn't find this user");
     }
+
     @Override
     public List<EmployeeUserDTO> getEmployeeUserAdmin() {
+        List<User> users = userRepository.findAll();
+        System.out.println(users);
         return userRepository.findAll()
                 .stream()
                 .map(user -> new EmployeeUserDTO(user.getEmployee(), user))
@@ -164,5 +182,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userDTO.setId(userId);
             return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
         }else throw new RuntimeException("This user does not exist");
+    }
+
+    @Override
+    public UserDTO activateDeactivateUser(Integer userId) {
+        Optional<User> myUser = userRepository.findById(userId);
+        if(myUser.isPresent()){
+            myUser.get().setEnable(!myUser.get().isEnable());
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }else {
+            throw new RuntimeException("User with id "+ userId +" could not be found!");
+        }
     }
 }

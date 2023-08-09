@@ -16,7 +16,7 @@ public class UserDTO {
         private Integer id;
         private String username;
         private String password;
-        private Boolean isEnabled;
+        private boolean isEnable;
         private Integer employeeId;
         private Role role;
         private boolean isSupervisor;
@@ -25,7 +25,7 @@ public class UserDTO {
                 this.id = user.getId();
                 this.username = user.getUsername();
                 this.password = user.getPassword();
-                this.isEnabled = user.getIsEnabled();
+                this.isEnable = user.isEnable();
                 this.role = user.getRole();
                 this.employeeId = user.getEmployee().getId();
                 this.isSupervisor = user.isSupervisor();

@@ -82,28 +82,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                 if(foundBalanceOfEmployee.isPresent()){
                     LeaveBalance employeesBalance = foundBalanceOfEmployee.get();
                     Date submitDate = leaveRequestDTO.getSubmitDate();
-                    long todayStartDiff, startDate, endDate, toDate;
 
-                    startDate = leaveRequestDTO.getStartDate().getTime();
-                    endDate = leaveRequestDTO.getEndDate().getTime();
-                    toDate = submitDate.getTime();
 
-                    if(toDate > startDate){todayStartDiff = startDate - toDate;}
-                    else {todayStartDiff = Math.abs(toDate - startDate);}
+                    if(leaveRequestDTO.getEndDate().getTime() >= leaveRequestDTO.getStartDate().getTime() ){
+                        System.out.println("start date:" + leaveRequestDTO.getStartDate());
+                        System.out.println("submit date:" + leaveRequestDTO.getSubmitDate());
+                        System.out.println("start date >= end date:");
+                        System.out.println(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() );
+                        if(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() ){
 
-                    long todayStartDiffToDays = TimeUnit.DAYS.convert(todayStartDiff, TimeUnit.MILLISECONDS);
-
-                    if(endDate >= startDate){
-                        if(todayStartDiffToDays >= 0){
-                            long startEndDiffToDays = TimeUnit.DAYS.convert(Math.abs(endDate - startDate), TimeUnit.MILLISECONDS) + 1;
-
-                            if(startEndDiffToDays <= employeesBalance.getDays()){
+                            if(leaveRequestDTO.getDuration() <= employeesBalance.getDays() - employeesBalance.getDaysTaken()){
                                 leaveRequestDTO.setId(0);
                                 leaveRequestDTO.setStatus(Status.PENDING);
                                 leaveRequestDTO.setSubmitDate(submitDate);
-                                leaveRequestDTO.setDuration((int) startEndDiffToDays);
-                                employeesBalance.setDays(employeesBalance.getDays() - (int) startEndDiffToDays);
-                                employeesBalance.setDaysTaken(employeesBalance.getDaysTaken() + (int) startEndDiffToDays);
+                                employeesBalance.setDaysTaken(employeesBalance.getDaysTaken() + leaveRequestDTO.getDuration());
                                 LeaveRequest leaveRequest = new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
                                 balanceRepository.save(employeesBalance);
                                 return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest), optionalLeaveCategory.get());
