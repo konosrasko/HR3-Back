@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDTO> findAll() {
@@ -62,6 +65,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     throw new RuntimeException("This Employee has already a User Account");
                 }
             }
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             userRepository.save(new User(userDTO, myEmployee.get()));
             return userDTO;
         } else throw new RuntimeException("Employee not found, couldn't create new account.");
