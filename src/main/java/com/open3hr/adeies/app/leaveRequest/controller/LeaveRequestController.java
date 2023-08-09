@@ -31,8 +31,6 @@ public class LeaveRequestController {
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/searchemployeeleaverequest/{id}")
     @PreAuthorize("hasRole('HR')")
