@@ -5,14 +5,16 @@ import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
+import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
-import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,11 +54,21 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public LeaveRequestDTO deleteRequestById(Integer id) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
-        if (leaveRequest.isPresent() && leaveRequest.get().getStatus()==Status.PENDING)
-        this.leaveRequestRepository.deleteById(id);
-        else throw new RuntimeException("oxi denn eee ");
+        if (leaveRequest.isPresent() && leaveRequest.get().getStatus() == Status.PENDING) {
+        try {
+            leaveRequest.get().getEmployee().findBalanceOfCategory(leaveRequest.get().getCategory()).addDaysTaken(-leaveRequest.get().getDuration());
+            try {
+                this.leaveRequestRepository.deleteByIdNative(id);
+            } catch (Exception e) {
+                System.out.println("Delete failed: " + e.getMessage() + e.getCause());
+            }
+            return new LeaveRequestDTO(leaveRequest.get(), leaveRequest.get().getCategory());
+        } catch (Exception e) {
+            throw new RuntimeException("Employee doesn't have a matching leave balance to the request");
+        }
+        } else throw new RuntimeException("This leave request is not deletable");
     }
 
     @Override
@@ -72,13 +84,14 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                 })
                 .collect(Collectors.toList());
     }
+
     @Override
     public List<LeaveRequestDTO> getPendingRequests() {
         List<LeaveRequest> leaveRequests = leaveRequestRepository.findAll();
 
         List<LeaveRequest> pendingRequests = new ArrayList<>();
         for (LeaveRequest leaveRequest : leaveRequests) {
-            if (leaveRequest.getStatus() == Status.PENDING){
+            if (leaveRequest.getStatus() == Status.PENDING) {
                 pendingRequests.add(leaveRequest);
             }
         }
@@ -86,9 +99,9 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                 .stream()
                 .map(leaveRequest -> {
                     Optional<LeaveCategory> categoryOfRequest = categoryRepository.findById(leaveRequest.getCategory().getId());
-                    if(categoryOfRequest.isPresent()){
+                    if (categoryOfRequest.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, categoryOfRequest.get());
-                    }else throw new RuntimeException("This category does not exists");
+                    } else throw new RuntimeException("This category does not exists");
                 })
                 .toList();
 

@@ -1,9 +1,8 @@
 package com.open3hr.adeies.app.leaveRequest.controller;
 
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
-import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
-import com.open3hr.adeies.app.user.service.UserService;
+import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +30,18 @@ public class LeaveRequestController {
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
 
+    //used in: http://localhost:4200/home/leaves/requests
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public LeaveRequestDTO deleteRequest(@PathVariable Integer id){
+        return leaveRequestService.deleteRequestById(id);
+    }
+
+
+
+
+    /* -------- v Undocumented v -------- */
+    /* ---------------------------------- */
 
     @GetMapping("/searchemployeeleaverequest/{id}")
     @PreAuthorize("hasRole('HR')")
@@ -50,11 +61,7 @@ public class LeaveRequestController {
         return leaveRequestService.findById(id);
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public void deleteRequest(@PathVariable Integer id){
-        leaveRequestService.deleteById(id);
-    }
+
 
     @GetMapping("/pending")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")

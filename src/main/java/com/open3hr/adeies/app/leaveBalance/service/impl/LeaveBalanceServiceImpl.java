@@ -1,13 +1,13 @@
 package com.open3hr.adeies.app.leaveBalance.service.impl;
 
 import com.open3hr.adeies.app.employee.entity.Employee;
+import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
-import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
-import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
-import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
+import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
+import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +76,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     }
 
     @Override
-    public List<LeaveBalanceDTO> showBalanceOfEmployee(int employeeId){
+    public List<LeaveBalanceDTO> showBalancesOfEmployee(int employeeId){
         Optional<Employee> foundEmployee = employeeRepository.findById(employeeId);
         if(foundEmployee.isPresent()){
             return foundEmployee.get().getLeaveBalanceList()

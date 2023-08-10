@@ -1,8 +1,8 @@
 package com.open3hr.adeies.app.user.entity;
 
+import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.enums.Role;
 import com.open3hr.adeies.app.user.dto.UserDTO;
-import com.open3hr.adeies.app.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")

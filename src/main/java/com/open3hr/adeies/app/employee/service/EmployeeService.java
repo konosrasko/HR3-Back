@@ -24,10 +24,6 @@ public interface EmployeeService {
 
     List<EmployeeDTO> employeesWithoutAccount();
 
-    LeaveRequestDTO acceptLeaveRequest(Integer employeeId, Integer leaveRequestId);
-
-    LeaveRequestDTO denyLeaveRequest(Integer employeeId, Integer leaveRequestId);
-
     EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id);
 
     EmployeeDTO assignToSupervisor(Integer employeeId, Integer supervisorId);
@@ -39,4 +35,8 @@ public interface EmployeeService {
     EmployeeDTO findEmployeeByUserName(String username);
 
     List<miniEmployeeDTO> findAllSupervisors();
+
+    LeaveRequestDTO approveLeaveRequest(Integer leaveReqId);
+
+    LeaveRequestDTO declineLeaveRequest(Integer leaveReqId);
 }

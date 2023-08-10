@@ -30,9 +30,16 @@ public class EmployeeController {
     //used in: http://localhost:4200/home/leaves/add
     @PostMapping("/leaverequests/add")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
+    public LeaveRequestDTO postNewRequestForMe(@RequestBody LeaveRequestDTO leaveRequestDTO){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    }
+
+    //used in: http://localhost:4200/home/leaves/add (by HR only)
+    @PostMapping("/{id}/leaverequests/add")
+    @PreAuthorize("hasRole('HR')")
+    public LeaveRequestDTO postNewRequestsForAnother(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
@@ -42,9 +49,21 @@ public class EmployeeController {
     public List<LeaveBalanceDTO> getMyLeaveBalances(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveBalanceService.showBalanceOfEmployee(id);
+        return leaveBalanceService.showBalancesOfEmployee(id);
+    }
+    //used in: http://localhost:4200/home/leaves/add (by HR only)
+    @GetMapping("/{id}/balance")
+    @PreAuthorize("hasRole('HR')")
+    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnother(@PathVariable Integer id){
+        return leaveBalanceService.showBalancesOfEmployee(id);
     }
 
+
+
+
+
+    /* -------- v Undocumented v -------- */
+    /* ---------------------------------- */
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
     public List<EmployeeSupervisorDTO> getAllEmployees(){
@@ -75,18 +94,6 @@ public class EmployeeController {
         return employeeService.employeesWithoutAccount();
     }
 
-
-
-
-    @GetMapping("/{id}/leavebalance")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
-        return leaveBalanceService.showBalanceOfEmployee(loggedUserEmployeeId);
-    }
-
-
     @PostMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('HR')")
     public String addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
@@ -100,16 +107,16 @@ public class EmployeeController {
         return employeeService.changeProfile(employeeDTO,id);
     }
 
-    @PutMapping("/{employeeId}/approve/{leaveRequestId}")
-    @PreAuthorize("hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
-        return employeeService.acceptLeaveRequest(employeeId,leaveRequestId);
+    @PutMapping("/{leaveRequestId}/approve")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer leaveRequestId){
+        return employeeService.approveLeaveRequest(leaveRequestId);
     }
 
-    // na ginei elegxos an einai o SV toy employee!~!!!!!@!!1111!1
-    @PutMapping("/{employeeId}/reject/{leaveRequestId}")
-    public LeaveRequestDTO denyLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
-        return employeeService.denyLeaveRequest(employeeId,leaveRequestId);
+    @PutMapping("/{leaveRequestId}/decline")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public LeaveRequestDTO decline(@PathVariable Integer leaveRequestId){
+        return employeeService.declineLeaveRequest(leaveRequestId);
     }
 
     @PutMapping("/{employeeId}/assign/{supervisorId}")

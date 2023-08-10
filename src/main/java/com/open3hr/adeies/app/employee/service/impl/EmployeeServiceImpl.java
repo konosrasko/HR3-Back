@@ -14,14 +14,12 @@ import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
-import com.open3hr.adeies.app.user.repository.UserRepository;
 import com.open3hr.adeies.app.user.entity.User;
+import com.open3hr.adeies.app.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -142,44 +140,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestDTO acceptLeaveRequest(Integer employeeId, Integer leaveRequestId) {
-        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
-        Optional<LeaveRequest> myLeaveRequest = leaveRequestRepository.findById(leaveRequestId);
-        Optional<LeaveCategory> myLeaveCategory = categoryRepository.findById(myLeaveRequest.get().getCategory().getId());
-        if (myLeaveRequest.isPresent()) {
-            if (myEmployee.isPresent()) {
-                myLeaveRequest.get().setStatus(Status.APPROVED);
-                leaveRequestRepository.save(myLeaveRequest.get());
-                myLeaveRequest.get().setCategory(myLeaveCategory.get());
-                return new LeaveRequestDTO(myLeaveRequest.get(), myLeaveCategory.get());
-            } else {
-                throw new RuntimeException("Couldn't find employee!");
-            }
-        } else {
-            throw new RuntimeException("Couldn't find leave request!");
-        }
-    }
-
-    @Override
-    public LeaveRequestDTO denyLeaveRequest(Integer employeeId, Integer leaveRequestId) {
-        Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
-        Optional<LeaveRequest> myLeaveRequest = leaveRequestRepository.findById(leaveRequestId);
-        Optional<LeaveCategory> myLeaveCategory = categoryRepository.findById(myLeaveRequest.get().getCategory().getId());
-        if (myLeaveRequest.isPresent()) {
-            if (myEmployee.isPresent()) {
-                myLeaveRequest.get().setStatus(Status.DENIED);
-                leaveRequestRepository.save(myLeaveRequest.get());
-                myLeaveRequest.get().setCategory(myLeaveCategory.get());
-                return new LeaveRequestDTO(myLeaveRequest.get(), myLeaveCategory.get());
-            } else {
-                throw new RuntimeException("Couldn't find employee!");
-            }
-        } else {
-            throw new RuntimeException("Couldn't find leave request!");
-        }
-    }
-
-    @Override
     public EmployeeDTO assignToSupervisor(Integer employeeId, Integer supervisorId) {
         Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
         Optional<Employee> employee = employeeRepository.findById(supervisorId);
@@ -227,6 +187,26 @@ public class EmployeeServiceImpl implements EmployeeService {
         }else {
             throw new RuntimeException("Couldn't find user");
         }
+    }
+
+    @Override
+    public LeaveRequestDTO approveLeaveRequest(Integer leaveReqId) {
+        Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
+        if (leaveRequest.isPresent()){
+            leaveRequest.get().setStatus(Status.APPROVED);
+            return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
+        }
+        throw new RuntimeException("Could not find leave request with id: " + leaveReqId);
+    }
+
+    @Override
+    public LeaveRequestDTO declineLeaveRequest(Integer leaveReqId) {
+        Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
+        if (leaveRequest.isPresent()){
+            leaveRequest.get().setStatus(Status.DENIED);
+            return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
+        }
+        throw new RuntimeException("Could not find leave request with id: " + leaveReqId);
     }
 
     @Override

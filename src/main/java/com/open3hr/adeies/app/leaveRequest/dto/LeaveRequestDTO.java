@@ -38,4 +38,13 @@ public class LeaveRequestDTO {
         this.duration = leaveRequest.getDuration();
         this.status = leaveRequest.getStatus();
     }
+
+    public LeaveRequestDTO(LeaveRequest leaveRequest) {
+        this.id = leaveRequest.getId();
+        this.submitDate = leaveRequest.getSubmitDate();
+        this.startDate = leaveRequest.getStartDate();
+        this.endDate = leaveRequest.getEndDate();
+        this.duration = leaveRequest.getDuration();
+        this.status = leaveRequest.getStatus();
+    }
 }

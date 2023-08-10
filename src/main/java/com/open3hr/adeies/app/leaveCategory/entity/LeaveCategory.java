@@ -1,8 +1,8 @@
 package com.open3hr.adeies.app.leaveCategory.entity;
 
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
-import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
+import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class LeaveCategory {
     private List<LeaveBalance> balances = new ArrayList<>();
 
     @OneToMany(mappedBy = "category",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.ALL
             })
