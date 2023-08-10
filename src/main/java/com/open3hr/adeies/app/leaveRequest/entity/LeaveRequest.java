@@ -58,6 +58,14 @@ public class LeaveRequest {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public LeaveRequest(LeaveRequestDTO leaveRequestDTO){
+        this.id= leaveRequestDTO.getId();
+        this.startDate = leaveRequestDTO.getStartDate();
+        this.endDate = leaveRequestDTO.getEndDate();
+        this.submitDate = leaveRequestDTO.getSubmitDate();
+        this.duration = leaveRequestDTO.getDuration();
+        this.status = leaveRequestDTO.getStatus();
+    }
     public LeaveRequest(LeaveRequestDTO leaveRequestDTO, Employee employee, LeaveCategory category){
         this.employee = employee;
         this.startDate = leaveRequestDTO.getStartDate();

@@ -96,16 +96,16 @@ public class EmployeeController {
         return employeeService.changeProfile(employeeDTO,id);
     }
 
-    @PutMapping("/{employeeId}/approve/{leaveRequestId}")
-    @PreAuthorize("hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
-        return employeeService.acceptLeaveRequest(employeeId,leaveRequestId);
+    @PutMapping("/{leaveRequestId}/approve")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer leaveRequestId){
+        return employeeService.approveLeaveRequest(leaveRequestId);
     }
 
-    // na ginei elegxos an einai o SV toy employee!~!!!!!@!!1111!1
-    @PutMapping("/{employeeId}/reject/{leaveRequestId}")
-    public LeaveRequestDTO denyLeaveRequest(@PathVariable Integer employeeId, @PathVariable Integer leaveRequestId){
-        return employeeService.denyLeaveRequest(employeeId,leaveRequestId);
+    @PutMapping("/{leaveRequestId}/decline")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public LeaveRequestDTO decline(@PathVariable Integer leaveRequestId){
+        return employeeService.declineLeaveRequest(leaveRequestId);
     }
 
     @PutMapping("/{employeeId}/assign/{supervisorId}")
