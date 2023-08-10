@@ -12,7 +12,7 @@ public interface LeaveRequestService {
 
     LeaveRequestDTO findById(Integer id);
 
-    void deleteById(Integer id);
+    LeaveRequestDTO deleteRequestById(Integer id);
 
     List<LeaveRequestDTO> findRequestsForAnEmployee(int id);
 

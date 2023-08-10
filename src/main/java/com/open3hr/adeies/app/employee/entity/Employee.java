@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.employee.entity;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
+import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.user.entity.User;
 import jakarta.persistence.*;
@@ -50,14 +51,14 @@ public class Employee {
     private Integer supervisorId;
 
     @OneToMany(mappedBy = "employee",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.ALL
             })
     private List<LeaveBalance> leaveBalanceList = new ArrayList<>();
 
     @OneToMany(mappedBy = "employee",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.ALL
             })
@@ -87,5 +88,14 @@ public class Employee {
         this.hireDate = employeeDTO.getHireDate();
         this.enabled = employeeDTO.isEnabled();
         this.supervisorId = employeeDTO.getSupervisorId();
+    }
+
+    public LeaveBalance findBalanceOfCategory(LeaveCategory leaveCategory){
+        for(LeaveBalance leaveBalance: this.leaveBalanceList){
+            if (leaveBalance.getCategory().equals(leaveCategory)){
+                return leaveBalance;
+            }
+        }
+        return null;
     }
 }

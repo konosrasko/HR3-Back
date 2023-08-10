@@ -23,19 +23,11 @@ public class LeaveRequest {
     @Column(name = "id")
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade  = {
-            CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.REFRESH
-    } )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade  = {
-            CascadeType.PERSIST,
-            CascadeType.DETACH,
-            CascadeType.REFRESH
-    })
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leave_category_id", referencedColumnName = "id")
     private LeaveCategory category;
 

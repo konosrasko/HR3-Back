@@ -35,7 +35,7 @@ public class LeaveCategory {
     private List<LeaveBalance> balances = new ArrayList<>();
 
     @OneToMany(mappedBy = "category",
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.ALL
             })

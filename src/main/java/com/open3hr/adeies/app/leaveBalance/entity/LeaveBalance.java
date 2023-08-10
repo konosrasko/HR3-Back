@@ -56,4 +56,8 @@ public class LeaveBalance {
         this.employee = employee;
         this.category = category;
     }
+
+    public void addDaysTaken(int daysToAdd){
+        this.daysTaken += daysToAdd;
+    }
 }
