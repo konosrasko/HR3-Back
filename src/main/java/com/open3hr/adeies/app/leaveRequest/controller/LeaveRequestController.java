@@ -2,6 +2,8 @@ package com.open3hr.adeies.app.leaveRequest.controller;
 
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
+import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
+import com.open3hr.adeies.app.user.service.UserService;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +30,7 @@ public class LeaveRequestController {
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
         return leaveRequestService.findRequestsForAnEmployee(id);
     }
+
 
     @GetMapping("/searchemployeeleaverequest/{id}")
     @PreAuthorize("hasRole('HR')")
@@ -58,4 +61,14 @@ public class LeaveRequestController {
     public List<LeaveRequestDTO> getPendingRequest(){
         return leaveRequestService.getPendingRequests();
     }
+
+
+    @GetMapping("/supervisor")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public List<SubordinatesReqDTO> findSubordinatesReq(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int supervisorId = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return leaveRequestService.getSubordinatesReq(supervisorId);
+    }
+
 }
