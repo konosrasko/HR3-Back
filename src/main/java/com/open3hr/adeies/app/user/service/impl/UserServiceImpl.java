@@ -1,19 +1,18 @@
 package com.open3hr.adeies.app.user.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.entity.Employee;
+import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
-import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.user.entity.User;
-import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.user.repository.UserRepository;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

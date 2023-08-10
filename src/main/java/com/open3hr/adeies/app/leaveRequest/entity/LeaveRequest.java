@@ -2,12 +2,14 @@ package com.open3hr.adeies.app.leaveRequest.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
-import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.enums.Status;
+import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
+import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 

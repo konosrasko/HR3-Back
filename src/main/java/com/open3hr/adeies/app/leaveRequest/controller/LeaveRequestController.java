@@ -1,9 +1,8 @@
 package com.open3hr.adeies.app.leaveRequest.controller;
 
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
-import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
-import com.open3hr.adeies.app.user.service.UserService;
+import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,7 +1,7 @@
 package com.open3hr.adeies.app.leaveBalance.entity;
 
-import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
+import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

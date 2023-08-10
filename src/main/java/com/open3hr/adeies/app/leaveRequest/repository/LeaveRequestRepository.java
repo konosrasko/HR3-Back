@@ -2,7 +2,6 @@ package com.open3hr.adeies.app.leaveRequest.repository;
 
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import jakarta.transaction.Transactional;
-import org.hibernate.sql.Delete;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

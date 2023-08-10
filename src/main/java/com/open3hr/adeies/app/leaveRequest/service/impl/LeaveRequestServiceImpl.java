@@ -5,14 +5,16 @@ import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
+import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
-import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
