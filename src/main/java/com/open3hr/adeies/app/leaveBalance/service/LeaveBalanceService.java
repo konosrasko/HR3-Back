@@ -16,5 +16,5 @@ public interface LeaveBalanceService {
 
     void addLeaveBalanceToEmployee(LeaveBalanceDTO leaveBalanceDTO, Integer employeeId);
 
-    List<LeaveBalanceDTO> showBalanceOfEmployee(int employeeId);
+    List<LeaveBalanceDTO> showBalancesOfEmployee(int employeeId);
 }
