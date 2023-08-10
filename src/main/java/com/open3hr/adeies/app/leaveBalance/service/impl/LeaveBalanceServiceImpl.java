@@ -76,7 +76,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
     }
 
     @Override
-    public List<LeaveBalanceDTO> showBalanceOfEmployee(int employeeId){
+    public List<LeaveBalanceDTO> showBalancesOfEmployee(int employeeId){
         Optional<Employee> foundEmployee = employeeRepository.findById(employeeId);
         if(foundEmployee.isPresent()){
             return foundEmployee.get().getLeaveBalanceList()

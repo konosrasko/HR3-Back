@@ -8,6 +8,7 @@ import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,16 @@ public class EmployeeController {
     //used in: http://localhost:4200/home/leaves/add
     @PostMapping("/leaverequests/add")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO leaveRequestDTO(@RequestBody LeaveRequestDTO leaveRequestDTO){
+    public LeaveRequestDTO postNewRequestForMe(@RequestBody LeaveRequestDTO leaveRequestDTO){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    }
+
+    //used in: http://localhost:4200/home/leaves/add (by HR only)
+    @PostMapping("/{id}/leaverequests/add")
+    @PreAuthorize("hasRole('HR')")
+    public LeaveRequestDTO postNewRequestsForAnother(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
         return employeeService.addLeaveRequest(leaveRequestDTO,id);
     }
 
@@ -38,9 +46,21 @@ public class EmployeeController {
     public List<LeaveBalanceDTO> getMyLeaveBalances(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveBalanceService.showBalanceOfEmployee(id);
+        return leaveBalanceService.showBalancesOfEmployee(id);
+    }
+    //used in: http://localhost:4200/home/leaves/add (by HR only)
+    @GetMapping("/{id}/balance")
+    @PreAuthorize("hasRole('HR')")
+    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnother(@PathVariable Integer id){
+        return leaveBalanceService.showBalancesOfEmployee(id);
     }
 
+
+
+
+
+    /* -------- v Undocumented v -------- */
+    /* ---------------------------------- */
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
     public List<EmployeeDTO> getAllEmployees(){
@@ -70,18 +90,6 @@ public class EmployeeController {
     public List<EmployeeDTO> employeesWithoutAccount(){
         return employeeService.employeesWithoutAccount();
     }
-
-
-
-
-    @GetMapping("/{id}/leavebalance")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnEmployee(){
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        int loggedUserEmployeeId = userService.getUserInfo(username).getEmployeeId();
-        return leaveBalanceService.showBalanceOfEmployee(loggedUserEmployeeId);
-    }
-
 
     @PostMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('HR')")
@@ -125,9 +133,4 @@ public class EmployeeController {
     public List<LeaveRequestDTO> leaveRequestHistoryOfEmployee(@PathVariable Integer employeeId){
         return employeeService.requestHistoryOfEmployee(employeeId);
     }
-
-
-
-    // make employee see personal leaveBalance
-    // make employee edit personal details
 }
