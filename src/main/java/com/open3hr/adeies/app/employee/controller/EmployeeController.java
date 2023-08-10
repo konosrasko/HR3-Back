@@ -2,6 +2,9 @@ package com.open3hr.adeies.app.employee.controller;
 
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
+import com.open3hr.adeies.app.employee.dto.miniEmployeeDTO;
+import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
@@ -12,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 @RestController
 @RequestMapping("/employees")
@@ -43,7 +47,7 @@ public class EmployeeController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<EmployeeDTO> getAllEmployees(){
+    public List<EmployeeSupervisorDTO> getAllEmployees(){
         return employeeService.findAllEmployees();
     }
 
@@ -126,7 +130,12 @@ public class EmployeeController {
         return employeeService.requestHistoryOfEmployee(employeeId);
     }
 
-
+    @GetMapping("/allSupervisors")
+    @PreAuthorize("hasRole('HR')")
+    public List<miniEmployeeDTO> supervisorsLastNames()
+    {
+        return employeeService.findAllSupervisors();
+    }
 
     // make employee see personal leaveBalance
     // make employee edit personal details

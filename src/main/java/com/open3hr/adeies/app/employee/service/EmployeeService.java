@@ -1,12 +1,18 @@
 package com.open3hr.adeies.app.employee.service;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
+import com.open3hr.adeies.app.employee.dto.miniEmployeeDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
+import jakarta.persistence.Id;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface EmployeeService {
-    List<EmployeeDTO> findAllEmployees();
+
+    List<EmployeeSupervisorDTO> findAllEmployees();
 
     EmployeeDTO findEmployeeById (Integer id);
 
@@ -31,4 +37,6 @@ public interface EmployeeService {
     List<LeaveRequestDTO> requestHistoryOfEmployee(Integer employeeId);
 
     EmployeeDTO findEmployeeByUserName(String username);
+
+    List<miniEmployeeDTO> findAllSupervisors();
 }

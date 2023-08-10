@@ -47,8 +47,8 @@ public class AuthenticationService {
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) throws BadCredentialsException, DisabledException, UsernameNotFoundException, IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
         Authentication authentication;
-        String encryptedUsername = authenticationRequest.getUsername();
-        String encryptedPassword = authenticationRequest.getPassword();
+     String encryptedUsername = authenticationRequest.getUsername();
+     String encryptedPassword = authenticationRequest.getPassword();
         System.out.println("encrypted username: " +  encryptedUsername + " and encypted pass: " +  encryptedPassword);
 
         //DECRYPTION
@@ -61,7 +61,7 @@ public class AuthenticationService {
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         String decryptedUsername = new String(cipher.doFinal(Base64.decodeBase64(encryptedUsername)), StandardCharsets.UTF_8).replace("\"", "");
         String decryptedPassword = new String(cipher.doFinal(Base64.decodeBase64(encryptedPassword)), StandardCharsets.UTF_8).replace("\"", "");
-        System.out.println("Updating request credentials with decrypted data (o Simos einai paneksipnos)");
+        System.out.println("Updating request credentials with decrypted data (o Simos einai XALIA )");
         authenticationRequest.setUsername(decryptedUsername); //update request info (username)
         authenticationRequest.setPassword(decryptedPassword); //(password)
         System.out.println("decrypted username: " + decryptedUsername + " and pass " +  decryptedPassword);
@@ -69,7 +69,7 @@ public class AuthenticationService {
 
         //AUTHENTICATION
         try {
-          authentication =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(decryptedUsername,decryptedPassword));
+          authentication =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Incorrect username or password!");
         } catch (DisabledException disabledException) {

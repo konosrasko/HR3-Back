@@ -1,6 +1,8 @@
 package com.open3hr.adeies.app.employee.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
+import com.open3hr.adeies.app.employee.dto.miniEmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
@@ -18,12 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -43,11 +44,23 @@ public class EmployeeServiceImpl implements EmployeeService {
     private UserRepository userRepository;
 
     @Override
-    public List<EmployeeDTO> findAllEmployees() {
-        return employeeRepository.findAll()
-                .stream()
-                .map(EmployeeDTO::new)
+    public List<EmployeeSupervisorDTO> findAllEmployees() {
+
+
+        List<Employee> employeeList = employeeRepository.findAll();
+        List<EmployeeSupervisorDTO> employeeSupervisorList = employeeList.stream()
+                .map(employee -> {
+                    if (employee.getSupervisorId() == null) {
+                        employee.setSupervisorId(0); // Set supervisorId to 0 if null
+                    }
+                    String supervisorLastName = employeeRepository.findById(employee.getSupervisorId())
+                            .map(Employee::getLastName)
+                            .orElse(""); // Get supervisor's last name or set to empty string if not found
+                    return new EmployeeSupervisorDTO(employee, supervisorLastName);
+                })
                 .collect(Collectors.toList());
+
+            return employeeSupervisorList;
     }
 
     @Override
@@ -214,6 +227,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         }else {
             throw new RuntimeException("Couldn't find user");
         }
+    }
+
+    @Override
+    public List<miniEmployeeDTO> findAllSupervisors() {
+
+       List<Employee> supervisors = employeeRepository.findAllSupervisors();
+        System.out.println(supervisors);
+        return supervisors.stream().map(supervisor ->
+            new miniEmployeeDTO(supervisor)).toList();
+
+
     }
 
     public boolean isSupervisor(int employeeId){
