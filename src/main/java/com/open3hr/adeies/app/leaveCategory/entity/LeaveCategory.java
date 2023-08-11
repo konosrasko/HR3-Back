@@ -47,5 +47,6 @@ public class LeaveCategory {
     public LeaveCategory(LeaveCategoryDTO leaveCategoryDTO){
         this.id = leaveCategoryDTO.getId();
         this.title = leaveCategoryDTO.getTitle();
+        this.isActive = leaveCategoryDTO.isActive();
     }
 }

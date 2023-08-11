@@ -11,13 +11,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/leavecategory")
 public class LeaveCategoryController {
+
     @Autowired
     private LeaveCategoryService leaveCategoryService;
 
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public List<LeaveCategoryDTO> findAll(){
-        return  leaveCategoryService.findAll();
+        return leaveCategoryService.findAll();
+    }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public List<LeaveCategoryDTO> findAllActiveCategory(){
+        return leaveCategoryService.activeLeaveCategories();
     }
 
     @GetMapping("/{id}")
@@ -35,8 +42,8 @@ public class LeaveCategoryController {
 
     @PutMapping("")
     @PreAuthorize("hasRole('HR')")
-    public LeaveCategoryDTO update(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
-        return leaveCategoryService.createNewCategory(leaveCategoryDTO);
+    public LeaveCategoryDTO updateCategory(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
+        return leaveCategoryService.editCategory(leaveCategoryDTO);
     }
 
     @DeleteMapping("/{id}")

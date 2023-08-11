@@ -139,8 +139,7 @@ public class EmployeeController {
 
     @GetMapping("/allSupervisors")
     @PreAuthorize("hasRole('HR')")
-    public List<miniEmployeeDTO> supervisorsLastNames()
-    {
+    public List<miniEmployeeDTO> supervisorsLastNames() {
         return employeeService.findAllSupervisors();
     }
 

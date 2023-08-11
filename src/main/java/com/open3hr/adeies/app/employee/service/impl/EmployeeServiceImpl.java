@@ -43,8 +43,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeSupervisorDTO> findAllEmployees() {
-
-
         List<Employee> employeeList = employeeRepository.findAll();
         List<EmployeeSupervisorDTO> employeeSupervisorList = employeeList.stream()
                 .map(employee -> {
@@ -57,7 +55,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     return new EmployeeSupervisorDTO(employee, supervisorLastName);
                 })
                 .collect(Collectors.toList());
-
             return employeeSupervisorList;
     }
 
@@ -211,13 +208,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<miniEmployeeDTO> findAllSupervisors() {
-
        List<Employee> supervisors = employeeRepository.findAllSupervisors();
         System.out.println(supervisors);
-        return supervisors.stream().map(supervisor ->
-            new miniEmployeeDTO(supervisor)).toList();
-
-
+        return supervisors.stream()
+                .map(supervisor -> new miniEmployeeDTO(supervisor))
+                .toList();
     }
 
     public boolean isSupervisor(int employeeId){

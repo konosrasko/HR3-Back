@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class LeaveCategoryDTO {
     private Integer id;
     private String title;
-    private boolean isEnabled;
+    private boolean isActive;
 
     public LeaveCategoryDTO(LeaveCategory leaveCategory){
         this.id = leaveCategory.getId();
         this.title = leaveCategory.getTitle();
-        this.isEnabled = leaveCategory.isActive();
+        this.isActive = leaveCategory.isActive();
     }
 }
