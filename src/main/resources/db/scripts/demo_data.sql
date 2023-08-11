@@ -13,9 +13,9 @@ INSERT INTO `leave_category` (`id`, `title`) VALUES (3, 'Αιμοδοσίας');
 
 
 INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (1, 1, 1, 15, 0);
-INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (2, 1, 1, 15, 0);
+INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (2, 1, 2, 15, 0);
 INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (3, 2, 1, 15, 0);
-INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (4, 2, 1, 15, 5);
+INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `days_taken`) VALUES (4, 2, 2, 15, 5);
 
 
 
