@@ -7,6 +7,9 @@ import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.enums.Status;
+import com.open3hr.adeies.app.exceptions.BadDataException;
+import com.open3hr.adeies.app.exceptions.ConflictException;
+import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -43,8 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeSupervisorDTO> findAllEmployees() {
-
-
         List<Employee> employeeList = employeeRepository.findAll();
         List<EmployeeSupervisorDTO> employeeSupervisorList = employeeList.stream()
                 .map(employee -> {
@@ -66,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Optional<Employee> result = employeeRepository.findById(id);
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
-        } else throw new RuntimeException("Couldn't find an employee with the id " + id);
+        } else throw new NotFoundException("Could not find employee with given id of " + id);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(Integer id) {
-        this.employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Employee with id " + id + " not found"));
+        this.employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Could not find employee with given id of " + id));
     }
 
     @Override
@@ -111,12 +112,12 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 balanceRepository.save(employeesBalance);
                                 return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest), optionalLeaveCategory.get());
 
-                            }else throw new RuntimeException("The employee does not have as many leave days as requested");
-                        }else throw new RuntimeException("Start's date can't be before submitDate's date");
-                    }else throw new RuntimeException("End's date can't be before start's date");
-                }else throw new RuntimeException("This employee doesn't have this type of leave category");
-            }else throw new RuntimeException("There is no such leave category");
-        }else throw new RuntimeException("There is no employee with this id");
+                            }else throw new ConflictException("The employee does not have as many leave days as requested");
+                        }else throw new ConflictException("Start's date can't be before submitDate's date");
+                    }else throw new ConflictException("End's date can't be before start's date");
+                }else throw new BadDataException("This employee doesn't have this type of leave category");
+            }else throw new BadDataException("There is no such leave category");
+        }else throw new NotFoundException("Could not find employee with given id of " + employeeId);
     }
 
     @Override
@@ -134,8 +135,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(new Employee(employeeDTO));
             return employeeDTO;
         } else {
-            throw new RuntimeException("Employee not found!");
-            // ### (id could be wrong) ###
+            throw new NotFoundException("Could not find employee with given id of " + id);
         }
     }
 
@@ -143,13 +143,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO assignToSupervisor(Integer employeeId, Integer supervisorId) {
         Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
         Optional<Employee> employee = employeeRepository.findById(supervisorId);
+        //TODO: check if supervisor has is_supervisor=true !
         if (myEmployee.isPresent()) {
             if (employee.isPresent()) {
                 myEmployee.get().setSupervisorId(supervisorId);
                 employeeRepository.save(myEmployee.get());
                 return new EmployeeDTO(myEmployee.get());
             } else
-                throw new RuntimeException("Couldn't find employee!");
+                throw new NotFoundException("Could not find employee with given id of " + employeeId);
         } else
             throw new RuntimeException("Couldn't find supervisor!");
     }
@@ -162,7 +163,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(myEmployee.get());
             return new EmployeeDTO(myEmployee.get());
         } else {
-            throw new RuntimeException("Couldn't find employee!");
+            throw new NotFoundException("Could not find employee with given id of " + employeeId);
         }
     }
 
@@ -182,10 +183,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(myEmployee.isPresent()){
                 return new EmployeeDTO(myEmployee.get());
             }else {
-                throw new RuntimeException("Couldn't find employee");
+                throw new NotFoundException("Could not find employee");
             }
         }else {
-            throw new RuntimeException("Couldn't find user");
+            throw new NotFoundException("Could not find user" + username);
         }
     }
 
@@ -196,7 +197,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             leaveRequest.get().setStatus(Status.APPROVED);
             return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
         }
-        throw new RuntimeException("Could not find leave request with id: " + leaveReqId);
+        throw new NotFoundException("Could not find leave request with id: " + leaveReqId);
     }
 
     @Override
@@ -206,7 +207,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             leaveRequest.get().setStatus(Status.DENIED);
             return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
         }
-        throw new RuntimeException("Could not find leave request with id: " + leaveReqId);
+        throw new NotFoundException("Could not find leave request with id: " + leaveReqId);
     }
 
     @Override
@@ -228,7 +229,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(foundSuperV.isPresent()){
                 isSuper = true;
             }
-        }else throw new RuntimeException("No employee with this id found");
+        }else throw new NotFoundException("Could not find employee with given id of " + employeeId);
         return isSuper;
     }
 }

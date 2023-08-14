@@ -11,10 +11,14 @@ import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.stream.Location;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 @RestController
@@ -78,8 +82,8 @@ public class EmployeeController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('HR')")
-    public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.addEmployee(employeeDTO);
+    public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO){
+        return new ResponseEntity<>(employeeService.addEmployee(employeeDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,9 @@ package com.open3hr.adeies.app.leaveRequest.service.impl;
 
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
+import com.open3hr.adeies.app.exceptions.BadDataException;
+import com.open3hr.adeies.app.exceptions.ConflictException;
+import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
@@ -37,7 +40,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
                     if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    } else throw new RuntimeException("Error with leave request");
+                    } else throw new NotFoundException("Error with leave request");
                 })
                 .toList();
     }
@@ -49,10 +52,11 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
             Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.get().getCategory().getTitle());
             if (category.isPresent()) {
                 return new LeaveRequestDTO(leaveRequest.get(), category.get());
-            } else throw new RuntimeException("Error Finding Leave Category");
-        } else throw new RuntimeException("Couldn't find request with id: " + id);
+            } else throw new BadDataException("Error Finding Leave Category");
+        } else throw new NotFoundException("Couldn't find leave request with id: " + id);
     }
 
+    //Είναι απαίσιο, το ξέρω :(
     @Override
     public LeaveRequestDTO deleteRequestById(Integer id) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(id);
@@ -66,9 +70,9 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
             }
             return new LeaveRequestDTO(leaveRequest.get(), leaveRequest.get().getCategory());
         } catch (Exception e) {
-            throw new RuntimeException("Employee doesn't have a matching leave balance to the request");
+            throw new ConflictException("Employee doesn't have a matching leave balance to the request");
         }
-        } else throw new RuntimeException("This leave request is not deletable");
+        } else throw new BadDataException("This leave request is not deletable");
     }
 
     @Override
@@ -80,7 +84,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
                     if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    } else throw new RuntimeException("Error with leave category");
+                    } else throw new BadDataException("Leave category missing from employee's leave balance");
                 })
                 .collect(Collectors.toList());
     }
@@ -101,7 +105,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> categoryOfRequest = categoryRepository.findById(leaveRequest.getCategory().getId());
                     if (categoryOfRequest.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, categoryOfRequest.get());
-                    } else throw new RuntimeException("This category does not exists");
+                    } else throw new NotFoundException("This category does not exists");
                 })
                 .toList();
 

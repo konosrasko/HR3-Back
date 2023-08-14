@@ -1,5 +1,7 @@
 package com.open3hr.adeies.app.leaveCategory.service.impl;
 
+import com.open3hr.adeies.app.exceptions.ConflictException;
+import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
@@ -34,7 +36,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
         if (leaveCategory.isPresent()) {
             return new LeaveCategoryDTO(leaveCategory.get());
         } else {
-            throw new RuntimeException("Couldn't find leave category with id" + Id);
+            throw new NotFoundException("Couldn't find leave category with id" + Id);
         }
     }
 
@@ -42,7 +44,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     public LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO) {
         Optional<LeaveCategory> foundCategory = leaveCategoryRepository.findCategoryByTitle(leaveCategoryDTO.getTitle());
         if(foundCategory.isPresent()){
-            throw new RuntimeException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+            throw new ConflictException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
         }else{
             LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
             return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
@@ -55,7 +57,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
         if (result.isPresent()) {
             leaveCategoryRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Did not find leave category id- " + id);
+            throw new NotFoundException("Did not find leave category with giver id " + id);
         }
     }
 }
