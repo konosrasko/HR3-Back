@@ -4,13 +4,11 @@ package com.open3hr.adeies.app.employee.controller;
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
 import com.open3hr.adeies.app.employee.dto.miniEmployeeDTO;
-import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.user.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 @RestController
 @RequestMapping("/employees")
