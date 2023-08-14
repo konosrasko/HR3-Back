@@ -10,6 +10,7 @@ import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.exceptions.BadDataException;
 import com.open3hr.adeies.app.exceptions.ConflictException;
 import com.open3hr.adeies.app.exceptions.NotFoundException;
+import com.open3hr.adeies.app.exceptions.UnauthorizedException;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -81,7 +82,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) {
+    public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) throws NotFoundException, ConflictException, BadDataException {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);//Search for the employee
         if(optionalEmployee.isPresent()){
             Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());//Search for leave category that has been requested
