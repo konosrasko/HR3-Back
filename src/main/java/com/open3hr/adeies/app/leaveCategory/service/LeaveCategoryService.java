@@ -7,10 +7,14 @@ import java.util.List;
 public interface LeaveCategoryService {
     List<LeaveCategoryDTO> findAll();
 
-    LeaveCategoryDTO findById(Integer Id);
+    List<LeaveCategoryDTO> activeLeaveCategories();
+
+    LeaveCategoryDTO findById(Integer categoryId);
 
     LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO);
 
-    void deleteById(Integer Id);
+    void deleteById(Integer categoryId);
+
+    LeaveCategoryDTO editCategory(LeaveCategoryDTO leaveCategoryDTO);
 
 }

@@ -1,7 +1,5 @@
 package com.open3hr.adeies.app.leaveCategory.service.impl;
 
-import com.open3hr.adeies.app.exceptions.ConflictException;
-import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
@@ -18,7 +16,6 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     private LeaveCategoryRepository leaveCategoryRepository;
 
     @Override
-
     public List<LeaveCategoryDTO> findAll() {
         return leaveCategoryRepository.findAll().stream()
                 .map(LeaveCategoryDTO::new)
@@ -26,17 +23,21 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     }
 
     //ΕΔΩ ΝΑ ΣΟΥ ΔΙΝΕΙ ΜΟΝΟ ΤΑ ΑΚΤΙΒ
-    //ΔΙΚΟ ΣΑΣ
-    /*
-    */
+    @Override
+    public List<LeaveCategoryDTO> activeLeaveCategories(){
+        return leaveCategoryRepository.findAll().stream()
+                .filter(LeaveCategory::isActive)
+                .map(LeaveCategoryDTO::new)
+                .toList();
+    }
 
     @Override
-    public LeaveCategoryDTO findById(Integer Id) {
-        Optional<LeaveCategory> leaveCategory = leaveCategoryRepository.findById(Id);
+    public LeaveCategoryDTO findById(Integer categoryId) {
+        Optional<LeaveCategory> leaveCategory = leaveCategoryRepository.findById(categoryId);
         if (leaveCategory.isPresent()) {
             return new LeaveCategoryDTO(leaveCategory.get());
         } else {
-            throw new NotFoundException("Couldn't find leave category with id" + Id);
+            throw new RuntimeException("Couldn't find leave category with id" + categoryId);
         }
     }
 
@@ -44,7 +45,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     public LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO) {
         Optional<LeaveCategory> foundCategory = leaveCategoryRepository.findCategoryByTitle(leaveCategoryDTO.getTitle());
         if(foundCategory.isPresent()){
-            throw new ConflictException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+            throw new RuntimeException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
         }else{
             LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
             return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
@@ -52,12 +53,19 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        Optional<LeaveCategory> result = leaveCategoryRepository.findById(Math.toIntExact(id));
+    public LeaveCategoryDTO editCategory(LeaveCategoryDTO leaveCategoryDTO){
+        if(leaveCategoryRepository.existsById(leaveCategoryDTO.getId())){
+            return new LeaveCategoryDTO(leaveCategoryRepository.save(new LeaveCategory(leaveCategoryDTO)));
+        }else throw new RuntimeException("This category does not exist");
+    }
+
+    @Override
+    public void deleteById(Integer categoryId) {
+        Optional<LeaveCategory> result = leaveCategoryRepository.findById(Math.toIntExact(categoryId));
         if (result.isPresent()) {
-            leaveCategoryRepository.deleteById(id);
+            leaveCategoryRepository.deleteById(categoryId);
         } else {
-            throw new NotFoundException("Did not find leave category with giver id " + id);
+            throw new RuntimeException("Did not find leave category id- " + categoryId);
         }
     }
 }

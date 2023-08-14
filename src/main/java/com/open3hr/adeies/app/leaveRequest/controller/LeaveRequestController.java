@@ -5,6 +5,8 @@ import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -24,17 +26,17 @@ public class LeaveRequestController {
     //used in: http://localhost:4200/home/leaves/requests
     @GetMapping("/all")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
-    public List<LeaveRequestDTO> getAllMyLeaveRequests() {
+    public ResponseEntity<List<LeaveRequestDTO>> getAllMyLeaveRequests() {
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveRequestService.findRequestsForAnEmployee(id);
+        return new ResponseEntity<>(leaveRequestService.findRequestsForAnEmployee(id), HttpStatus.OK);
     }
 
     //used in: http://localhost:4200/home/leaves/requests
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO deleteRequest(@PathVariable Integer id){
-        return leaveRequestService.deleteRequestById(id);
+    public ResponseEntity<LeaveRequestDTO> deleteRequest(@PathVariable Integer id){
+        return new ResponseEntity<>(leaveRequestService.deleteRequestById(id),HttpStatus.NO_CONTENT);
     }
 
 
@@ -45,37 +47,37 @@ public class LeaveRequestController {
 
     @GetMapping("/searchemployeeleaverequest/{id}")
     @PreAuthorize("hasRole('HR')")
-    public List<LeaveRequestDTO> getAllLeaveRequestsOfAnEmployee(@PathVariable Integer id) {
-        return leaveRequestService.findRequestsForAnEmployee(id);
+    public ResponseEntity<List<LeaveRequestDTO>> getAllLeaveRequestsOfAnEmployee(@PathVariable Integer id) {
+        return new ResponseEntity<>(leaveRequestService.findRequestsForAnEmployee(id),HttpStatus.OK);
     }
 
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public List<LeaveRequestDTO> getAllLeaveRequest(){
-        return leaveRequestService.findAll();
+    public ResponseEntity<List<LeaveRequestDTO>> getAllLeaveRequest(){
+        return new ResponseEntity<>(leaveRequestService.findAll(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO findLeaveRequestDTO(@PathVariable Integer id){
-        return leaveRequestService.findById(id);
+    public ResponseEntity<LeaveRequestDTO> findLeaveRequestDTO(@PathVariable Integer id){
+        return new ResponseEntity<>(leaveRequestService.findById(id),HttpStatus.OK);
     }
 
 
 
     @GetMapping("/pending")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public List<LeaveRequestDTO> getPendingRequest(){
-        return leaveRequestService.getPendingRequests();
+    public ResponseEntity<List<LeaveRequestDTO>> getPendingRequest(){
+        return new ResponseEntity<>(leaveRequestService.getPendingRequests(),HttpStatus.OK);
     }
 
 
     @GetMapping("/supervisor")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public List<SubordinatesReqDTO> findSubordinatesReq(){
+    public ResponseEntity<List<SubordinatesReqDTO>> findSubordinatesReq(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int supervisorId = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveRequestService.getSubordinatesReq(supervisorId);
+        return new ResponseEntity<>(leaveRequestService.getSubordinatesReq(supervisorId),HttpStatus.OK);
     }
 
 }
