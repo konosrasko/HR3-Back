@@ -5,7 +5,10 @@ import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -22,91 +25,91 @@ public class UserController {
     //used in: http://localhost:4200/home/landing
     @GetMapping("/roles")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public RolesDTO getMyRoles(){
+    public ResponseEntity<RolesDTO> getMyRoles(){
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
         int logged_id = userService.getUserInfo(username).getId();
-        return userService.getUserRoles(logged_id);
+        return new ResponseEntity<>(userService.getUserRoles(logged_id), HttpStatus.OK);
     }
 
     @GetMapping("/user_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public UserDTO getUserInfo(){
+    public ResponseEntity<UserDTO> getUserInfo(){
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
-        return userService.getUserInfo(username);
+        return new ResponseEntity<>(userService.getUserInfo(username),HttpStatus.OK);
     }
 
     @GetMapping("/employee_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public EmployeeDTO getEmployeeInfo(){
+    public ResponseEntity<EmployeeDTO> getEmployeeInfo(){
         String username= SecurityContextHolder.getContext().getAuthentication().getName();
-        return userService.getEmployeeInfo(username);
+        return new ResponseEntity<>(userService.getEmployeeInfo(username),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public UserDTO findById(@PathVariable Integer id){
-        return userService.findById(id);
+    public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
+        return new ResponseEntity<>(userService.findById(id),HttpStatus.OK);
     }
 
     @GetMapping("")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin')")
-    public List<UserDTO> findAll(){
-        return userService.findAll();
+    public ResponseEntity<List<UserDTO>> findAll(){
+        return new ResponseEntity<>(userService.findAll(),HttpStatus.OK);
     }
 
     @GetMapping("/admin/all-users")
     @PreAuthorize("hasRole('Admin')")
-    public List<EmployeeUserDTO> findUsersEmployeesForAdmin(){
-        return userService.getEmployeeUserAdmin();
+    public ResponseEntity<List<EmployeeUserDTO>> findUsersEmployeesForAdmin(){
+        return new ResponseEntity<>(userService.getEmployeeUserAdmin(),HttpStatus.OK);
     }
 
     @GetMapping("/admin/{user}")
     @PreAuthorize("hasRole('Admin')")
-    public EmployeeUserDTO findUsersEmployeesForAdminById(@PathVariable String user){
+    public ResponseEntity<EmployeeUserDTO> findUsersEmployeesForAdminById(@PathVariable String user){
         Integer userId = userService.getUserInfo(user).getEmployeeId();
-        return userService.getEmployeeUserById(userId);
+        return new ResponseEntity<>(userService.getEmployeeUserById(userId),HttpStatus.OK);
     }
 
     @PostMapping("/createAccount")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO createAccount(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> createAccount(@RequestBody UserDTO userDTO){
         userDTO.setId(0);
-        return userService.createAccount(userDTO);
+        return new ResponseEntity<>(userService.createAccount(userDTO),HttpStatus.OK);
     }
 
     @PutMapping("/admin/{userId}")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId){
-        return userService.editUser(userDTO, userId);
+    public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId){
+        return new ResponseEntity<>(userService.editUser(userDTO, userId),HttpStatus.OK);
     }
 
     @PutMapping("/{id}/changeStatus")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO changeStatus(@PathVariable Integer id){
-        return userService.updateStatus(id);
+    public ResponseEntity<UserDTO> changeStatus(@PathVariable Integer id){
+        return new ResponseEntity<>(userService.updateStatus(id),HttpStatus.OK);
     }
 
     //TI EINAI AYTO
     @PutMapping("/{id}/supervisorRights")
-    public UserDTO supervisorRights(@PathVariable Integer id){
-        return userService.changeSupervisorRights(id);
+    public ResponseEntity<UserDTO> supervisorRights(@PathVariable Integer id){
+        return new ResponseEntity<>(userService.changeSupervisorRights(id),HttpStatus.OK);
     }
 
     @PutMapping("/{userId}/assignToEmployee/{employeeId}")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO assignUserToEmployee(@PathVariable Integer userId, @PathVariable Integer employeeId){
-        return userService.assignUserToEmployee(userId,employeeId);
+    public ResponseEntity<UserDTO> assignUserToEmployee(@PathVariable Integer userId, @PathVariable Integer employeeId){
+        return new ResponseEntity<>(userService.assignUserToEmployee(userId,employeeId),HttpStatus.OK);
     }
 
     @PutMapping("/{userId}/unassign")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO unassignUserAccount(@PathVariable Integer userId){
-        return userService.unassignUserAccount(userId);
+    public ResponseEntity<UserDTO> unassignUserAccount(@PathVariable Integer userId){
+        return new ResponseEntity<>(userService.unassignUserAccount(userId),HttpStatus.OK);
     }
 
     @PutMapping("/{userid}/changeEnabled")
     @PreAuthorize("hasRole('Admin')")
-    public UserDTO activateDeactivateUser(@PathVariable Integer userid){
-        return userService.activateDeactivateUser(userid);
+    public ResponseEntity<UserDTO> activateDeactivateUser(@PathVariable Integer userid){
+        return new ResponseEntity<>(userService.activateDeactivateUser(userid),HttpStatus.OK);
     }
 }

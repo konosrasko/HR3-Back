@@ -3,6 +3,8 @@ package com.open3hr.adeies.app.leaveCategory.controller;
 import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveCategory.service.LeaveCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,39 +19,40 @@ public class LeaveCategoryController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public List<LeaveCategoryDTO> findAll(){
-        return leaveCategoryService.findAll();
+    public ResponseEntity<List<LeaveCategoryDTO>> findAll(){
+        return new ResponseEntity<>(leaveCategoryService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/active")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public List<LeaveCategoryDTO> findAllActiveCategory(){
-        return leaveCategoryService.activeLeaveCategories();
+    public ResponseEntity<List<LeaveCategoryDTO>> findAllActiveCategory(){
+        return new ResponseEntity<>(leaveCategoryService.activeLeaveCategories(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveCategoryDTO findById(@PathVariable Integer id){
-        return leaveCategoryService.findById(id);
+    public ResponseEntity<LeaveCategoryDTO> findById(@PathVariable Integer id){
+        return new ResponseEntity<>(leaveCategoryService.findById(id),HttpStatus.OK);
     }
 
     @PostMapping("")
     @PreAuthorize("hasRole('HR')")
-    public LeaveCategoryDTO save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
+    public ResponseEntity<LeaveCategoryDTO> save(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
         leaveCategoryDTO.setId(0);
-        return leaveCategoryService.createNewCategory(leaveCategoryDTO);
+        return new ResponseEntity<>(leaveCategoryService.createNewCategory(leaveCategoryDTO),HttpStatus.CREATED);
     }
 
     @PutMapping("")
     @PreAuthorize("hasRole('HR')")
-    public LeaveCategoryDTO updateCategory(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
-        return leaveCategoryService.editCategory(leaveCategoryDTO);
+    public ResponseEntity<LeaveCategoryDTO> updateCategory(@RequestBody LeaveCategoryDTO leaveCategoryDTO){
+        return new ResponseEntity<>(leaveCategoryService.editCategory(leaveCategoryDTO),HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('HR')")
-    public void deleteById(@PathVariable Integer id){
+    public ResponseEntity deleteById(@PathVariable Integer id){
         leaveCategoryService.deleteById(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }

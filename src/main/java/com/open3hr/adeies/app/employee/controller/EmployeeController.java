@@ -10,7 +10,10 @@ import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.service.LeaveBalanceService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.user.service.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -30,32 +33,32 @@ public class EmployeeController {
     //used in: http://localhost:4200/home/leaves/add
     @PostMapping("/leaverequests/add")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public LeaveRequestDTO postNewRequestForMe(@RequestBody LeaveRequestDTO leaveRequestDTO){
+    public ResponseEntity<LeaveRequestDTO> postNewRequestForMe(@RequestBody LeaveRequestDTO leaveRequestDTO){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+        return new ResponseEntity<>(employeeService.addLeaveRequest(leaveRequestDTO,id), HttpStatus.CREATED);
     }
 
     //used in: http://localhost:4200/home/leaves/add (by HR only)
     @PostMapping("/{id}/leaverequests/add")
     @PreAuthorize("hasRole('HR')")
-    public LeaveRequestDTO postNewRequestsForAnother(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
-        return employeeService.addLeaveRequest(leaveRequestDTO,id);
+    public ResponseEntity<LeaveRequestDTO> postNewRequestsForAnother(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
+        return new ResponseEntity<>(employeeService.addLeaveRequest(leaveRequestDTO,id),HttpStatus.CREATED);
     }
 
     //used in: http://localhost:4200/home/leaves/add
     @GetMapping("/balance")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
-    public List<LeaveBalanceDTO> getMyLeaveBalances(){
+    public ResponseEntity<List<LeaveBalanceDTO>> getMyLeaveBalances(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return leaveBalanceService.showBalancesOfEmployee(id);
+        return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
     //used in: http://localhost:4200/home/leaves/add (by HR only)
     @GetMapping("/{id}/balance")
     @PreAuthorize("hasRole('HR')")
-    public List<LeaveBalanceDTO> getAllLeaveBalancesOfAnother(@PathVariable Integer id){
-        return leaveBalanceService.showBalancesOfEmployee(id);
+    public ResponseEntity<List<LeaveBalanceDTO>> getAllLeaveBalancesOfAnother(@PathVariable Integer id){
+        return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
 
 
@@ -66,81 +69,82 @@ public class EmployeeController {
     /* ---------------------------------- */
     @GetMapping("")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public List<EmployeeSupervisorDTO> getAllEmployees(){
-        return employeeService.findAllEmployees();
+    public ResponseEntity<List<EmployeeSupervisorDTO>> getAllEmployees(){
+        return new ResponseEntity<>(employeeService.findAllEmployees(),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public EmployeeDTO getEmployeeById(@PathVariable Integer id){
-        return employeeService.findEmployeeById(id);
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Integer id){
+        return new ResponseEntity<>(employeeService.findEmployeeById(id),HttpStatus.OK);
     }
 
     @PostMapping("")
     @PreAuthorize("hasRole('HR')")
-    public EmployeeDTO addEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return employeeService.addEmployee(employeeDTO);
+    public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO){
+        return new ResponseEntity<>(employeeService.addEmployee(employeeDTO),HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('Admin')")
-    public void deleteById(@PathVariable Integer id){
+    public ResponseEntity deleteById(@PathVariable Integer id){
         employeeService.deleteById(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/withoutAccount")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin')")
-    public List<EmployeeDTO> employeesWithoutAccount(){
-        return employeeService.employeesWithoutAccount();
+    public ResponseEntity<List<EmployeeDTO>> employeesWithoutAccount(){
+        return new ResponseEntity<>(employeeService.employeesWithoutAccount(),HttpStatus.OK);
     }
 
     @PostMapping("/{id}/leavebalance")
     @PreAuthorize("hasRole('HR')")
-    public String addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
+    public ResponseEntity addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
         leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO, id);
-        return ("New balance added to employee with id " + id);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}/changeProfile")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
-    public EmployeeDTO changeProfileOfEmployeeByAdmin(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id){
-        return employeeService.changeProfile(employeeDTO,id);
+    public ResponseEntity<EmployeeDTO> changeProfileOfEmployeeByAdmin(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id){
+        return new ResponseEntity<>(employeeService.changeProfile(employeeDTO,id),HttpStatus.OK);
     }
 
     @PutMapping("/{leaveRequestId}/approve")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public LeaveRequestDTO approveLeaveRequest(@PathVariable Integer leaveRequestId){
-        return employeeService.approveLeaveRequest(leaveRequestId);
+    public ResponseEntity<LeaveRequestDTO> approveLeaveRequest(@PathVariable Integer leaveRequestId){
+        return new ResponseEntity<>(employeeService.approveLeaveRequest(leaveRequestId),HttpStatus.OK);
     }
 
     @PutMapping("/{leaveRequestId}/decline")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public LeaveRequestDTO decline(@PathVariable Integer leaveRequestId){
-        return employeeService.declineLeaveRequest(leaveRequestId);
+    public ResponseEntity<LeaveRequestDTO> decline(@PathVariable Integer leaveRequestId){
+        return new ResponseEntity<>(employeeService.declineLeaveRequest(leaveRequestId),HttpStatus.OK);
     }
 
     @PutMapping("/{employeeId}/assign/{supervisorId}")
     @PreAuthorize("hasRole('HR')")
-    public EmployeeDTO assignToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
-        return employeeService.assignToSupervisor(employeeId, supervisorId);
+    public ResponseEntity<EmployeeDTO> assignToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
+        return new ResponseEntity<>(employeeService.assignToSupervisor(employeeId, supervisorId),HttpStatus.OK);
     }
 
     @PutMapping("/{employeeId}/unassigned/{supervisorId}")
     @PreAuthorize("hasRole('HR')")
-    public EmployeeDTO unassignedToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
-        return employeeService.unassignedToSupervisor(employeeId, supervisorId);
+    public ResponseEntity<EmployeeDTO> unassignedToSupervisor(@PathVariable Integer employeeId, @PathVariable Integer supervisorId){
+        return new ResponseEntity<>(employeeService.unassignedToSupervisor(employeeId, supervisorId),HttpStatus.OK);
     }
 
     @GetMapping("/{employeeId}/leaveRequestHistory")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public List<LeaveRequestDTO> leaveRequestHistoryOfEmployee(@PathVariable Integer employeeId){
-        return employeeService.requestHistoryOfEmployee(employeeId);
+    public ResponseEntity<List<LeaveRequestDTO>> leaveRequestHistoryOfEmployee(@PathVariable Integer employeeId){
+        return new ResponseEntity<>(employeeService.requestHistoryOfEmployee(employeeId),HttpStatus.OK);
     }
 
     @GetMapping("/allSupervisors")
     @PreAuthorize("hasRole('HR')")
-    public List<miniEmployeeDTO> supervisorsLastNames() {
-        return employeeService.findAllSupervisors();
+    public ResponseEntity<List<miniEmployeeDTO>> supervisorsLastNames() {
+        return new ResponseEntity<>(employeeService.findAllSupervisors(),HttpStatus.OK);
     }
 
     // make employee see personal leaveBalance
