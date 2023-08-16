@@ -49,9 +49,9 @@ public class AuthenticationService {
         Authentication authentication;
      String encryptedUsername = authenticationRequest.getUsername();
      String encryptedPassword = authenticationRequest.getPassword();
-        System.out.println("encrypted username: " +  encryptedUsername + " and encypted pass: " +  encryptedPassword);
 
-        //DECRYPTION
+
+        // DECRYPTION
         MessageDigest sha = MessageDigest.getInstance("SHA-1");
         byte[] secretKeySpec = sha.digest(AES_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
         secretKeySpec = Arrays.copyOf(AES_SECRET_KEY.getBytes(StandardCharsets.UTF_8), 16);
@@ -61,19 +61,19 @@ public class AuthenticationService {
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
         String decryptedUsername = new String(cipher.doFinal(Base64.decodeBase64(encryptedUsername)), StandardCharsets.UTF_8).replace("\"", "");
         String decryptedPassword = new String(cipher.doFinal(Base64.decodeBase64(encryptedPassword)), StandardCharsets.UTF_8).replace("\"", "");
-        System.out.println("Updating request credentials with decrypted data (o Simos einai XALIA )");
+
         authenticationRequest.setUsername(decryptedUsername); //update request info (username)
         authenticationRequest.setPassword(decryptedPassword); //(password)
-        System.out.println("decrypted username: " + decryptedUsername + " and pass " +  decryptedPassword);
+
 
 
         //AUTHENTICATION
         try {
           authentication =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect username or password!");
+            throw new BadCredentialsException("Λάθος Όνομα χρήστη/Κωδικός");
         } catch (DisabledException disabledException) {
-            throw  new DisabledException("User not Registered");
+            throw  new DisabledException("Ο χρήστης δεν είναι εγγεγραμμένος");
         }
 
 

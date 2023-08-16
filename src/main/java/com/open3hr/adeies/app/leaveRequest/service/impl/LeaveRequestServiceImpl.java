@@ -40,7 +40,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
                     if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    } else throw new NotFoundException("Error with leave request");
+                    } else throw new NotFoundException("Πρόβλημα με την αίτηση άδειας");
                 })
                 .toList();
     }
@@ -52,8 +52,8 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
             Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.get().getCategory().getTitle());
             if (category.isPresent()) {
                 return new LeaveRequestDTO(leaveRequest.get(), category.get());
-            } else throw new BadDataException("Error Finding Leave Category");
-        } else throw new NotFoundException("Couldn't find leave request with id: " + id);
+            } else throw new BadDataException("Πρόβλημα: η κατηγορία δεν βρέθηκε");
+        } else throw new NotFoundException("Η αίτηση άδειας με id: " + id + "δεν βρέθηκε");
     }
 
     //Είναι απαίσιο, το ξέρω :(
@@ -66,13 +66,13 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
             try {
                 this.leaveRequestRepository.deleteByIdNative(id);
             } catch (Exception e) {
-                System.out.println("Delete failed: " + e.getMessage() + e.getCause());
+                System.out.println("Η διαγραφή απέτυχε: " + e.getMessage() + e.getCause());
             }
             return new LeaveRequestDTO(leaveRequest.get(), leaveRequest.get().getCategory());
         } catch (Exception e) {
-            throw new ConflictException("Employee doesn't have a matching leave balance to the request");
+            throw new ConflictException("Δεν αντιστοιχεί κάποια κατηγορία άδειας με το συγκεκριμένο αίτημα");
         }
-        } else throw new BadDataException("This leave request is not deletable");
+        } else throw new BadDataException("Αυτό το αίτημα άδειας δεν μπορεί να διαγραφτεί");
     }
 
     @Override
@@ -84,7 +84,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> category = categoryRepository.findCategoryByTitle(leaveRequest.getCategory().getTitle());
                     if (category.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, category.get());
-                    } else throw new BadDataException("Leave category missing from employee's leave balance");
+                    } else throw new BadDataException("Η συγκεκριμένη κατηγορία άδειας λείπει από τις δικαιούμενες άδειες του εργαζομένου");
                 })
                 .collect(Collectors.toList());
     }
@@ -105,7 +105,7 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
                     Optional<LeaveCategory> categoryOfRequest = categoryRepository.findById(leaveRequest.getCategory().getId());
                     if (categoryOfRequest.isPresent()) {
                         return new LeaveRequestDTO(leaveRequest, categoryOfRequest.get());
-                    } else throw new NotFoundException("This category does not exists");
+                    } else throw new NotFoundException("Η συγκεκριμένη κατηγορία άδειας δεν υπάρχει");
                 })
                 .toList();
 

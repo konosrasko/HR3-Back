@@ -24,4 +24,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "SELECT employee.* FROM employee  INNER JOIN user  ON employee.id = user.employee_id   WHERE user.is_supervisor = 1;", nativeQuery = true)
     List<Employee>findAllSupervisors();
+
+    @Query(value = "SELECT e.* FROM employee e WHERE e.supervisor_id = :supervisorId ;", nativeQuery = true)
+    List<Employee> findAllSubordinatesOf(Integer supervisorId);
 }
