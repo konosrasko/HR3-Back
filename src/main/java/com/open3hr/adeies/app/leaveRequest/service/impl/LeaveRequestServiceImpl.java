@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.leaveRequest.service.impl;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.exceptions.BadDataException;
@@ -119,6 +120,18 @@ public class LeaveRequestServiceImpl implements LeaveRequestService {
         return myLeaveRequestHistory.stream()
                 .map(leaveRequest -> new SubordinatesReqDTO(leaveRequest, leaveRequest.getEmployee()))
                 .toList();
+    }
+
+    @Override
+    public List<SubordinatesReqDTO> getAllSubordinatesReq(Integer supervisorId, List<EmployeeSupervisorDTO> subordinates) {
+        List<SubordinatesReqDTO> subReqDTOs = new ArrayList<>();
+        System.out.println(subordinates);
+        for (EmployeeSupervisorDTO subordinate: subordinates){
+            subReqDTOs.addAll( leaveRequestRepository.leaveRequestHistoryOfEmployee(subordinate.getEmployeeId()).stream()
+                    .map(leaveRequest -> new SubordinatesReqDTO(leaveRequest, leaveRequest.getEmployee()))
+                    .toList());
+        }
+        return subReqDTOs;
     }
 }
 

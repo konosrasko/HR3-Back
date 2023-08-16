@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.leaveRequest.controller;
 
+import com.open3hr.adeies.app.employee.service.EmployeeService;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
@@ -20,6 +21,9 @@ public class LeaveRequestController {
 
     @Autowired
     private LeaveRequestService leaveRequestService;
+
+    @Autowired
+    private EmployeeService employeeService;
     @Autowired
     private UserService userService;
 
@@ -37,6 +41,24 @@ public class LeaveRequestController {
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public ResponseEntity<LeaveRequestDTO> deleteRequest(@PathVariable Integer id){
         return new ResponseEntity<>(leaveRequestService.deleteRequestById(id),HttpStatus.NO_CONTENT);
+    }
+
+    //used in: http://localhost:4200/home/subordinates/requests
+    @GetMapping("/direct-subordinates")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public ResponseEntity<List<SubordinatesReqDTO>> findDirectSubordinatesReq(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int supervisorId = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(leaveRequestService.getSubordinatesReq(supervisorId),HttpStatus.OK);
+    }
+
+    //used in: http://localhost:4200/home/subordinates/requests
+    @GetMapping("/all-subordinates")
+    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
+    public ResponseEntity<List<SubordinatesReqDTO>> findAllSubordinatesReq(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int supervisorId = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(leaveRequestService.getAllSubordinatesReq(supervisorId, employeeService.findAllSubordinates(supervisorId)),HttpStatus.OK);
     }
 
 
@@ -71,13 +93,5 @@ public class LeaveRequestController {
         return new ResponseEntity<>(leaveRequestService.getPendingRequests(),HttpStatus.OK);
     }
 
-
-    @GetMapping("/supervisor")
-    @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
-    public ResponseEntity<List<SubordinatesReqDTO>> findSubordinatesReq(){
-        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        int supervisorId = userService.getUserInfo(loggedUsername).getEmployeeId();
-        return new ResponseEntity<>(leaveRequestService.getSubordinatesReq(supervisorId),HttpStatus.OK);
-    }
 
 }
