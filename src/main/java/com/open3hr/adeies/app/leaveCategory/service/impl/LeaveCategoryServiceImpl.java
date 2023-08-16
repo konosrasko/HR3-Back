@@ -61,7 +61,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
             List<LeaveCategory> allCategories = leaveCategoryRepository.findAll();
             for(LeaveCategory category : allCategories){
                 if(!Objects.equals(category.getId(), leaveCategoryDTO.getId()) && Objects.equals(category.getTitle(), leaveCategoryDTO.getTitle())){
-                    throw new ConflictException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+                    throw new ConflictException("Υπάρχει ήδη μία κατηγορία άδειας με αυτόν τον τίτλο: " + leaveCategoryDTO.getTitle());
                 }
             }
             return new LeaveCategoryDTO(leaveCategoryRepository.save(new LeaveCategory(leaveCategoryDTO)));
