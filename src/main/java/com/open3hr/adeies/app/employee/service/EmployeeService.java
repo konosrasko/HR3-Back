@@ -44,5 +44,4 @@ public interface EmployeeService {
 
     LeaveRequestDTO declineLeaveRequest(Integer leaveReqId);
 
-    List<EmployeeDTO> findAllSubordinates(Integer employeeId);
 }

@@ -246,13 +246,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         return DTOSubordinates;
     }
 
-    @Override
-    public List<EmployeeDTO> findAllSubordinates(Integer employeeId) {
-            List<Employee> employeeList = employeeRepository.findAllSubordinates(employeeId);
-                return employeeList.stream()
-                        .map(employee -> new EmployeeDTO(employee))
-                        .toList();
-        }
 
     @Override
     public List<miniEmployeeDTO> findAllSupervisors() {
