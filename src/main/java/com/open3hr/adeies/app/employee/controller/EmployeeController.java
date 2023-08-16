@@ -144,6 +144,14 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findAllSupervisors(),HttpStatus.OK);
     }
 
+
+    @GetMapping("/allSubordinates")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public ResponseEntity<List<EmployeeDTO>> findAllSubordinates(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int employeeId = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(employeeService.findAllSubordinates(employeeId),HttpStatus.OK);
+    }
     // make employee see personal leaveBalance
     // make employee edit personal details
 }

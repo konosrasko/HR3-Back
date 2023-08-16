@@ -39,4 +39,6 @@ public interface EmployeeService {
     LeaveRequestDTO approveLeaveRequest(Integer leaveReqId);
 
     LeaveRequestDTO declineLeaveRequest(Integer leaveReqId);
+
+    List<EmployeeDTO> findAllSubordinates(Integer employeeId);
 }

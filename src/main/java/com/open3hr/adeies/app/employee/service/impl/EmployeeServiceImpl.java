@@ -211,6 +211,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeDTO> findAllSubordinates(Integer employeeId) {
+            List<Employee> employeeList = employeeRepository.findAllSubordinates(employeeId);
+                return employeeList.stream()
+                        .map(employee -> new EmployeeDTO(employee))
+                        .toList();
+        }
+
+    @Override
     public List<miniEmployeeDTO> findAllSupervisors() {
        List<Employee> supervisors = employeeRepository.findAllSupervisors();
         System.out.println(supervisors);
