@@ -38,11 +38,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(HttpServerErrorException.GatewayTimeout.class)
     public ResponseEntity<String> handleGatewayTimeoutException(HttpServerErrorException.GatewayTimeout ex) {
-        return ResponseEntity.status(504).body("Custom Gateway Timeout Message: The request took too long to process.");
+        return ResponseEntity.status(504).body("Η επεξεργασία του αιτήματος άργησε πολύ.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Custom Access Denied Message: You do not have permission to access this resource.");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Δεν έχετε πρόσβαση σε αυτή την πηγή");
     }
 }

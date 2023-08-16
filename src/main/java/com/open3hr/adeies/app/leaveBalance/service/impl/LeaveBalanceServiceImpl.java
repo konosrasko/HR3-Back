@@ -32,7 +32,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
                     Optional<LeaveCategory> categoryOfBalance = categoryRepository.findById(leaveBalance.getCategory().getId());
                     if(categoryOfBalance.isPresent()){
                         return new LeaveBalanceDTO(leaveBalance, categoryOfBalance.get());
-                    }else throw new RuntimeException("Error with category ids");
+                    }else throw new RuntimeException("Σφάλμα με την κατηγορία αδειών");
                 })
                 .toList();
     }
@@ -44,8 +44,8 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
             Optional<LeaveCategory> category = categoryRepository.findById(myLeaveBalance.get().getCategory().getId());
             if(category.isPresent()){
                 return new LeaveBalanceDTO(myLeaveBalance.get(), category.get());
-            } else throw new RuntimeException("There was an error with category id");
-        } else throw new RuntimeException("Couldn't find leave balance with id: "+ id);
+            } else throw new RuntimeException("Υπήρξε σφάλμα με το κλειδί της κατηγορίας");
+        } else throw new RuntimeException("Δεν βρέθηκε υπόλοιπο άδειας με id: "+ id);
     }
 
 //    @Override
@@ -59,7 +59,7 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
 
     @Override
     public void deleteById(Integer id) {
-        this.leaveBalanceRepository.findById(id).orElseThrow(()-> new RuntimeException("Leave balance with id "+ id +" not found"));
+        this.leaveBalanceRepository.findById(id).orElseThrow(()-> new RuntimeException("Η άδεια με το id : "+ id +" δεν βρέθηκε"));
     }
 
     @Override
@@ -71,8 +71,8 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
             if(foundCategory.isPresent()){
                 LeaveBalance myLeaveBalance = new LeaveBalance(leaveBalanceDTO, foundEmployee.get(), foundCategory.get());
                 leaveBalanceRepository.save(myLeaveBalance);
-            }else throw new RuntimeException("There is no such category title!");
-        } else throw new RuntimeException("Couldn't find this employee to assign the leave balance");
+            }else throw new RuntimeException("Αυτός ο τίτλος κατηγορίας δεν υπάρχει!");
+        } else throw new RuntimeException("Δεν βρέθηκε ο εργαζόμενους για να του περαστεί νέα κατηγορία άδειας");
     }
 
     @Override
@@ -85,9 +85,9 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
                         Optional<LeaveCategory> categoryOfBalance = categoryRepository.findById(leaveBalance.getCategory().getId());
                         if(categoryOfBalance.isPresent()){
                             return new LeaveBalanceDTO(leaveBalance, categoryOfBalance.get());
-                        }else throw new RuntimeException("Problem with category id");
+                        }else throw new RuntimeException("Πρόβλημα με το id τής Κατηγορίας Άδειας");
                     })
                     .toList();
-        }else throw new RuntimeException("Couldn't find the employee with this id");
+        }else throw new RuntimeException("Ο εργαζόμενος με το συγκεκριμένο id δεν βρέθηκε");
     }
 }
