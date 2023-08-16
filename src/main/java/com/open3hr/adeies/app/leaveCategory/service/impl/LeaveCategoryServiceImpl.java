@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,7 +40,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
         if (leaveCategory.isPresent()) {
             return new LeaveCategoryDTO(leaveCategory.get());
         } else {
-            throw new NotFoundException("Couldn't find leave category with id" + categoryId);
+            throw new NotFoundException("Η κατηγορία Άδειας με το id :" + categoryId + "δεν βρέθηκε");
         }
     }
 
@@ -47,7 +48,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     public LeaveCategoryDTO createNewCategory(LeaveCategoryDTO leaveCategoryDTO) {
         Optional<LeaveCategory> foundCategory = leaveCategoryRepository.findCategoryByTitle(leaveCategoryDTO.getTitle());
         if(foundCategory.isPresent()){
-            throw new ConflictException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+            throw new ConflictException("Υπάρχει ήδη μία κατηγορία άδειας με αυτόν τον τίτλο: " + leaveCategoryDTO.getTitle());
         }else{
             LeaveCategory leaveCategory = new LeaveCategory(leaveCategoryDTO);
             return new LeaveCategoryDTO(leaveCategoryRepository.save(leaveCategory));
@@ -57,8 +58,14 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     @Override
     public LeaveCategoryDTO editCategory(LeaveCategoryDTO leaveCategoryDTO){
         if(leaveCategoryRepository.existsById(leaveCategoryDTO.getId())){
+            List<LeaveCategory> allCategories = leaveCategoryRepository.findAll();
+            for(LeaveCategory category : allCategories){
+                if(!Objects.equals(category.getId(), leaveCategoryDTO.getId()) && Objects.equals(category.getTitle(), leaveCategoryDTO.getTitle())){
+                    throw new ConflictException("Υπάρχει ήδη μία κατηγορία άδειας με αυτόν τον τίτλο: " + leaveCategoryDTO.getTitle());
+                }
+            }
             return new LeaveCategoryDTO(leaveCategoryRepository.save(new LeaveCategory(leaveCategoryDTO)));
-        }else throw new NotFoundException("This category does not exist");
+        }else throw new NotFoundException("Αυτή η κατηγορία άδειας δεν υπάρχει ");
     }
 
     @Override
@@ -67,7 +74,7 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
         if (result.isPresent()) {
             leaveCategoryRepository.deleteById(categoryId);
         } else {
-            throw new NotFoundException("Did not find leave category id- " + categoryId);
+            throw new NotFoundException("Η κατηγορία άδειας με το id : " + categoryId + "δεν βρέθηκε");
         }
     }
 }

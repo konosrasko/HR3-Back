@@ -34,6 +34,10 @@ public interface EmployeeService {
 
     EmployeeDTO findEmployeeByUserName(String username);
 
+    List<EmployeeSupervisorDTO> findAllDirectSubordinates(Integer supervisorId);
+
+    List<EmployeeSupervisorDTO> findAllSubordinates(Integer supervisorId);
+
     List<miniEmployeeDTO> findAllSupervisors();
 
     LeaveRequestDTO approveLeaveRequest(Integer leaveReqId);

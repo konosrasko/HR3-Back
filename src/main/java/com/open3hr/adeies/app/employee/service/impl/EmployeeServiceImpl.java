@@ -10,7 +10,6 @@ import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.exceptions.BadDataException;
 import com.open3hr.adeies.app.exceptions.ConflictException;
 import com.open3hr.adeies.app.exceptions.NotFoundException;
-import com.open3hr.adeies.app.exceptions.UnauthorizedException;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -67,7 +64,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Optional<Employee> result = employeeRepository.findById(id);
         if (result.isPresent()) {
             return new EmployeeDTO(result.get());
-        } else throw new NotFoundException("Could not find employee with given id of " + id);
+        } else throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + id);
     }
 
     @Override
@@ -78,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteById(Integer id) {
-        this.employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Could not find employee with given id of " + id));
+        this.employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + id));
     }
 
     @Override
@@ -135,7 +132,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(new Employee(employeeDTO));
             return employeeDTO;
         } else {
-            throw new NotFoundException("Could not find employee with given id of " + id);
+            throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + id);
         }
     }
 
@@ -150,9 +147,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employeeRepository.save(myEmployee.get());
                 return new EmployeeDTO(myEmployee.get());
             } else
-                throw new NotFoundException("Could not find employee with given id of " + employeeId);
+                throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + employeeId);
         } else
-            throw new RuntimeException("Couldn't find supervisor!");
+            throw new NotFoundException("Δε βρέθηκε ο προιστάμενος με το ζητούμενο id: " + supervisorId);
     }
 
     @Override
@@ -163,7 +160,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(myEmployee.get());
             return new EmployeeDTO(myEmployee.get());
         } else {
-            throw new NotFoundException("Could not find employee with given id of " + employeeId);
+            throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + employeeId);
         }
     }
 
@@ -183,10 +180,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(myEmployee.isPresent()){
                 return new EmployeeDTO(myEmployee.get());
             }else {
-                throw new NotFoundException("Could not find employee");
+                throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + myUser.get().getEmployee().getId());
             }
         }else {
-            throw new NotFoundException("Could not find user" + username);
+            throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + username);
         }
     }
 
@@ -197,7 +194,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             leaveRequest.get().setStatus(Status.APPROVED);
             return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
         }
-        throw new NotFoundException("Could not find leave request with id: " + leaveReqId);
+        throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
 
     @Override
@@ -207,7 +204,46 @@ public class EmployeeServiceImpl implements EmployeeService {
             leaveRequest.get().setStatus(Status.DENIED);
             return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
         }
-        throw new NotFoundException("Could not find leave request with id: " + leaveReqId);
+        throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
+    }
+
+    @Override
+    public List<EmployeeSupervisorDTO> findAllDirectSubordinates(Integer supervisorId) {
+        Optional<Employee> supervisor = employeeRepository.findById(supervisorId);
+        if (supervisor.isEmpty())
+            throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
+
+        List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+        try {
+            for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
+                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
+            }
+        }catch (Exception e){
+            throw new NotFoundException("Προέκυψε σφάλμα με την αναζήτηση των υφισταμένων");
+        }
+
+        return DTOSubordinates;
+    }
+
+    @Override
+    public List<EmployeeSupervisorDTO> findAllSubordinates(Integer supervisorId) {
+        Optional<Employee> supervisor = employeeRepository.findById(supervisorId);
+        if (supervisor.isEmpty())
+            throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
+
+        List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+        try {
+            for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
+                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
+                if(subordinate.getId()!=supervisorId){ //infinite loop prevention
+                    DTOSubordinates.addAll(findAllSubordinates(subordinate.getId()));
+                }
+            }
+        }catch (Exception e){
+            throw new NotFoundException("Προέκυψε σφάλμα με την αναζήτηση των υφισταμένων");
+        }
+
+        return DTOSubordinates;
     }
 
     @Override
@@ -235,7 +271,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(foundSuperV.isPresent()){
                 isSuper = true;
             }
-        }else throw new NotFoundException("Could not find employee with given id of " + employeeId);
+        }else throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + employeeId);
         return isSuper;
     }
 }

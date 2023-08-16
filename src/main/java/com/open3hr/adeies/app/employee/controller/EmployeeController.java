@@ -58,6 +58,24 @@ public class EmployeeController {
         return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
 
+    //used in: http://localhost:4200/home/subordinates
+    @GetMapping("direct-subordinates")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
+    public ResponseEntity<List<EmployeeSupervisorDTO>> getDirectSubordinates(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(employeeService.findAllDirectSubordinates(id), HttpStatus.OK);
+    }
+
+    //used in: http://localhost:4200/home/subordinates
+    @GetMapping("all-subordinates")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
+    public ResponseEntity<List<EmployeeSupervisorDTO>> getAllSubordinates(){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int id = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(employeeService.findAllSubordinates(id), HttpStatus.OK);
+    }
+
 
 
 

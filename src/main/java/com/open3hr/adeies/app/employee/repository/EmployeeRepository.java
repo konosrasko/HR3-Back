@@ -28,4 +28,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     @Query(value = "SELECT e.* FROM employee e WHERE e.supervisor_id = :employeeId", nativeQuery = true)
     List<Employee> findAllSubordinates(@Param("employeeId")Integer employee_Id);
+
+    @Query(value = "SELECT e.* FROM employee e WHERE e.supervisor_id = :supervisorId ;", nativeQuery = true)
+    List<Employee> findAllSubordinatesOf(Integer supervisorId);
 }
