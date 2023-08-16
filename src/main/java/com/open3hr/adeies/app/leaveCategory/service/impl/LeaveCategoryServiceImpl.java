@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -57,6 +58,12 @@ public class LeaveCategoryServiceImpl implements LeaveCategoryService {
     @Override
     public LeaveCategoryDTO editCategory(LeaveCategoryDTO leaveCategoryDTO){
         if(leaveCategoryRepository.existsById(leaveCategoryDTO.getId())){
+            List<LeaveCategory> allCategories = leaveCategoryRepository.findAll();
+            for(LeaveCategory category : allCategories){
+                if(!Objects.equals(category.getId(), leaveCategoryDTO.getId()) && Objects.equals(category.getTitle(), leaveCategoryDTO.getTitle())){
+                    throw new ConflictException("There is already a leave category with the title: " + leaveCategoryDTO.getTitle());
+                }
+            }
             return new LeaveCategoryDTO(leaveCategoryRepository.save(new LeaveCategory(leaveCategoryDTO)));
         }else throw new NotFoundException("This category does not exist");
     }
