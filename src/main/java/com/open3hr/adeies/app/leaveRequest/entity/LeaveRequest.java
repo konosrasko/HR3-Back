@@ -8,6 +8,7 @@ import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LeaveRequest {
 
     @Id

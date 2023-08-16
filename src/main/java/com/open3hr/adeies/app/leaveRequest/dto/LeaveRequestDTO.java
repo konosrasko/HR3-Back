@@ -40,7 +40,6 @@ public class LeaveRequestDTO {
     }
 
     public LeaveRequestDTO(LeaveRequest leaveRequest) {
-        this.id = leaveRequest.getId();
         this.submitDate = leaveRequest.getSubmitDate();
         this.startDate = leaveRequest.getStartDate();
         this.endDate = leaveRequest.getEndDate();

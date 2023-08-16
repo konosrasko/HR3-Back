@@ -5,6 +5,7 @@ import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name="leave_category")
 
 public class LeaveCategory {
@@ -48,5 +50,11 @@ public class LeaveCategory {
         this.id = leaveCategoryDTO.getId();
         this.title = leaveCategoryDTO.getTitle();
         this.isActive = leaveCategoryDTO.isActive();
+    }
+
+    public LeaveCategory(int id,String title)
+    {
+        this.id = id;
+        this.title = title;
     }
 }

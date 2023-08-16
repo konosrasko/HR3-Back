@@ -10,7 +10,6 @@ import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.exceptions.BadDataException;
 import com.open3hr.adeies.app.exceptions.ConflictException;
 import com.open3hr.adeies.app.exceptions.NotFoundException;
-import com.open3hr.adeies.app.exceptions.UnauthorizedException;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -110,7 +109,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 employeesBalance.setDaysTaken(employeesBalance.getDaysTaken() + leaveRequestDTO.getDuration());
                                 LeaveRequest leaveRequest = new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
                                 balanceRepository.save(employeesBalance);
-                                return new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest), optionalLeaveCategory.get());
+                                leaveRequestRepository.save(leaveRequest);
+                                System.out.println(leaveRequestRepository.count());
+                                return new LeaveRequestDTO(leaveRequest, optionalLeaveCategory.get());
 
                             }else throw new ConflictException("The employee does not have as many leave days as requested");
                         }else throw new ConflictException("Start's date can't be before submitDate's date");
