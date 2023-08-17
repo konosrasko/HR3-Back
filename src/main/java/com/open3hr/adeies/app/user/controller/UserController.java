@@ -30,6 +30,15 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserRoles(logged_id), HttpStatus.OK);
     }
 
+    //used in: http://localhost:4200/home/admin
+    @GetMapping("/admin/{userId}")
+    @PreAuthorize("hasRole('Admin')")
+    public ResponseEntity<EmployeeUserDTO> findUsersEmployeesForAdminById(@PathVariable Integer userId){
+        System.out.println(userId);
+        return new ResponseEntity<>(userService.getEmployeeUserById(userId),HttpStatus.OK);
+    }
+
+
     @GetMapping("/user_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
     public ResponseEntity<UserDTO> getUserInfo(){
@@ -62,12 +71,6 @@ public class UserController {
         return new ResponseEntity<>(userService.getEmployeeUserAdmin(),HttpStatus.OK);
     }
 
-    @GetMapping("/admin/{user}")
-    @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<EmployeeUserDTO> findUsersEmployeesForAdminById(@PathVariable String user){
-        Integer userId = userService.getUserInfo(user).getEmployeeId();
-        return new ResponseEntity<>(userService.getEmployeeUserById(userId),HttpStatus.OK);
-    }
 
     @PostMapping("/createAccount")
     @PreAuthorize("hasRole('Admin')")

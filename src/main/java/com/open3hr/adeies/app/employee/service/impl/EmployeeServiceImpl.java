@@ -203,6 +203,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public LeaveRequestDTO declineLeaveRequest(Integer leaveReqId) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
         if (leaveRequest.isPresent()){
+            try {
+                leaveRequest.get().getEmployee().findBalanceOfCategory(leaveRequest.get().getCategory()).addDaysTaken(-leaveRequest.get().getDuration());
+            } catch (Exception e){
+                throw new BadDataException("Δεν ήταν δυνατή η απόρριψη του αιτήματος.");
+            }
             leaveRequest.get().setStatus(Status.DENIED);
             return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
         }

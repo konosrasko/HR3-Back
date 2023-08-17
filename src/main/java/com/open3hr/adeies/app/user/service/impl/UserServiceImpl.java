@@ -3,6 +3,8 @@ package com.open3hr.adeies.app.user.service.impl;
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
+import com.open3hr.adeies.app.exceptions.ConflictException;
+import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +28,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private EmployeeRepository employeeRepository;
+
 
     @Override
     public List<UserDTO> findAll() {
@@ -37,9 +41,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         User user = userRepository.findUserByUsername(username).orElseThrow();
-       return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),user.getAuthorities());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
     @Override
@@ -48,7 +51,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (myUser.isPresent()) {
             return new UserDTO(myUser.get());
         } else {
-            throw new RuntimeException("Couldn't find user with id: " + id);
+            throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + id);
         }
     }
 
@@ -57,54 +60,53 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Optional<Employee> myEmployee = employeeRepository.findById(userDTO.getEmployeeId());
         if (myEmployee.isPresent()) {
             List<User> userList = userRepository.findAll();
-            for (User user : userList){
-                if(Objects.equals(userDTO.getEmployeeId(), user.getEmployee().getId())){
-                    throw new RuntimeException("This Employee has already a User Account");
+            for (User user : userList) {
+                if (Objects.equals(userDTO.getEmployeeId(), user.getEmployee().getId())) {
+                    throw new ConflictException("Ο εργαζόμενος με id " + userDTO.getEmployeeId() + " έχει ήδη account.");
                 }
             }
-            //STAMTAH KSPINA
-            //userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             userRepository.save(new User(userDTO, myEmployee.get()));
             return userDTO;
-        } else throw new RuntimeException("Employee not found, couldn't create new account.");
+        } else throw new NotFoundException("Δε βρέθηκε ο επιλεγμένος εργαζόμενος.");
     }
 
     @Override
     public UserDTO updateStatus(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
-        if(myUser.isPresent()){
+        if (myUser.isPresent()) {
             myUser.get().setEnable(!myUser.get().isEnable());
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
         }
-        throw new RuntimeException("Couldn't find this user with id "+id);
+        throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + id);
     }
 
     @Override
     public UserDTO changeSupervisorRights(Integer id) {
         Optional<User> myUser = userRepository.findById(id);
-        if(myUser.isPresent()){
-                userRepository.save(myUser.get());
-                return new UserDTO(myUser.get());
-            }
-        throw new RuntimeException("Couldn't find this user with id "+id);
+        if (myUser.isPresent()) {
+            userRepository.save(myUser.get());
+            return new UserDTO(myUser.get());
+        }
+        throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + id);
     }
 
     @Override
     public UserDTO assignUserToEmployee(Integer userId, Integer employeeId) {
         Optional<Employee> myEmployee = employeeRepository.findById(employeeId);
         Optional<User> myUser = userRepository.findById(userId);
-        if(myUser.isPresent()){
-            if(myEmployee.isPresent()){
+        if (myUser.isPresent()) {
+            if (myEmployee.isPresent()) {
                 myUser.get().setEmployee(myEmployee.get());
                 userRepository.save(myUser.get());
                 return new UserDTO(myUser.get());
-            }else {
-                throw new RuntimeException("Couldn't find employee!");
+            } else {
+                throw new NotFoundException("Δε βρέθηκε εργαζόμενος με το ζητούμενο id: " + employeeId);
                 // ### probably the employee ID is wrong ###
             }
-        }else{
-            throw new RuntimeException("Couldn't find the user account");
+        } else {
+            throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
             // ### probably the user ID is wrong ###
         }
 
@@ -113,12 +115,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public UserDTO unassignUserAccount(Integer userId) {
         Optional<User> myUser = userRepository.findById(userId);
-        if(myUser.isPresent()){
+        if (myUser.isPresent()) {
             myUser.get().setEmployee(null);
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
-        }else {
-            throw new RuntimeException("Couldn't find user account!");
+        } else {
+            throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
             // ### couldn't find user account with given id ###
         }
     }
@@ -126,16 +128,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public RolesDTO getUserRoles(Integer userId) {
         Optional<User> myUser = userRepository.findById(userId);
-        if(myUser.isPresent()){
+        if (myUser.isPresent()) {
             return new RolesDTO(myUser.get());
-        }else {
-            throw new RuntimeException("Couldn't find user account!");
+        } else {
+            throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
         }
     }
 
     @Override
     public EmployeeDTO getEmployeeInfo(String username) {
-        for (User user : userRepository.findAll()){
+        for (User user : userRepository.findAll()) {
             if (user.getUsername().equals(username)) {
                 Optional<Employee> myEmployee = employeeRepository.findById(user.getEmployee().getId());
                 if (myEmployee.isPresent()) {
@@ -145,15 +147,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return null;
     }
+
     @Override
     public UserDTO getUserInfo(String username) {
         Optional<User> foundUser = userRepository.findAll()
                 .stream()
                 .filter(user -> Objects.equals(user.getUsername(), username))
                 .findFirst();
-        if(foundUser.isPresent()){
+        if (foundUser.isPresent()) {
             return new UserDTO(foundUser.get());
-        }else throw new RuntimeException("Couldn't find this user");
+        } else throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο username: " + username);
     }
 
     @Override
@@ -167,31 +170,32 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public EmployeeUserDTO getEmployeeUserById(int userId){
+    public EmployeeUserDTO getEmployeeUserById(int userId) {
         Optional<User> foundUser = userRepository.findById(userId);
-        if(foundUser.isPresent()){
+        if (foundUser.isPresent()) {
             return new EmployeeUserDTO(foundUser.get().getEmployee(), foundUser.get());
-        }else throw new RuntimeException("This user does not exist");
+        } else throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
     }
 
     @Override
-    public UserDTO editUser(UserDTO userDTO, Integer userId){
+    public UserDTO editUser(UserDTO userDTO, Integer userId) {
         Optional<User> foundUser = userRepository.findById(userId);
-        if(foundUser.isPresent()){
+        if (foundUser.isPresent()) {
             userDTO.setId(userId);
+            userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
-        }else throw new RuntimeException("This user does not exist");
+        } else throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
     }
 
     @Override
     public UserDTO activateDeactivateUser(Integer userId) {
         Optional<User> myUser = userRepository.findById(userId);
-        if(myUser.isPresent()){
+        if (myUser.isPresent()) {
             myUser.get().setEnable(!myUser.get().isEnable());
             userRepository.save(myUser.get());
             return new UserDTO(myUser.get());
-        }else {
-            throw new RuntimeException("User with id "+ userId +" could not be found!");
+        } else {
+            throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
         }
     }
 }
