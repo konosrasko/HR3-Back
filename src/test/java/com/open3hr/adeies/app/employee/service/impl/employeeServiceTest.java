@@ -63,7 +63,6 @@ import static org.mockito.Mockito.when;
         private Employee employee1;
         private Employee employee2;
 
-        private Employee employee2;
         private User user;
         private User user1;
         private User user2;
