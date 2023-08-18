@@ -1,6 +1,7 @@
 package com.open3hr.adeies.app.employee.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
@@ -11,7 +12,6 @@ import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -48,6 +50,8 @@ import static org.mockito.Mockito.when;
         private LeaveBalanceRepository leaveBalanceRepository;
         private Employee employee;
         private Employee employee1;
+
+        private Employee employee2;
         private LeaveRequestDTO leaveRequestDTO;
 
         private LeaveCategory leaveCategory;
@@ -67,7 +71,6 @@ import static org.mockito.Mockito.when;
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
-                    .supervisorId(2)
                     .build();
 
             employee1 = Employee.builder()
@@ -78,6 +81,19 @@ import static org.mockito.Mockito.when;
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
+                    .supervisorId(1)
+
+                    .build();
+
+            employee2 = Employee.builder()
+                    .id(2)
+                    .firstName("test")
+                    .lastName("testiou")
+                    .email("testopoulos@gmail.com")
+                    .mobileNumber("6985345634")
+                    .address("testisias")
+                    .address("23")
+                    .supervisorId(1)
                     .build();
 
             List<LeaveBalance> leaveBalances = new ArrayList<>();
@@ -153,8 +169,19 @@ import static org.mockito.Mockito.when;
             LeaveRequestDTO answer = employeeService.approveLeaveRequest(leaveRequest.getId());
             Assertions.assertNotNull(answer);
             Assertions.assertEquals(Status.APPROVED,answer.getStatus());
-
         }
 
+        @Test
+        void findAllDirectSubordinatesTest()
+        {
+            List<Employee> employeeList = new ArrayList<>();
+            employeeList.add(employee1);
+            employeeList.add(employee2);
+
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+            when(employeeRepository.findAllSubordinatesOf(employee.getId())).thenReturn(employeeList);
+            List<EmployeeSupervisorDTO> employeeSupervisorDTOList = employeeService.findAllDirectSubordinates(employee.getId());
+            Assertions.assertEquals(2,employeeSupervisorDTOList.size());
+        }
     }
 

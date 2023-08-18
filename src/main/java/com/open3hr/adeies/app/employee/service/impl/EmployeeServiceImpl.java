@@ -222,8 +222,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
 
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+        List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         try {
-            for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
+            for (Employee subordinate: subordinatesList){
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
             }
         }catch (Exception e){
@@ -240,6 +241,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
 
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+
         try {
             for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
