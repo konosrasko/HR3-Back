@@ -210,7 +210,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new BadDataException("Δεν ήταν δυνατή η απόρριψη του αιτήματος.");
             }
             leaveRequest.get().setStatus(Status.DENIED);
-            return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
+            leaveRequestRepository.save(leaveRequest.get());
+            return  new LeaveRequestDTO(leaveRequest.get());
         }
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
