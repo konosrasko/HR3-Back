@@ -178,11 +178,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDTO editUser(UserDTO userDTO, Integer userId) {
+    public UserDTO editUser(UserDTO userDTO, Integer userId, boolean isPassEdited) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
             userDTO.setId(userId);
-            userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            if(isPassEdited){
+                userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+            }
             return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
         } else throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
     }
