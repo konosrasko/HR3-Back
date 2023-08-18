@@ -94,9 +94,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
                     if(leaveRequestDTO.getEndDate().getTime() >= leaveRequestDTO.getStartDate().getTime() ){
-                        System.out.println("start date:" + leaveRequestDTO.getStartDate());
+                        System.out.println("New leave request posted:");
                         System.out.println("submit date:" + leaveRequestDTO.getSubmitDate());
-                        System.out.println("start date >= end date:");
+                        System.out.println("start date:" + leaveRequestDTO.getStartDate());
+                        System.out.println("end date:" + leaveRequestDTO.getEndDate());
                         System.out.println(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() );
                         if(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() ){
 
@@ -108,15 +109,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 LeaveRequest leaveRequest = new LeaveRequest(leaveRequestDTO, optionalEmployee.get(), optionalLeaveCategory.get());
                                 balanceRepository.save(employeesBalance);
                                 leaveRequestRepository.save(leaveRequest);
-                                System.out.println(leaveRequestRepository.count());
                                 return new LeaveRequestDTO(leaveRequest, optionalLeaveCategory.get());
 
-                            }else throw new ConflictException("The employee does not have as many leave days as requested");
-                        }else throw new ConflictException("Start's date can't be before submitDate's date");
-                    }else throw new ConflictException("End's date can't be before start's date");
-                }else throw new BadDataException("This employee doesn't have this type of leave category");
-            }else throw new BadDataException("There is no such leave category");
-        }else throw new NotFoundException("Could not find employee with given id of " + employeeId);
+                            }else throw new ConflictException("Το υπόλοιπο ημερών δεν επαρκεί για την αίτηση άδειας αυτής της κατηγορίας (" + (employeesBalance.getDays() - employeesBalance.getDaysTaken()) + " ημέρες)");
+                        }else throw new ConflictException("H έναρξη της άδειας πρέπει να προηγείται της σημερινής ημέρας");
+                    }else throw new ConflictException("Η έναρξη της άδειας πρέπει να είναι πριν τη λήξη της.");
+                }else throw new BadDataException("Ο εργαζόμενος δεν δικαιούται άδειες αυτής της κατηγορίας.");
+            }else throw new BadDataException("Δεν υπάρχει τέτοια κατηγορία άδειας");
+        }else throw new NotFoundException("Δε βρέθηκε εργαζόμενους με το ζητούμενο id: " + employeeId);
     }
 
     @Override
@@ -223,8 +223,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
 
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+        List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         try {
-            for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
+            for (Employee subordinate: subordinatesList){
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
             }
         }catch (Exception e){
@@ -242,6 +243,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
+
         try {
             for (Employee subordinate: subordinatesList){
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));

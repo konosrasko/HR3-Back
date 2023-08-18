@@ -79,10 +79,10 @@ public class UserController {
         return new ResponseEntity<>(userService.createAccount(userDTO),HttpStatus.OK);
     }
 
-    @PutMapping("/admin/{userId}")
+    @PutMapping("/admin/{userId}/{isPassEdited}")
     @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId){
-        return new ResponseEntity<>(userService.editUser(userDTO, userId),HttpStatus.OK);
+    public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId, @PathVariable boolean isPassEdited){
+        return new ResponseEntity<>(userService.editUser(userDTO, userId, isPassEdited),HttpStatus.OK);
     }
 
     @PutMapping("/{id}/changeStatus")

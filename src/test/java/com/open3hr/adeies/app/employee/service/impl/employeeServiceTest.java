@@ -25,6 +25,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.Mockito.mock;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -60,6 +62,8 @@ import static org.mockito.Mockito.when;
         private Employee employee;
         private Employee employee1;
         private Employee employee2;
+
+        private Employee employee2;
         private User user;
         private User user1;
         private User user2;
@@ -82,6 +86,7 @@ import static org.mockito.Mockito.when;
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
+                    .supervisorId(2)
                     .build();
 
             employee1 = Employee.builder()
@@ -207,7 +212,19 @@ import static org.mockito.Mockito.when;
             LeaveRequestDTO answer = employeeService.approveLeaveRequest(leaveRequest.getId());
             Assertions.assertNotNull(answer);
             Assertions.assertEquals(Status.APPROVED,answer.getStatus());
+        }
 
+        @Test
+        void findAllDirectSubordinatesTest()
+        {
+            List<Employee> employeeList = new ArrayList<>();
+            employeeList.add(employee1);
+            employeeList.add(employee2);
+
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+            when(employeeRepository.findAllSubordinatesOf(employee.getId())).thenReturn(employeeList);
+            List<EmployeeSupervisorDTO> employeeSupervisorDTOList = employeeService.findAllDirectSubordinates(employee.getId());
+            Assertions.assertEquals(2,employeeSupervisorDTOList.size());
         }
 
 
