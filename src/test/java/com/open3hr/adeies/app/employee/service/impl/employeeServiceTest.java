@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.employee.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
+import com.open3hr.adeies.app.employee.dto.miniEmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
@@ -273,4 +274,13 @@ import static org.mockito.Mockito.when;
             assertEquals(employeeSupervisorDTOS.size(),2);
         }
 
+        @Test
+        void findAllSupervisorsTest()
+        {
+            List<Employee> supervisorsList = new ArrayList<>();
+            supervisorsList.add(employee);
+            when(employeeRepository.findAllSupervisors()).thenReturn(supervisorsList);
+            List<miniEmployeeDTO> miniEmployeeDTOList = employeeService.findAllSupervisors();
+            Assertions.assertEquals(1,miniEmployeeDTOList.size());
+        }
     }
