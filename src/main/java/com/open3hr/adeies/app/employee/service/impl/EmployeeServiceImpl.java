@@ -259,7 +259,7 @@ public class EmployeeServiceImpl implements EmployeeService {
        List<Employee> supervisors = employeeRepository.findAllSupervisors();
         System.out.println(supervisors);
         return supervisors.stream()
-                .map(supervisor -> new miniEmployeeDTO(supervisor))
+                .map(miniEmployeeDTO::new)
                 .toList();
     }
 
