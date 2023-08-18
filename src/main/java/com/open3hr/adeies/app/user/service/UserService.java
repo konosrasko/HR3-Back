@@ -29,7 +29,7 @@ public interface UserService {
 
     EmployeeUserDTO getEmployeeUserById(int userId);
 
-    UserDTO editUser(UserDTO userDTO, Integer userId);
+    UserDTO editUser(UserDTO userDTO, Integer userId, boolean isPassEdited);
 
     UserDTO activateDeactivateUser(Integer userId);
 }

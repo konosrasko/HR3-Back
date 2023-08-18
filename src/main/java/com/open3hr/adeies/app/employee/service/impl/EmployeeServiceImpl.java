@@ -194,7 +194,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
         if (leaveRequest.isPresent()){
             leaveRequest.get().setStatus(Status.APPROVED);
-            return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
+            leaveRequestRepository.save(leaveRequest.get());
+            return  new LeaveRequestDTO((leaveRequest.get()));
         }
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
@@ -209,7 +210,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new BadDataException("Δεν ήταν δυνατή η απόρριψη του αιτήματος.");
             }
             leaveRequest.get().setStatus(Status.DENIED);
-            return  new LeaveRequestDTO(leaveRequestRepository.save(leaveRequest.get()));
+            leaveRequestRepository.save(leaveRequest.get());
+            return  new LeaveRequestDTO(leaveRequest.get());
         }
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
@@ -259,7 +261,7 @@ public class EmployeeServiceImpl implements EmployeeService {
        List<Employee> supervisors = employeeRepository.findAllSupervisors();
         System.out.println(supervisors);
         return supervisors.stream()
-                .map(supervisor -> new miniEmployeeDTO(supervisor))
+                .map(miniEmployeeDTO::new)
                 .toList();
     }
 
