@@ -1,7 +1,9 @@
 package com.open3hr.adeies.app.employee.service.impl;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
+import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.enums.Role;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
@@ -14,6 +16,7 @@ import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.repository.UserRepository;
 import com.open3hr.adeies.app.user.service.impl.UserServiceImpl;
+import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,8 +57,13 @@ import static org.mockito.Mockito.when;
         @Mock
         private LeaveBalanceRepository leaveBalanceRepository;
         private Employee employee;
+        private Employee employee1;
         private User user;
         private LeaveRequestDTO leaveRequestDTO;
+
+        private LeaveCategory leaveCategory;
+
+        private LeaveRequest leaveRequest;
 
         @BeforeEach
         public void init() throws ParseException {
@@ -70,7 +78,19 @@ import static org.mockito.Mockito.when;
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
+                    .supervisorId(2)
                     .build();
+
+            employee1 = Employee.builder()
+                    .id(3)
+                    .firstName("test")
+                    .lastName("testiou")
+                    .email("testopoulos@gmail.com")
+                    .mobileNumber("6985345634")
+                    .address("testisias")
+                    .address("23")
+                    .build();
+
             List<LeaveBalance> leaveBalances = new ArrayList<>();
             leaveBalances.add(LeaveBalance.builder()
                     .id(1)
@@ -100,21 +120,63 @@ import static org.mockito.Mockito.when;
                     .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-26"))
                     .build();
 
+            leaveCategory = new LeaveCategory(1,"Normal");
+            leaveRequest =  LeaveRequest.builder()
+                    .id(1)
+                    .employee(employee)
+                    .category(leaveCategory)
+                    .submitDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-22"))
+                    .startDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-24"))
+                    .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-26"))
+                    .status(Status.PENDING)
+                    .build();
+
+
+
 
         }
 
         @Test
-        void addNewLeaveRequest()
+        void addNewLeaveRequestTest()
         {
             LeaveCategory leaveCategory = new LeaveCategory(1,"Normal");
             when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
             when(leaveCategoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle())).thenReturn(Optional.of(leaveCategory));
-            LeaveRequestDTO answer = employeeService.addLeaveRequest(leaveRequestDTO,employee.getId());
 
+            LeaveRequestDTO answer = employeeService.addLeaveRequest(leaveRequestDTO,employee.getId());
             assertEquals("PENDING",answer.getStatus().toString());
             Assertions.assertNotNull(answer);
 
         }
+
+        @Test
+        void assignToSupervisorTest()
+        {
+            when(employeeRepository.findById(employee1.getId())).thenReturn(Optional.of(employee));
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee1));
+            EmployeeDTO answer = employeeService.assignToSupervisor(employee.getId(),employee1.getId());
+            Assertions.assertEquals(employee1.getId(),answer.getSupervisorId());
+
+        }
+
+        @Test
+        void unAssignTheSupervisorTest()
+        {
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee1));
+            EmployeeDTO answer = employeeService.unassignedToSupervisor(employee.getId(),employee1.getId());
+            Assertions.assertNull(answer.getSupervisorId());
+        }
+
+        @Test
+        void approveLeaveRequestTest()
+        {
+            when(leaveRequestRepository.findById(leaveRequest.getId())).thenReturn(Optional.of(leaveRequest));
+            LeaveRequestDTO answer = employeeService.approveLeaveRequest(leaveRequest.getId());
+            Assertions.assertNotNull(answer);
+            Assertions.assertEquals(Status.APPROVED,answer.getStatus());
+
+        }
+
 
         @Test
         void findEmployeeByUserName()
