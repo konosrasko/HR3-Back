@@ -1,6 +1,7 @@
 package com.open3hr.adeies.app.leaveRequest.service;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
+import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 
@@ -18,6 +19,8 @@ public interface LeaveRequestService {
     List<LeaveRequestDTO> findRequestsForAnEmployee(int id);
 
     List<LeaveRequestDTO> getPendingRequests();
+
+    LeaveRequestDTO editLeaveRequest(LeaveRequestDTO leaveRequestDTO, Integer employeeId);
 
     List<SubordinatesReqDTO> getSubordinatesReq(Integer supervisorId);
 

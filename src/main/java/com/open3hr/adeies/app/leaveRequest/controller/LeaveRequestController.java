@@ -1,6 +1,7 @@
 package com.open3hr.adeies.app.leaveRequest.controller;
 
 import com.open3hr.adeies.app.employee.service.EmployeeService;
+import com.open3hr.adeies.app.leaveCategory.dto.LeaveCategoryDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
 import com.open3hr.adeies.app.leaveRequest.dto.SubordinatesReqDTO;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
@@ -39,8 +40,24 @@ public class LeaveRequestController {
     //used in: http://localhost:4200/home/leaves/requests
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public ResponseEntity<LeaveRequestDTO> deleteRequest(@PathVariable Integer id){
+    public ResponseEntity<LeaveRequestDTO> deleteLeaveRequest(@PathVariable Integer id){
         return new ResponseEntity<>(leaveRequestService.deleteRequestById(id),HttpStatus.NO_CONTENT);
+    }
+
+    //used in: http://localhost:4200/home/leaves/edit
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public ResponseEntity<LeaveRequestDTO> findLeaveRequest(@PathVariable Integer id){
+        return new ResponseEntity<>(leaveRequestService.findById(id),HttpStatus.OK);
+    }
+
+    //used in: http://localhost:4200/home/leaves/edit
+    @PutMapping("")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
+    public ResponseEntity<LeaveRequestDTO> updateLeaveRequest(@RequestBody LeaveRequestDTO leaveRequestDTO){
+        String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        int employeeId = userService.getUserInfo(loggedUsername).getEmployeeId();
+        return new ResponseEntity<>(leaveRequestService.editLeaveRequest(leaveRequestDTO, employeeId),HttpStatus.OK);
     }
 
     //used in: http://localhost:4200/home/subordinates/requests
@@ -79,19 +96,11 @@ public class LeaveRequestController {
         return new ResponseEntity<>(leaveRequestService.findAll(),HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public ResponseEntity<LeaveRequestDTO> findLeaveRequestDTO(@PathVariable Integer id){
-        return new ResponseEntity<>(leaveRequestService.findById(id),HttpStatus.OK);
-    }
-
-
 
     @GetMapping("/pending")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public ResponseEntity<List<LeaveRequestDTO>> getPendingRequest(){
         return new ResponseEntity<>(leaveRequestService.getPendingRequests(),HttpStatus.OK);
     }
-
 
 }

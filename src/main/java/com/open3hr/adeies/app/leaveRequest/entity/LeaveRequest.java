@@ -36,15 +36,15 @@ public class LeaveRequest {
     private LeaveCategory category;
 
     @Column(name = "submit_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date submitDate;
 
     @Column(name = "start_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date startDate;
 
     @Column(name = "end_date")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date endDate;
 
     @Column(name = "duration")
@@ -63,6 +63,7 @@ public class LeaveRequest {
         this.status = leaveRequestDTO.getStatus();
     }
     public LeaveRequest(LeaveRequestDTO leaveRequestDTO, Employee employee, LeaveCategory category){
+        this.id = leaveRequestDTO.getId();
         this.employee = employee;
         this.startDate = leaveRequestDTO.getStartDate();
         this.endDate = leaveRequestDTO.getEndDate();
