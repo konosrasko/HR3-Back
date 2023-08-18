@@ -240,9 +240,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (supervisor.isEmpty())
             throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + supervisorId);
 
+        List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
         try {
-            for (Employee subordinate: employeeRepository.findAllSubordinatesOf(supervisorId)){
+            for (Employee subordinate: subordinatesList){
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
                 if(subordinate.getId()!=supervisorId){ //infinite loop prevention
                     DTOSubordinates.addAll(findAllSubordinates(subordinate.getId()));
@@ -265,15 +266,5 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .toList();
     }
 
-    public boolean isSupervisor(int employeeId){
-        boolean isSuper = false;
-        Optional<Employee> foundEmployee = employeeRepository.findById(employeeId);
-        if(foundEmployee.isPresent()){
-            Optional<Employee> foundSuperV = employeeRepository.findIfSupervisor(employeeId);
-            if(foundSuperV.isPresent()){
-                isSuper = true;
-            }
-        }else throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + employeeId);
-        return isSuper;
-    }
+
 }

@@ -1,6 +1,7 @@
 package com.open3hr.adeies.app.employee.service.impl;
 
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
+import com.open3hr.adeies.app.employee.dto.EmployeeSupervisorDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
@@ -58,7 +59,10 @@ import static org.mockito.Mockito.when;
         private LeaveBalanceRepository leaveBalanceRepository;
         private Employee employee;
         private Employee employee1;
+        private Employee employee2;
         private User user;
+        private User user1;
+        private User user2;
         private LeaveRequestDTO leaveRequestDTO;
 
         private LeaveCategory leaveCategory;
@@ -78,17 +82,27 @@ import static org.mockito.Mockito.when;
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
-                    .supervisorId(2)
                     .build();
 
             employee1 = Employee.builder()
-                    .id(3)
+                    .id(2)
                     .firstName("test")
                     .lastName("testiou")
                     .email("testopoulos@gmail.com")
                     .mobileNumber("6985345634")
                     .address("testisias")
                     .address("23")
+                    .supervisorId(1)
+                    .build();
+            employee2 = Employee.builder()
+                    .id(3)
+                    .firstName("test1")
+                    .lastName("testiou1")
+                    .email("testopoulos111@gmail.com")
+                    .mobileNumber("6985345634")
+                    .address("testisias11")
+                    .address("231")
+                    .supervisorId(1)
                     .build();
 
             List<LeaveBalance> leaveBalances = new ArrayList<>();
@@ -107,6 +121,25 @@ import static org.mockito.Mockito.when;
                     .role(Role.HR)
                     .username("test")
                     .password("test")
+                    .isSupervisor(true)
+                    .build();
+
+            user1 = User.builder()
+                    .id(2)
+                    .employee(employee1)
+                    .isEnable(true)
+                    .role(Role.HR)
+                    .username("test1")
+                    .password("test1")
+                    .isSupervisor(true)
+                    .build();
+            user2 = User.builder()
+                    .id(3)
+                    .employee(employee2)
+                    .isEnable(true)
+                    .role(Role.HR)
+                    .username("test2")
+                    .password("test2")
                     .isSupervisor(false)
                     .build();
 
@@ -207,6 +240,22 @@ import static org.mockito.Mockito.when;
             assertEquals(Status.DENIED,leaveRequestDTO1.getStatus());
         }
 
+        @Test
+        void findAllSubordinates()
+        {
+            List<Employee> subordinates = new ArrayList<>();
+            subordinates.add(employee1);
+            subordinates.add(employee2);
+
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+            when(employeeRepository.findById(employee1.getId())).thenReturn(Optional.of(employee1));
+            when(employeeRepository.findById(employee2.getId())).thenReturn(Optional.of(employee2));
+
+            when(employeeRepository.findAllSubordinatesOf(employee.getId())).thenReturn(subordinates);
+
+            List<EmployeeSupervisorDTO> employeeSupervisorDTOS = employeeService.findAllSubordinates(employee.getId());
+            assertEquals(employeeSupervisorDTOS.size(),2);
+        }
 
     }
 
