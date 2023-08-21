@@ -121,7 +121,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}/changeProfile")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
     public ResponseEntity<EmployeeDTO> changeProfileOfEmployeeByAdmin(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id){
         return new ResponseEntity<>(employeeService.changeProfile(employeeDTO,id),HttpStatus.OK);
     }
