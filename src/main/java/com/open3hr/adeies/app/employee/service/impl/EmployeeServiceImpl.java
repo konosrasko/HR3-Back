@@ -56,7 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     return new EmployeeSupervisorDTO(employee, supervisorLastName);
                 })
                 .collect(Collectors.toList());
-            return employeeSupervisorList;
+        return employeeSupervisorList;
     }
 
     @Override
@@ -81,27 +81,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) throws NotFoundException, ConflictException, BadDataException {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);//Search for the employee
-        if(optionalEmployee.isPresent()){
+        if (optionalEmployee.isPresent()) {
             Optional<LeaveCategory> optionalLeaveCategory = categoryRepository.findCategoryByTitle(leaveRequestDTO.getLeaveTitle());//Search for leave category that has been requested
-            if(optionalLeaveCategory.isPresent()){
+            if (optionalLeaveCategory.isPresent()) {
                 Optional<LeaveBalance> foundBalanceOfEmployee = optionalEmployee.get().getLeaveBalanceList()
                         .stream()
                         .filter(balance -> Objects.equals(balance.getCategory().getTitle(), leaveRequestDTO.getLeaveTitle()))
                         .findAny();//Search for the balance of the leave category for this employee
-                if(foundBalanceOfEmployee.isPresent()){
+                if (foundBalanceOfEmployee.isPresent()) {
                     LeaveBalance employeesBalance = foundBalanceOfEmployee.get();
                     Date submitDate = leaveRequestDTO.getSubmitDate();
 
 
-                    if(leaveRequestDTO.getEndDate().getTime() >= leaveRequestDTO.getStartDate().getTime() ){
+                    if (leaveRequestDTO.getEndDate().getTime() >= leaveRequestDTO.getStartDate().getTime()) {
                         System.out.println("New leave request posted:");
                         System.out.println("submit date:" + leaveRequestDTO.getSubmitDate());
                         System.out.println("start date:" + leaveRequestDTO.getStartDate());
                         System.out.println("end date:" + leaveRequestDTO.getEndDate());
-                        System.out.println(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() );
-                        if(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime() ){
+                        System.out.println(leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime());
+                        if (leaveRequestDTO.getStartDate().getTime() >= leaveRequestDTO.getSubmitDate().getTime()) {
 
-                            if(leaveRequestDTO.getDuration() <= employeesBalance.getDays() - employeesBalance.getDaysTaken()){
+                            if (leaveRequestDTO.getDuration() <= employeesBalance.getDays() - employeesBalance.getDaysTaken()) {
                                 leaveRequestDTO.setId(0);
                                 leaveRequestDTO.setStatus(Status.PENDING);
                                 leaveRequestDTO.setSubmitDate(submitDate);
@@ -111,12 +111,14 @@ public class EmployeeServiceImpl implements EmployeeService {
                                 leaveRequestRepository.save(leaveRequest);
                                 return new LeaveRequestDTO(leaveRequest, optionalLeaveCategory.get());
 
-                            }else throw new ConflictException("Το υπόλοιπο ημερών δεν επαρκεί για την αίτηση άδειας αυτής της κατηγορίας (" + (employeesBalance.getDays() - employeesBalance.getDaysTaken()) + " ημέρες)");
-                        }else throw new ConflictException("H έναρξη της άδειας πρέπει να προηγείται της σημερινής ημέρας");
-                    }else throw new ConflictException("Η έναρξη της άδειας πρέπει να είναι πριν τη λήξη της.");
-                }else throw new BadDataException("Ο εργαζόμενος δεν δικαιούται άδειες αυτής της κατηγορίας.");
-            }else throw new BadDataException("Δεν υπάρχει τέτοια κατηγορία άδειας");
-        }else throw new NotFoundException("Δε βρέθηκε εργαζόμενους με το ζητούμενο id: " + employeeId);
+                            } else
+                                throw new ConflictException("Το υπόλοιπο ημερών δεν επαρκεί για την αίτηση άδειας αυτής της κατηγορίας (" + (employeesBalance.getDays() - employeesBalance.getDaysTaken()) + " ημέρες)");
+                        } else
+                            throw new ConflictException("H έναρξη της άδειας πρέπει να προηγείται της σημερινής ημέρας");
+                    } else throw new ConflictException("Η έναρξη της άδειας πρέπει να είναι πριν τη λήξη της.");
+                } else throw new BadDataException("Ο εργαζόμενος δεν δικαιούται άδειες αυτής της κατηγορίας.");
+            } else throw new BadDataException("Δεν υπάρχει τέτοια κατηγορία άδειας");
+        } else throw new NotFoundException("Δε βρέθηκε εργαζόμενους με το ζητούμενο id: " + employeeId);
     }
 
     @Override
@@ -129,8 +131,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO changeProfile(EmployeeDTO employeeDTO, Integer id) {
-        Optional<Employee> result = employeeRepository.findById(id);
-        if (result.isPresent()) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isPresent()) {
+            //αν ο employee ειναι ανενεργος
+            if (!employeeDTO.isEnabled()) {
+                //αφαιρεσε τον σαν προισταμενο των subordinates του
+                List<Employee> subordinates = employeeRepository.findAllSubordinatesOf(employeeDTO.getEmployeeId());
+                for (Employee subordinate : subordinates) {
+                    subordinate.setSupervisorId(null);
+                }
+            }
             employeeRepository.save(new Employee(employeeDTO));
             return employeeDTO;
         } else {
@@ -177,14 +187,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO findEmployeeByUserName(String username) {
         Optional<User> myUser = userRepository.findUserByUsername(username);
-        if(myUser.isPresent()){
+        if (myUser.isPresent()) {
             Optional<Employee> myEmployee = employeeRepository.findById(myUser.get().getEmployee().getId());
-            if(myEmployee.isPresent()){
+            if (myEmployee.isPresent()) {
                 return new EmployeeDTO(myEmployee.get());
-            }else {
+            } else {
                 throw new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + myUser.get().getEmployee().getId());
             }
-        }else {
+        } else {
             throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + username);
         }
     }
@@ -192,10 +202,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public LeaveRequestDTO approveLeaveRequest(Integer leaveReqId) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
-        if (leaveRequest.isPresent()){
+        if (leaveRequest.isPresent()) {
             leaveRequest.get().setStatus(Status.APPROVED);
             leaveRequestRepository.save(leaveRequest.get());
-            return  new LeaveRequestDTO((leaveRequest.get()));
+            return new LeaveRequestDTO((leaveRequest.get()));
         }
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
@@ -203,15 +213,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public LeaveRequestDTO declineLeaveRequest(Integer leaveReqId) {
         Optional<LeaveRequest> leaveRequest = leaveRequestRepository.findById(leaveReqId);
-        if (leaveRequest.isPresent()){
+        if (leaveRequest.isPresent()) {
             try {
                 leaveRequest.get().getEmployee().findBalanceOfCategory(leaveRequest.get().getCategory()).addDaysTaken(-leaveRequest.get().getDuration());
-            } catch (Exception e){
+            } catch (Exception e) {
                 throw new BadDataException("Δεν ήταν δυνατή η απόρριψη του αιτήματος.");
             }
             leaveRequest.get().setStatus(Status.DENIED);
             leaveRequestRepository.save(leaveRequest.get());
-            return  new LeaveRequestDTO(leaveRequest.get());
+            return new LeaveRequestDTO(leaveRequest.get());
         }
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
@@ -225,10 +235,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
         List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         try {
-            for (Employee subordinate: subordinatesList){
+            for (Employee subordinate : subordinatesList) {
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NotFoundException("Προέκυψε σφάλμα με την αναζήτηση των υφισταμένων");
         }
 
@@ -245,13 +255,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<EmployeeSupervisorDTO> DTOSubordinates = new ArrayList<>();
 
         try {
-            for (Employee subordinate: subordinatesList){
+            for (Employee subordinate : subordinatesList) {
                 DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
-                if(subordinate.getId()!=supervisorId){ //infinite loop prevention
+                if (subordinate.getId() != supervisorId) { //infinite loop prevention
                     DTOSubordinates.addAll(findAllSubordinates(subordinate.getId()));
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NotFoundException("Προέκυψε σφάλμα με την αναζήτηση των υφισταμένων");
         }
 
@@ -261,7 +271,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<miniEmployeeDTO> findAllSupervisors() {
-       List<Employee> supervisors = employeeRepository.findAllSupervisors();
+        List<Employee> supervisors = employeeRepository.findAllSupervisors();
         System.out.println(supervisors);
         return supervisors.stream()
                 .map(miniEmployeeDTO::new)
