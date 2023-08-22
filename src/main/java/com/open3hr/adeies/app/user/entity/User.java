@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +46,9 @@ public class User implements  UserDetails {
     @Column (name = "is_supervisor")
     private boolean isSupervisor;
 
+    @Column (name = "logged")
+    private boolean isLoggedIn;
+
     @Column (name = "is_pass_temp")
     private boolean isPassTemp;
 
@@ -71,6 +75,11 @@ public class User implements  UserDetails {
         this.employee = employee;
         this.isSupervisor = userDTO.isSupervisor();
         this.isPassTemp = userDTO.isPassTemp();
+    }
+
+    public <E> User(String username, String password, ArrayList<E> es) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override

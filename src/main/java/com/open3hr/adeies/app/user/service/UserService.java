@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service;
 
+import com.open3hr.adeies.app.Auth.LogoutRequest;
 import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
 import com.open3hr.adeies.app.user.dto.RolesDTO;
@@ -32,4 +33,6 @@ public interface UserService {
     UserDTO editUser(UserDTO userDTO, Integer userId, boolean isPassEdited);
 
     UserDTO activateDeactivateUser(Integer userId);
+
+    String userLogout(LogoutRequest logoutRequest);
 }

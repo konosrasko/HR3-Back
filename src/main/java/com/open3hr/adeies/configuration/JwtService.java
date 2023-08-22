@@ -9,14 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-
     private static final String SECRET_KEY = "b3BlbjNocmJ5b3RzYW5kbWlrZXBhdmxvc3N0YW1hdGlzdGhvZG9yaXNrb25zdGFudGlub3NzaW1vc2thaW9wb2x5ZXRlbGlzbWVnYXNvbG9udHNpcmlkaXM=";
 
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver)
@@ -78,4 +75,6 @@ public class JwtService {
 
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }

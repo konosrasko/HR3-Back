@@ -34,9 +34,10 @@ public class SecurityConfiguration{
     {
       return  http
                 .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/auth/login").permitAll().anyRequest().authenticated()
-                .and()
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/login").permitAll()
+                        )
+              .authorizeHttpRequests(authorize->authorize.requestMatchers("/auth/logout").permitAll().anyRequest().authenticated())
+//                .requestMatchers("/auth/login").permitAll().anyRequest().authenticated()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();

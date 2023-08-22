@@ -1,5 +1,5 @@
 package com.open3hr.adeies.app.Auth;
-
+import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.repository.UserRepository;
 import com.open3hr.adeies.app.user.service.impl.UserServiceImpl;
 import com.open3hr.adeies.configuration.JwtService;
@@ -11,7 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -78,9 +78,21 @@ public class AuthenticationService {
 
 
         //GENERATE TOKEN
-        User user = new User(authenticationRequest.getUsername(), authenticationRequest.getPassword(),new ArrayList<>());
-        var token = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder().token(token).build();
+        User loggedUser = userRepository.findUserByUsername(authenticationRequest.getUsername()).orElseThrow();
+        UserDetails user = new User(authenticationRequest.getUsername(), authenticationRequest.getPassword(), new ArrayList<>()) ;
+
+        if(loggedUser.isLoggedIn() == false )
+        {
+            loggedUser.setLoggedIn(true);
+            userRepository.save(loggedUser);
+            var token = jwtService.generateToken(user);
+            return AuthenticationResponse.builder().token(token).message("Welcome").build();
+        }
+        else
+        {
+            return AuthenticationResponse.builder().message("YOU ARE ALREADY LOGGED IN FROM ANOTHER SOURCE").build();
+        }
     }
+
 }
