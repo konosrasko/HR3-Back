@@ -30,7 +30,7 @@ public class EmployeeController {
     //used in: http://localhost:4200/home/leaves/add
     @PostMapping("/leaverequests/add")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public ResponseEntity<LeaveRequestDTO> postNewRequestForMe(@RequestBody LeaveRequestDTO leaveRequestDTO){
+    public ResponseEntity<LeaveRequestDTO> newLeaveRequestForLoggedUser(@RequestBody LeaveRequestDTO leaveRequestDTO){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
         return new ResponseEntity<>(employeeService.addLeaveRequest(leaveRequestDTO,id), HttpStatus.CREATED);
@@ -39,22 +39,23 @@ public class EmployeeController {
     //used in: http://localhost:4200/home/leaves/add (by HR only)
     @PostMapping("/{id}/leaverequests/add")
     @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<LeaveRequestDTO> postNewRequestsForAnother(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
+    public ResponseEntity<LeaveRequestDTO> newLeaveRequestForEmployee(@RequestBody LeaveRequestDTO leaveRequestDTO, @PathVariable Integer id){
         return new ResponseEntity<>(employeeService.addLeaveRequest(leaveRequestDTO,id),HttpStatus.CREATED);
     }
 
     //used in: http://localhost:4200/home/leaves/add
     @GetMapping("/balance")
     @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
-    public ResponseEntity<List<LeaveBalanceDTO>> getMyLeaveBalances(){
+    public ResponseEntity<List<LeaveBalanceDTO>> getLeaveBalanceOfLoggedUser(){
         String loggedUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         int id = userService.getUserInfo(loggedUsername).getEmployeeId();
         return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
+
     //used in: http://localhost:4200/home/leaves/add (by HR only)
     @GetMapping("/{id}/balance")
     @PreAuthorize("hasRole('HR')")
-    public ResponseEntity<List<LeaveBalanceDTO>> getAllLeaveBalancesOfAnother(@PathVariable Integer id){
+    public ResponseEntity<List<LeaveBalanceDTO>> getLeaveBalancesOfEmployee(@PathVariable Integer id){
         return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
 
@@ -77,9 +78,6 @@ public class EmployeeController {
     }
 
 
-
-
-
     /* -------- v Undocumented v -------- */
     /* ---------------------------------- */
     @GetMapping("")
@@ -98,13 +96,6 @@ public class EmployeeController {
     @PreAuthorize("hasRole('HR')")
     public ResponseEntity<EmployeeDTO> addEmployee(@RequestBody EmployeeDTO employeeDTO){
         return new ResponseEntity<>(employeeService.addEmployee(employeeDTO),HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('Admin')")
-    public ResponseEntity deleteById(@PathVariable Integer id){
-        employeeService.deleteById(id);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/withoutAccount")

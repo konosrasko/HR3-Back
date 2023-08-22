@@ -18,8 +18,6 @@ public interface EmployeeService {
 
     EmployeeDTO addEmployee(EmployeeDTO employeeDTO);
 
-    void deleteById(Integer id);
-
     LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId);
 
     List<EmployeeDTO> employeesWithoutAccount();

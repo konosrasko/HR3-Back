@@ -74,11 +74,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        this.employeeRepository.findById(id).orElseThrow(() -> new NotFoundException("Δε βρέθηκε ο χρήστης με το ζητούμενο id: " + id));
-    }
-
-    @Override
     public LeaveRequestDTO addLeaveRequest(LeaveRequestDTO leaveRequestDTO, int employeeId) throws NotFoundException, ConflictException, BadDataException {
         Optional<Employee> optionalEmployee = employeeRepository.findById(employeeId);//Search for the employee
         if (optionalEmployee.isPresent()) {
