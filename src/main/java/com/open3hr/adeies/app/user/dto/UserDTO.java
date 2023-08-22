@@ -20,6 +20,7 @@ public class UserDTO {
         private Integer employeeId;
         private Role role;
         private boolean isSupervisor;
+        private boolean isPassTemp;
 
         public UserDTO(User user) {
                 this.id = user.getId();
@@ -29,5 +30,6 @@ public class UserDTO {
                 this.role = user.getRole();
                 this.employeeId = user.getEmployee().getId();
                 this.isSupervisor = user.isSupervisor();
+                this.isPassTemp = user.isPassTemp();
         }
 }
