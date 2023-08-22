@@ -186,6 +186,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDTO editUser(UserDTO userDTO, Integer userId, boolean isPassEdited) {
         Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isPresent()) {
+
+            //Σε περίπτωση που αφαιρούμε το δικαίωμα supervisor του χρήστη:
+            boolean userWasSupervisor = foundUser.get().isSupervisor();
+            if (userWasSupervisor && !userDTO.isSupervisor()){
+                Optional<Employee> supervisor = Optional.empty(); //o supervisor του supervisor
+                try {
+                    //ευρεση του supervisor του user (optional)
+                    supervisor = employeeRepository.findById(employeeRepository.findById(userDTO.getEmployeeId()).get().getSupervisorId());
+                } catch (Exception e){System.out.println(e);}
+                finally {
+                    List<Employee> subordinates = employeeRepository.findAllSubordinatesOf(userDTO.getEmployeeId());
+                    for (Employee subordinate: subordinates) {
+                        //αν ο supervisor εχει supervisor τότε τον κληρονωμούν οι subordinates
+                        if (supervisor.isPresent() && !Objects.equals(supervisor.get().getId(), userDTO.getEmployeeId()))
+                            subordinate.setSupervisorId(supervisor.get().getId());
+                            //αλλιώς μένουν χωρίς supervisor
+                        else subordinate.setSupervisorId(null);
+                    }
+                }
+            }
+
             userDTO.setId(userId);
             if(isPassEdited){
                 userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));

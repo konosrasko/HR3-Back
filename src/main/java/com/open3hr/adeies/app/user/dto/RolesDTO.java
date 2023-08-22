@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RolesDTO {
 
+        private String username;
         private Role role;
         private boolean isSupervisor;
 
         public RolesDTO(User user) {
+                this.username = user.getUsername();
                 this.role = user.getRole();
                 this.isSupervisor = user.isSupervisor();
         }
