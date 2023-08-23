@@ -7,7 +7,6 @@ import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.enums.Role;
-import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
@@ -17,8 +16,6 @@ import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
 import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.repository.UserRepository;
-import com.open3hr.adeies.app.user.service.impl.UserServiceImpl;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 
     @ExtendWith(MockitoExtension.class)
-    class EmployeeServiceTest {
+    class employeeServiceTest {
         @Mock
         private EmployeeRepository employeeRepository;
 
