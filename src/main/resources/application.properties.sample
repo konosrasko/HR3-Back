@@ -1,5 +1,6 @@
 # Spring
 spring.main.allow-bean-definition-overriding = true
+spring.sql.init.mode = always
 
 # Logging
 logging.level.root = warn
