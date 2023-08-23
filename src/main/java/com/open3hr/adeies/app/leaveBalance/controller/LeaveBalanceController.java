@@ -29,11 +29,4 @@ public class LeaveBalanceController {
         return new ResponseEntity<>(leaveBalanceService.findById(id),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
-    public ResponseEntity deleteById(@PathVariable Integer id){
-        leaveBalanceService.deleteById(id);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
 }
