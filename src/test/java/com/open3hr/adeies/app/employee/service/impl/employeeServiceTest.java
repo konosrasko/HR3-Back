@@ -23,19 +23,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
-
 
     @ExtendWith(MockitoExtension.class)
     class employeeServiceTest {
@@ -53,7 +47,6 @@ import static org.mockito.Mockito.when;
         @InjectMocks
         private EmployeeServiceImpl employeeService;
 
-
         @Mock
         private LeaveBalanceRepository leaveBalanceRepository;
         private Employee employee;
@@ -70,10 +63,7 @@ import static org.mockito.Mockito.when;
         private LeaveRequest leaveRequest;
 
         @BeforeEach
-        public void init() throws ParseException {
-
-
-
+        public void Init() throws ParseException {
             employee = Employee.builder()
                     .id(1)
                     .firstName("test")
@@ -164,10 +154,6 @@ import static org.mockito.Mockito.when;
                     .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-26"))
                     .status(Status.PENDING)
                     .build();
-
-
-
-
         }
 
         @Test
