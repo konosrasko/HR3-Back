@@ -70,6 +70,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     throw new ConflictException("Ο εργαζόμενος με id " + userDTO.getEmployeeId() + " έχει ήδη account.");
                 }
             }
+            userDTO.setPassTemp(true);
             userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
             userRepository.save(new User(userDTO, myEmployee.get()));
             return userDTO;

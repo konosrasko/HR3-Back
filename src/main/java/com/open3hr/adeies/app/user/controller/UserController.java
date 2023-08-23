@@ -38,7 +38,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getEmployeeUserById(userId),HttpStatus.OK);
     }
 
-
+    //used in: http://localhost:4200/login
     @GetMapping("/user_info")
     @PreAuthorize("hasRole('HR') OR hasRole('Employee') OR hasRole('Admin')")
     public ResponseEntity<UserDTO> getUserInfo(){
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PutMapping("/admin/{userId}/{isPassEdited}")
-    @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
     public ResponseEntity<UserDTO> editUser(@RequestBody UserDTO userDTO, @PathVariable Integer userId, @PathVariable boolean isPassEdited){
         return new ResponseEntity<>(userService.editUser(userDTO, userId, isPassEdited),HttpStatus.OK);
     }

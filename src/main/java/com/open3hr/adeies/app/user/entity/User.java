@@ -49,6 +49,9 @@ public class User implements  UserDetails {
     @Column (name = "logged")
     private boolean isLoggedIn;
 
+    @Column (name = "is_pass_temp")
+    private boolean isPassTemp;
+
     @OneToOne(fetch = FetchType.EAGER,
             cascade = {
             CascadeType.PERSIST,
@@ -71,6 +74,7 @@ public class User implements  UserDetails {
         this.role = userDTO.getRole();
         this.employee = employee;
         this.isSupervisor = userDTO.isSupervisor();
+        this.isPassTemp = userDTO.isPassTemp();
     }
 
     public <E> User(String username, String password, ArrayList<E> es) {

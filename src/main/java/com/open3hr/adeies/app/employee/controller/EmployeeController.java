@@ -54,7 +54,7 @@ public class EmployeeController {
 
     //used in: http://localhost:4200/home/leaves/add (by HR only)
     @GetMapping("/{id}/balance")
-    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasRole('HR') or hasRole('Admin')")
     public ResponseEntity<List<LeaveBalanceDTO>> getLeaveBalancesOfEmployee(@PathVariable Integer id){
         return new ResponseEntity<>(leaveBalanceService.showBalancesOfEmployee(id),HttpStatus.OK);
     }
