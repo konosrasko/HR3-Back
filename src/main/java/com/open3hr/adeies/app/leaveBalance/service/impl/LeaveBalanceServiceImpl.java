@@ -2,6 +2,7 @@ package com.open3hr.adeies.app.leaveBalance.service.impl;
 
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
+import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveBalance.dto.LeaveBalanceDTO;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
@@ -48,20 +49,6 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
         } else throw new RuntimeException("Δεν βρέθηκε υπόλοιπο άδειας με id: "+ id);
     }
 
-//    @Override
-//    public LeaveBalanceDTO save(LeaveBalanceDTO leaveBalanceDTO) {
-//        Optional<LeaveCategory> foundCategory = categoryRepository.findCategoryByTitle(leaveBalanceDTO.getCategoryTitle());
-//        if(foundCategory.isPresent()){
-//            LeaveBalance myLeaveBalance = new LeaveBalance(leaveBalanceDTO);
-//            return new LeaveBalanceDTO(leaveBalanceRepository.save(myLeaveBalance));
-//        }
-//    }
-
-    @Override
-    public void deleteById(Integer id) {
-        this.leaveBalanceRepository.findById(id).orElseThrow(()-> new RuntimeException("Η άδεια με το id : "+ id +" δεν βρέθηκε"));
-    }
-
     @Override
     public void addLeaveBalanceToEmployee(LeaveBalanceDTO leaveBalanceDTO, Integer employeeId) {
         leaveBalanceDTO.setId(0);
@@ -89,5 +76,20 @@ public class LeaveBalanceServiceImpl implements LeaveBalanceService {
                     })
                     .toList();
         }else throw new RuntimeException("Ο εργαζόμενος με το συγκεκριμένο id δεν βρέθηκε");
+    }
+
+    @Override
+    public void deleteLeaveBalanceOfEmployee(int employeeId, int leaveBalanceId){
+        if(employeeRepository.existsById(employeeId)){
+            List<LeaveBalance> allBalancesOfEmployee = leaveBalanceRepository.findAll()
+                    .stream()
+                    .filter(leaveBalance -> leaveBalance.getEmployee().getId() == employeeId)
+                    .toList();
+            Optional<LeaveBalance> leaveToDelete = allBalancesOfEmployee
+                    .stream()
+                    .filter(leaveBalance -> leaveBalance.getId() == leaveBalanceId)
+                    .findFirst();
+            leaveToDelete.ifPresent(leaveBalance -> leaveBalanceRepository.deleteById(leaveBalance.getId()));
+        }else throw new NotFoundException("Ο ζητούμενος εργαζόμενος δεν βρέθηκε");
     }
 }

@@ -153,7 +153,10 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findAllSupervisors(),HttpStatus.OK);
     }
 
-
-    // make employee see personal leaveBalance
-    // make employee edit personal details
+    @DeleteMapping("/{employeeId}/leavebalance/{leaveBalanceId}")
+    @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
+    public ResponseEntity deleteLeave(@PathVariable Integer employeeId, @PathVariable Integer leaveBalanceId){
+        leaveBalanceService.deleteLeaveBalanceOfEmployee(employeeId, leaveBalanceId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
