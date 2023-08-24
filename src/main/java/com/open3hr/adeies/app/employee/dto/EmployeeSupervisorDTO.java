@@ -24,8 +24,9 @@ public class EmployeeSupervisorDTO {
     private Date hireDate;
     private boolean enabled;
     private String supervisorLastName;
+    private String supervisorFirstName;
 
-    public EmployeeSupervisorDTO(Employee employee,String supervisorLastName ){
+    public EmployeeSupervisorDTO(Employee employee, String supervisorLastName, String supervisorFirstName ){
         this.employeeId = employee.getId();
         this.firstName = employee.getFirstName();
         this.lastName = employee.getLastName();
@@ -35,6 +36,6 @@ public class EmployeeSupervisorDTO {
         this.hireDate = employee.getHireDate();
         this.enabled = employee.isEnabled();
         this.supervisorLastName = supervisorLastName;
+        this.supervisorFirstName = supervisorFirstName;
     }
-
 }

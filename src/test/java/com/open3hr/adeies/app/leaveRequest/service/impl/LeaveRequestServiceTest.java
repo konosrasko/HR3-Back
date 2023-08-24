@@ -208,8 +208,8 @@ public class LeaveRequestServiceTest {
         leaveRequests.add(leaveRequest);
         leaveRequests.add(leaveRequest1);
         List<EmployeeSupervisorDTO> subordinates = new ArrayList<>();
-        EmployeeSupervisorDTO employeeSupervisorDTO = new EmployeeSupervisorDTO(employee,supervisor.getLastName());
-        EmployeeSupervisorDTO employeeSupervisorDTO2 = new EmployeeSupervisorDTO(employee2,supervisor.getLastName());
+        EmployeeSupervisorDTO employeeSupervisorDTO = new EmployeeSupervisorDTO(employee,supervisor.getLastName(), supervisor.getFirstName());
+        EmployeeSupervisorDTO employeeSupervisorDTO2 = new EmployeeSupervisorDTO(employee2,supervisor.getLastName(), supervisor.getFirstName());
         subordinates.add(employeeSupervisorDTO);
         subordinates.add(employeeSupervisorDTO2);
         when(leaveRequestRepository.leaveRequestHistoryOfEmployee(employeeSupervisorDTO.getEmployeeId())).thenReturn(leaveRequests);
