@@ -52,8 +52,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                     }
                     String supervisorLastName = employeeRepository.findById(employee.getSupervisorId())
                             .map(Employee::getLastName)
-                            .orElse(""); // Get supervisor's last name or set to empty string if not found
-                    return new EmployeeSupervisorDTO(employee, supervisorLastName);
+                            .orElse("");// Get supervisor's last name or set to empty string if not found
+                    String supervisorFirstName = employeeRepository.findById(employee.getSupervisorId())
+                            .map(Employee::getFirstName)
+                            .orElse("");
+                    return new EmployeeSupervisorDTO(employee, supervisorLastName, supervisorFirstName);
                 })
                 .collect(Collectors.toList());
         return employeeSupervisorList;
@@ -231,7 +234,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> subordinatesList = employeeRepository.findAllSubordinatesOf(supervisorId);
         try {
             for (Employee subordinate : subordinatesList) {
-                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
+                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName(), employeeRepository.findById(subordinate.getSupervisorId()).get().getFirstName()));
             }
         } catch (Exception e) {
             throw new NotFoundException("Προέκυψε σφάλμα με την αναζήτηση των υφισταμένων");
@@ -251,7 +254,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         try {
             for (Employee subordinate : subordinatesList) {
-                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName()));
+                DTOSubordinates.add(new EmployeeSupervisorDTO(subordinate, employeeRepository.findById(subordinate.getSupervisorId()).get().getLastName(), employeeRepository.findById(subordinate.getSupervisorId()).get().getFirstName()));
                 if (subordinate.getId() != supervisorId) { //infinite loop prevention
                     DTOSubordinates.addAll(findAllSubordinates(subordinate.getId()));
                 }
