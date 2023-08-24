@@ -104,12 +104,6 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.employeesWithoutAccount(),HttpStatus.OK);
     }
 
-    @PostMapping("/{id}/leavebalance")
-    @PreAuthorize("hasRole('HR')")
-    public ResponseEntity addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
-        leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO, id);
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
 
     @PutMapping("/{id}/changeProfile")
     @PreAuthorize("hasRole('Admin') OR hasRole('HR') OR hasRole('Employee')")
@@ -153,10 +147,27 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findAllSupervisors(),HttpStatus.OK);
     }
 
+    // REQUESTS FOR EMPLOYEE'S LEAVE BALANCE
+
+    @PostMapping("/{id}/leavebalance")
+    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity addLeaveBalanceToAnEmployee(@PathVariable Integer id, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
+        leaveBalanceService.addLeaveBalanceToEmployee(leaveBalanceDTO, id);
+        return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @PutMapping("{employeeId}/leavebalance")
+    @PreAuthorize("hasRole('HR')")
+    public ResponseEntity editLeaveBalanceOfAnEmployee(@PathVariable Integer employeeId, @RequestBody LeaveBalanceDTO leaveBalanceDTO){
+        leaveBalanceService.editLeaveBalanceOfEmployee(leaveBalanceDTO, employeeId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @DeleteMapping("/{employeeId}/leavebalance/{leaveBalanceId}")
-    @PreAuthorize("hasRole('Admin') OR hasRole('HR')")
+    @PreAuthorize("hasRole('HR')")
     public ResponseEntity deleteLeave(@PathVariable Integer employeeId, @PathVariable Integer leaveBalanceId){
         leaveBalanceService.deleteLeaveBalanceOfEmployee(employeeId, leaveBalanceId);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }

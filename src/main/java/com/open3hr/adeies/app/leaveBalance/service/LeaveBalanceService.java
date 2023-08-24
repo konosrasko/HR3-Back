@@ -10,6 +10,8 @@ public interface LeaveBalanceService {
 
     LeaveBalanceDTO findById(Integer id);
 
+    void editLeaveBalanceOfEmployee(LeaveBalanceDTO balanceDTO, Integer employeeId);
+
     void deleteLeaveBalanceOfEmployee(int employeeId, int leaveBalanceId);
 
     void addLeaveBalanceToEmployee(LeaveBalanceDTO leaveBalanceDTO, Integer employeeId);
