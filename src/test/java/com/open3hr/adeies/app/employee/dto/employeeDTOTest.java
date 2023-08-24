@@ -37,8 +37,8 @@ public class employeeDTOTest {
                 .supervisorId(1)
                 .build();
 
-        EmployeeDTO myEmployeeDTOFromEntity = new EmployeeDTO(myEmployee);
+        EmployeeDTO myEmployeeEntityToDTO = new EmployeeDTO(myEmployee);
 
-        assertThat(myEmployeeDTO.equals(myEmployeeDTOFromEntity)).isTrue();
+        assertThat(myEmployeeDTO.equals(myEmployeeEntityToDTO)).isTrue();
     }
 }

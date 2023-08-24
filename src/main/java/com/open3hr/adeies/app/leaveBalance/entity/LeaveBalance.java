@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,5 +63,22 @@ public class LeaveBalance {
 
     public void addDaysTaken(int daysToAdd){
         this.daysTaken += daysToAdd;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        LeaveBalance that = (LeaveBalance) obj;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(days, that.days) &&
+                Objects.equals(daysTaken, that.daysTaken) &&
+                Objects.equals(employee, that.employee) &&
+                Objects.equals(category, that.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, days, daysTaken, employee, category);
     }
 }
