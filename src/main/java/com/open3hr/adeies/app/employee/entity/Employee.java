@@ -11,13 +11,13 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-
 @Builder
 public class Employee {
 
@@ -97,5 +97,26 @@ public class Employee {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id &&
+                enabled == employee.enabled &&
+                supervisorId == employee.supervisorId &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(email, employee.email) &&
+                Objects.equals(mobileNumber, employee.mobileNumber) &&
+                Objects.equals(address, employee.address) &&
+                Objects.equals(hireDate, employee.hireDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, mobileNumber, address, hireDate, enabled, supervisorId);
     }
 }
