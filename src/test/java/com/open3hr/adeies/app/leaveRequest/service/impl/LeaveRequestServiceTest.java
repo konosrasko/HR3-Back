@@ -7,6 +7,7 @@ import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.enums.Role;
 import com.open3hr.adeies.app.enums.Status;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
+import com.open3hr.adeies.app.leaveBalance.repository.LeaveBalanceRepository;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveCategory.repository.LeaveCategoryRepository;
 import com.open3hr.adeies.app.leaveRequest.dto.LeaveRequestDTO;
@@ -16,6 +17,7 @@ import com.open3hr.adeies.app.leaveRequest.repository.LeaveRequestRepository;
 import com.open3hr.adeies.app.leaveRequest.service.LeaveRequestService;
 import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.repository.UserRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +53,8 @@ public class LeaveRequestServiceTest {
     @Mock
     private UserRepository userRepository;
 
-
+    @Mock
+    private LeaveBalanceRepository leaveBalanceRepository;
     @InjectMocks
     private LeaveRequestServiceImpl leaveRequestService;
 
@@ -156,6 +159,7 @@ public class LeaveRequestServiceTest {
                 .submitDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-09-22"))
                 .startDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-09-24"))
                 .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-09-26"))
+                .duration(3)
                 .status(Status.PENDING)
                 .build();
 
@@ -217,5 +221,29 @@ public class LeaveRequestServiceTest {
         assertEquals(2,subReqList.size());
     }
 
+    @Test
+    void editLeaveRequestTest() throws ParseException {
+        LeaveRequestDTO editedLeaveRequest = LeaveRequestDTO.builder()
+                .id(leaveRequest.getId())
+                .leaveTitle(leaveRequest.getCategory().getTitle())
+                .status(leaveRequest.getStatus())
+                .submitDate(leaveRequest.getSubmitDate())
+                .startDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-09-26"))
+                .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-10-29"))
+                .duration(3)
+                .build();
+        when(leaveRequestRepository.findById(editedLeaveRequest.getId())).thenReturn(Optional.of(leaveRequest));
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        when(leaveCategoryRepository.findCategoryByTitle(editedLeaveRequest.getLeaveTitle())).thenReturn(Optional.of(leaveCategory));
 
+        LeaveRequestDTO answer = leaveRequestService.editLeaveRequest(editedLeaveRequest,employee.getId());
+        Assert.assertEquals(editedLeaveRequest,answer);
+
+    }
+
+    @Test
+    void declineLeaveRequest()
+    {
+        
+    }
 }
