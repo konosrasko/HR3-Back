@@ -236,6 +236,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setLoggedIn(false);
         userRepository.save(user);
 
-        return ("you have been logged out succesfully");
+        return ("you have been logged out successfully");
     }
 }

@@ -242,6 +242,7 @@ import static org.mockito.Mockito.when;
             when(leaveRequestRepository.findById(leaveRequest.getId())).thenReturn(Optional.of(leaveRequest));
             LeaveRequestDTO leaveRequestDTO1 = employeeService.declineLeaveRequest(leaveRequest.getId());
             assertEquals(Status.DENIED,leaveRequestDTO1.getStatus());
+            assertEquals(18,employee.getLeaveBalanceList().get(0).getDays());
         }
 
         @Test

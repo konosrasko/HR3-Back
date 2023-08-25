@@ -21,11 +21,11 @@ INSERT INTO `leave_balance` (`id`, `employee_id`, `leave_category_id`, `days`, `
 
 
 
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (1, 1, 1, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'DENIED');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (2, 2, 2, '2023-05-02 10:00:00', '2023-06-01', '2023-07-01', 30, 'DENIED');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (3, 3, 3, '2023-04-13 12:40:30', '2023-06-01', '2023-07-01', 30, 'DENIED');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (4, 4, 2, '2023-05-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'DENIED');
-INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-04-30 12:00:00', '2023-06-01', '2023-07-01', 30, 'DENIED');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (1, 1, 1, '2023-05-30', '2023-06-01', '2023-07-01', 30, 'DENIED');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (2, 2, 2, '2023-05-02', '2023-06-01', '2023-07-01', 30, 'DENIED');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (3, 3, 3, '2023-04-13', '2023-06-01', '2023-07-01', 30, 'DENIED');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (4, 4, 2, '2023-05-30', '2023-06-01', '2023-07-01', 30, 'DENIED');
+INSERT INTO `leave_request` (`id`, `employee_id`, `leave_category_id`, `submit_date`, `start_date`, `end_date`, `duration`, `status`) VALUES (5, 1, 1, '2023-04-30', '2023-06-01', '2023-07-01', 30, 'DENIED');
 
 
 INSERT INTO `user` (`id`, `username`, `password`, `enabled`, `employee_id`, `role`,`is_supervisor`,`logged`) VALUES (1, 'schatzis', '$2a$12$HbC4Qa3XDqoUIxtia5o19OptfHIeQccF1kWapk9yRztFlafnwoE4i', true, 1, 'Admin',1,0);
