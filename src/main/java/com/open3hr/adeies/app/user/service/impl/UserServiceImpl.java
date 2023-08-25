@@ -211,7 +211,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             userDTO.setId(userId);
             if(isPassEdited){
                 userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
-                userDTO.setPassTemp(true);
+                userDTO.setPassTemp(false);
             }
             return new UserDTO(userRepository.save(new User(userDTO, foundUser.get().getEmployee())));
         } else throw new NotFoundException("Δε βρέθηκε χρήστης με το ζητούμενο id: " + userId);
