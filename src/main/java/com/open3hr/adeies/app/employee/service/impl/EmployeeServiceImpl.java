@@ -224,6 +224,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         throw new NotFoundException("Δε βρέθηκε αίτημα με το ζητούμενο id: " + leaveRequest);
     }
 
+
     @Override
     public List<EmployeeSupervisorDTO> findAllDirectSubordinates(Integer supervisorId) {
         Optional<Employee> supervisor = employeeRepository.findById(supervisorId);
@@ -266,11 +267,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         return DTOSubordinates;
     }
 
+    @Override
+    public List<miniEmployeeDTO> getFilteredSupervisors(int id) {
+        Optional<Employee> employee = employeeRepository.findById(id);
+        List<Employee> employeeList = new ArrayList<>();
+        if(employee.isPresent()){
+            List<Employee> supervisors = employeeRepository.findAllSupervisors();
+             List<EmployeeSupervisorDTO> subordinates =  findAllSubordinates(employee.get().getId());
+
+             for (Employee supervisor: supervisors){
+                 boolean flag = true;
+                 for(EmployeeSupervisorDTO subordinate : subordinates){
+                     if(Objects.equals(subordinate.getEmployeeId(), supervisor.getId())){
+                         flag= false;
+                         break;
+                     }
+                 }
+                 if (flag) {
+                     employeeList.add(supervisor);
+                 }
+             }
+             return employeeList.stream()
+                    .map(miniEmployeeDTO::new)
+                    .toList();
+        }
+        else throw new NotFoundException("Δε βρέθηκε υπάλληλος με το ζητούμενο id: " + id);
+    }
 
     @Override
     public List<miniEmployeeDTO> findAllSupervisors() {
         List<Employee> supervisors = employeeRepository.findAllSupervisors();
-        System.out.println(supervisors);
+
         return supervisors.stream()
                 .map(miniEmployeeDTO::new)
                 .toList();

@@ -77,6 +77,13 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.findAllSubordinates(id), HttpStatus.OK);
     }
 
+    //used in: http://localhost:4200/home/subordinates
+    @GetMapping("{id}/filtered-supervisors")
+    @PreAuthorize("hasRole('HR') OR hasRole('Admin') OR hasRole('Employee')")
+    public ResponseEntity<List<miniEmployeeDTO>> getFilteredSubordinates(@PathVariable Integer id){
+        return new ResponseEntity<>(employeeService.getFilteredSupervisors(id), HttpStatus.OK);
+    }
+
 
     /* -------- v Undocumented v -------- */
     /* ---------------------------------- */

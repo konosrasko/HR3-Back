@@ -42,4 +42,5 @@ public interface EmployeeService {
 
     LeaveRequestDTO declineLeaveRequest(Integer leaveReqId);
 
+    List<miniEmployeeDTO> getFilteredSupervisors(int id);
 }
