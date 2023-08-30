@@ -151,6 +151,27 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void findAll(){
+        List<User> userList = new ArrayList<>();
+        userList.add((userSupervisor));
+        userList.add((userEmployee));
+        userList.add((userEmployee2));
+        when(userRepository.findAll()).thenReturn(userList);
+        List<UserDTO> userDTOS = new ArrayList<>();
+        userDTOS.add(new UserDTO(userSupervisor));
+        userDTOS.add(new UserDTO(userEmployee));
+        userDTOS.add(new UserDTO(userEmployee2));
+        assertEquals(userDTOS, userService.findAll());
+    }
+
+    @Test
+    void findById(){
+        when(userRepository.findById(employee2.getId())).thenReturn(Optional.ofNullable(userEmployee2));
+        UserDTO userDTO = new UserDTO(userEmployee2);
+        assertEquals(userDTO, userService.findById(employee2.getId()));
+    }
+
 
     @Test
     public void testCreateAccount_Success() {
