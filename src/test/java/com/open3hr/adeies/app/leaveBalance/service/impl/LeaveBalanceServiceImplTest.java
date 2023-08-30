@@ -214,30 +214,76 @@ class LeaveBalanceServiceImplTest {
 
         verify(leaveBalanceRepository, times(1)).save(any(LeaveBalance.class));
     }
-//    @Test
-//    void testShowBalancesOfEmployee() {
-//        LeaveBalance leaveBalance = LeaveBalance.builder()
-//                .id(1)
-//                .employee(employee)
-//                .category(leaveCategory)
-//                .days(18)
-//                .daysTaken(0)
-//                .build();
-//
-//        List<LeaveBalance> leaveBalances = new ArrayList<>();
-//        leaveBalances.add(leaveBalance);
-//
-//        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
-//        when(leaveCategoryRepository.findById(leaveBalance.getCategory().getId())).thenReturn(Optional.of(leaveCategory));
-//        when(employee.getLeaveBalanceList()).thenReturn(leaveBalances);
-//
-//        List<LeaveBalanceDTO> result = leaveBalanceService.showBalancesOfEmployee(employee.getId());
-//
-//        assertEquals(1, result.size());
-//        assertEquals(leaveBalance.getId(), result.get(0).getId());
-//        assertEquals(leaveCategory.getTitle(), result.get(0).getCategoryTitle());
-//        assertEquals(leaveBalance.getDays(), result.get(0).getDays());
-//        assertEquals(leaveBalance.getDaysTaken(), result.get(0).getDaysTaken());
-//    }
+    @Test
+    void testShowBalancesOfEmployee() {
+        LeaveBalance leaveBalance = LeaveBalance.builder()
+                .id(1)
+                .employee(employee)
+                .category(leaveCategory)
+                .days(18)
+                .daysTaken(0)
+                .build();
+
+        List<LeaveBalance> leaveBalances = new ArrayList<>();
+        leaveBalances.add(leaveBalance);
+
+        when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
+        when(leaveCategoryRepository.findById(leaveBalance.getCategory().getId())).thenReturn(Optional.of(leaveCategory));
+
+        List<LeaveBalanceDTO> result = leaveBalanceService.showBalancesOfEmployee(employee.getId());
+
+        assertEquals(1, result.size());
+        assertEquals(leaveBalance.getId(), result.get(0).getId());
+        assertEquals(leaveCategory.getTitle(), result.get(0).getCategoryTitle());
+        assertEquals(leaveBalance.getDays(), result.get(0).getDays());
+        assertEquals(leaveBalance.getDaysTaken(), result.get(0).getDaysTaken());
+    }
+
+    @Test
+    void findLeaveBalanceById(){
+        LeaveBalance leaveBalance = LeaveBalance.builder()
+                .id(1)
+                .employee(employee)
+                .category(leaveCategory)
+                .days(18)
+                .daysTaken(0)
+                .build();
+
+        List<LeaveBalance> leaveBalances = new ArrayList<>();
+        leaveBalances.add(leaveBalance);
+        leaveCategory.setBalances(leaveBalances);
+
+        when(leaveBalanceRepository.findById(1)).thenReturn(Optional.of(leaveBalance));
+        when(leaveCategoryRepository.findById(leaveBalance.getId())).thenReturn(Optional.of(leaveCategory));
+
+        assertNotNull(leaveBalanceService.findById(1));
+    }
+
+    @Test
+    void testFindAll(){
+        LeaveBalance leaveBalance = LeaveBalance.builder()
+                .id(1)
+                .employee(employee)
+                .category(leaveCategory)
+                .days(18)
+                .daysTaken(0)
+                .build();
+
+        LeaveCategory leaveCategory = new LeaveCategory();
+        leaveCategory.setId(1);
+
+        when(leaveBalanceRepository.findAll()).thenReturn(List.of(leaveBalance));
+        when(leaveCategoryRepository.findById(leaveCategory.getId())).thenReturn(Optional.of(leaveCategory));
+
+        List<LeaveBalanceDTO> result = leaveBalanceService.findAll();
+
+        verify(leaveBalanceRepository, times(1)).findAll();
+        verify(leaveCategoryRepository, times(1)).findById(leaveCategory.getId());
+
+        assertEquals(1, result.size());
+        LeaveBalanceDTO dto = result.get(0);
+        assertEquals(leaveBalance.getId(), dto.getId());
+
+    }
 
 }
