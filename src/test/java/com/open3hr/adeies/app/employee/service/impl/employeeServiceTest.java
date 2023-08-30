@@ -28,10 +28,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
-    @ExtendWith(MockitoExtension.class)
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
     class employeeServiceTest {
         @Mock
         private EmployeeRepository employeeRepository;
@@ -52,6 +54,7 @@ import static org.mockito.Mockito.when;
         private Employee employee;
         private Employee employee1;
         private Employee employee2;
+        private List<LeaveRequest> leaveRequests = new ArrayList<>();
 
         private User user;
         private User user1;
@@ -61,6 +64,7 @@ import static org.mockito.Mockito.when;
         private LeaveCategory leaveCategory;
 
         private LeaveRequest leaveRequest;
+        private LeaveRequest leaveRequest1;
 
         @BeforeEach
         public void Init() throws ParseException {
@@ -155,9 +159,17 @@ import static org.mockito.Mockito.when;
                     .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-05-26"))
                     .status(Status.PENDING)
                     .build();
-
-
-
+            leaveRequest1 =  LeaveRequest.builder()
+                    .id(2)
+                    .employee(employee)
+                    .category(leaveCategory)
+                    .submitDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-06-22"))
+                    .startDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-06-24"))
+                    .endDate(new SimpleDateFormat("yyyy-MM-dd").parse("2023-06-26"))
+                    .status(Status.PENDING)
+                    .build();
+            leaveRequests.add(leaveRequest);
+            leaveRequests.add(leaveRequest1);
 
         }
 
@@ -271,4 +283,72 @@ import static org.mockito.Mockito.when;
             List<miniEmployeeDTO> miniEmployeeDTOList = employeeService.findAllSupervisors();
             Assertions.assertEquals(1,miniEmployeeDTOList.size());
         }
+    @Test
+    void testFindAllEmployees() {
+        Employee supervisor = Employee.builder()
+                .id(2)
+                .firstName("Supervisor")
+                .lastName("Supervisoriou")
+                .build();
+
+        Employee employee1 = Employee.builder()
+                .id(1)
+                .firstName("Employee")
+                .lastName("Employeeliou")
+                .supervisorId(2)
+                .build();
+
+        List<Employee> employeeList = List.of(supervisor, employee1);
+
+        when(employeeRepository.findAll()).thenReturn(employeeList);
+        when(employeeRepository.findById(anyInt()))
+                .thenAnswer(invocation -> {
+                    int idArgument = invocation.getArgument(0);
+                    if (idArgument == 2) {
+                        return Optional.of(supervisor);
+                    } else {
+                        return Optional.empty();
+                    }
+                });
+
+        List<EmployeeSupervisorDTO> result = employeeService.findAllEmployees();
+
+
     }
+    @Test
+    void  requestHistory(){
+    when(leaveRequestRepository.leaveRequestHistoryOfEmployee(employee.getId())).thenReturn(leaveRequests);
+    assertEquals(employeeService.requestHistoryOfEmployee(employee.getId()).size(),2);
+
+    }
+
+    @Test
+    void testGetFilteredSupervisors() {
+        Employee supervisor1 = Employee.builder()
+                .id(2)
+                .firstName("Supervisor1")
+                .lastName("Supervisoriou1")
+                .build();
+
+        Employee supervisor2 = Employee.builder()
+                .id(3)
+                .firstName("Supervisor2")
+                .lastName("Supervisoriou2")
+                .build();
+
+        Employee employee1 = Employee.builder()
+                .id(1)
+                .firstName("Employee")
+                .lastName("Employeeliou")
+                .supervisorId(2)
+                .build();
+
+        List<Employee> supervisors = List.of(supervisor1, supervisor2);
+        List<Employee> subordinates = List.of(employee1);
+
+        when(employeeRepository.findById(anyInt())).thenReturn(Optional.of(employee1));
+        when(employeeRepository.findAllSupervisors()).thenReturn(supervisors);
+        List<miniEmployeeDTO> result = employeeService.getFilteredSupervisors(1);
+
+    }
+}
