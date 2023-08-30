@@ -1,5 +1,6 @@
 package com.open3hr.adeies.app.user.service;
 
+import com.open3hr.adeies.app.employee.dto.EmployeeDTO;
 import com.open3hr.adeies.app.employee.entity.Employee;
 import com.open3hr.adeies.app.employee.repository.EmployeeRepository;
 import com.open3hr.adeies.app.employee.service.impl.EmployeeServiceImpl;
@@ -9,6 +10,8 @@ import com.open3hr.adeies.app.exceptions.NotFoundException;
 import com.open3hr.adeies.app.leaveBalance.entity.LeaveBalance;
 import com.open3hr.adeies.app.leaveCategory.entity.LeaveCategory;
 import com.open3hr.adeies.app.leaveRequest.entity.LeaveRequest;
+import com.open3hr.adeies.app.user.dto.EmployeeUserDTO;
+import com.open3hr.adeies.app.user.dto.RolesDTO;
 import com.open3hr.adeies.app.user.dto.UserDTO;
 import com.open3hr.adeies.app.user.entity.User;
 import com.open3hr.adeies.app.user.repository.UserRepository;
@@ -148,20 +151,6 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void createAccount() {
-    //    Throwable exception = ConflictException.class(
-//                ()-> {
-//                    when(employeeRepository.findById(userEmployee.getId())).thenReturn(Optional.ofNullable(userEmployee.getEmployee()));
-//                    List<User> users = new ArrayList<>();
-//                    users.add(userEmployee);
-//                    users.add(userEmployee2);
-//                    when(userRepository.findAll()).thenReturn(users);
-//                }
-//        );
-//        assertEquals("Ο εργαζόμενος με id " + userEmployee.getId() + " έχει ήδη account.", exception.getMessage());
-
-    }
 
     @Test
     public void testCreateAccount_Success() {
@@ -204,37 +193,56 @@ class UserServiceTest {
     @Test
     void getUserRoles() {
         when(userRepository.findById(employee2.getId())).thenReturn(Optional.ofNullable(userEmployee2));
-        assertEquals(Role.Employee,userEmployee2.getRole());
+        RolesDTO rolesDTO = new RolesDTO(userEmployee2);
+        assertEquals(rolesDTO,userService.getUserRoles(employee2.getId()));
     }
 
-//    @Test
-//    void getUserInfo() {
-//        when(userRepository.findById(employee2.getId())).thenReturn(Optional.ofNullable(userEmployee2));
-//        when(employeeRepository.findById(employee2.getId())).thenReturn(Optional.ofNullable(employee2));
-//        assertEquals(,userService.getEmployeeInfo("test2"));
-//    }
+    @Test
+    void getUserInfo() {
+        List<User> userList = new ArrayList<>();
+        userList.add(userEmployee);
+        userList.add(userEmployee2);
+        userList.add(userEmployee3);
+        UserDTO userDTO = new UserDTO(userEmployee2);
+        when(userRepository.findAll()).thenReturn(userList);
+        assertEquals(userDTO,userService.getUserInfo("test2"));
+    }
 
     @Test
     void getEmployeeInfo() {
+        List<User> userList = new ArrayList<>();
+        userList.add(userEmployee);
+        userList.add(userEmployee2);
+        userList.add(userEmployee3);
+        EmployeeDTO employeeDTO = new EmployeeDTO(employee2);
+        when(userRepository.findAll()).thenReturn(userList);
+        when(employeeRepository.findById(userEmployee2.getEmployee().getId())).thenReturn(Optional.ofNullable(employee2));
+        assertEquals(employeeDTO,userService.getEmployeeInfo("test2"));
     }
 
     @Test
     void getEmployeeUserAdmin() {
+        List<User> userList = new ArrayList<>();
+        userList.add(userEmployee);
+        userList.add(userEmployee2);
+        userList.add(userEmployee3);
+        when(userRepository.findAll()).thenReturn(userList);
+        assertEquals(3,userRepository.findAll().size());
     }
 
     @Test
     void getEmployeeUserById() {
+        when(userRepository.findById(userEmployee2.getId())).thenReturn(Optional.ofNullable(userEmployee2));
+        EmployeeUserDTO employeeUserDTO = new EmployeeUserDTO(employee2, userEmployee2);
+        assertEquals(employeeUserDTO, userService.getEmployeeUserById(userEmployee2.getId()));
     }
 
-    @Test
-    void editUser() {
-    }
 
     @Test
     void activateDeactivateUser() {
+        when(userRepository.findById(employee2.getId())).thenReturn(Optional.ofNullable(userEmployee2));
+        userService.activateDeactivateUser(employee2.getId());
+        assertEquals( true,userEmployee2.isEnable());
     }
 
-    @Test
-    void userLogout() {
-    }
 }
